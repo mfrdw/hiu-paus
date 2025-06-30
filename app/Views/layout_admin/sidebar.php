@@ -22,14 +22,14 @@
 <!-- Sidebar -->
 <div class="sidebar">
     <ul class="list-unstyled">
-        <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="#"><i class="fas fa-box"></i> Kelola Pesanan</a></li>
-        <li><a href="#"><i class="fas fa-calendar"></i> Kelola Jadwal</a></li>
-        <li><a href="#"><i class="fas fa-cogs"></i> Kelola Paket</a></li>
-        <li><a href="#"><i class="fas fa-users"></i> Data Wisatawan</a></li>
-        <li><a href="#"><i class="fas fa-comments"></i> Kelola Ulasan</a></li>
-        <li><a href="#"><i class="fas fa-gift"></i> Promosi</a></li>
-        <li><a href="#"><i class="fas fa-cogs"></i> Pengaturan</a></li>
-        <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        <li><a href="<?= base_url('dashboard') ?>"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="<?= base_url('kelola_pesanan') ?>"><i class="fas fa-box"></i> Kelola Pesanan</a></li>
+        <li><a href="<?= base_url('kelola_jadwal') ?>"><i class="fas fa-calendar"></i> Kelola Jadwal</a></li>
+        <li><a href="<?= base_url('kelola_paket_wisata') ?>"><i class="fas fa-cogs"></i> Kelola Paket</a></li>
+        <li><a href="<?= base_url('data_wisatawan') ?>"><i class="fas fa-users"></i> Data Wisatawan</a></li>
+        <li><a href="<?= base_url('kelola_ulasan') ?>"><i class="fas fa-comments"></i> Kelola Ulasan</a></li>
+        <li><a href="<?= base_url('promosi') ?>"><i class="fas fa-gift"></i> Promosi</a></li>
+        <li><a href="<?= base_url('pengaturan') ?>"><i class="fas fa-cogs"></i> Pengaturan</a></li>
+        <li><a href="<?= base_url('logout') ?>"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
 </div>
