@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HIU PAUS</title>
+    <title><?= $title ?>| Wisata Whale Shark Teluk Saleh</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -87,6 +87,37 @@
         header nav a.active {
             color: var(--accent-green);
         }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #ffffff;
+            border-bottom: 0px solid #ddd;
+        }
+
+        .nav-left a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .nav-left a.active {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .nav-right a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .nav-right a:hover {
+            text-decoration: underline;
+        }
+
 
         .video-container {
             position: relative;

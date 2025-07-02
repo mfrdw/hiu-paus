@@ -17,10 +17,16 @@
         </a>
     </div>
 
-    <nav>
-        <a href="#" class="active">Beranda</a>
-        <a href="#">Sewa Kapal</a>
-        <a href="#">Paket Wisata</a>
-        <a href="#">Unggulan</a>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="active">Beranda</a>
+            <a href="#">Sewa Kapal</a>
+            <a href="#">Paket Wisata</a>
+            <a href="#">Unggulan</a>
+        </div>
+        <div class="nav-right">
+            <a href="#">Masuk</a> | <a href="#">Daftar</a>
+        </div>
     </nav>
+
 </header>
