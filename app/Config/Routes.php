@@ -13,3 +13,9 @@ $routes->get('dashboard', 'Administrator::dashboard');
 $routes->get('kelola_pesanan', 'Administrator::kelola_pesanan');
 $routes->get('kelola_jadwal', 'Administrator::kelola_jadwal');
 $routes->get('kelola_paket_wisata', 'Administrator::kelola_paket_wisata');
+$routes->post('/kelola-wisata/create', 'KelolaWisata::create');
+
+$routes->post('kelola-wisata/create', 'KelolaWisata::create');
+
+$routes->get('kelola-wisata/create', 'KelolaWisata::create');
+$routes->post('kelola-wisata/create', 'KelolaWisata::create');

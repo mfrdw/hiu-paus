@@ -14,56 +14,11 @@
                             <!-- Search Bar -->
                             <input type="text" class="form-control w-50" placeholder="Cari paket..." aria-label="Search">
                             <!-- Add New Paket Button -->
+                            <!-- Button (sudah ada) -->
                             <button class="btn btn-success" data-toggle="modal" data-target="#addEditModal">
                                 <i class="fas fa-plus"></i> Tambah Paket Baru
                             </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Modal for Add/Edit Paket -->
-            <div class="modal fade" id="addEditModal" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addEditModalLabel">Form Tambah/Edit Paket</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- Form Tambah/Edit Paket -->
-                            <form>
-                                <div class="form-group">
-                                    <label for="packageName">Nama Paket</label>
-                                    <input type="text" class="form-control" id="packageName" placeholder="Masukkan nama paket">
-                                </div>
-                                <div class="form-group">
-                                    <label for="packageCategory">Kategori</label>
-                                    <select class="form-control" id="packageCategory">
-                                        <option>Pantai</option>
-                                        <option>Gunung</option>
-                                        <option>City Tour</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="packagePrice">Harga per Orang</label>
-                                    <input type="text" class="form-control" id="packagePrice" placeholder="Masukkan harga per orang">
-                                </div>
-                                <div class="form-group">
-                                    <label for="packageDuration">Durasi</label>
-                                    <input type="text" class="form-control" id="packageDuration" placeholder="Masukkan durasi">
-                                </div>
-                                <div class="form-group">
-                                    <label for="packageDescription">Deskripsi</label>
-                                    <textarea class="form-control" id="packageDescription" rows="3" placeholder="Masukkan deskripsi paket"></textarea>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                            <button type="button" class="btn btn-primary" id="savePackage">Simpan Paket</button>
                         </div>
                     </div>
                 </div>
@@ -121,64 +76,75 @@
     </div>
 </div>
 
-<!-- Custom CSS -->
-<style>
-    #packagePreview {
-        text-align: center;
-        font-size: 16px;
-    }
+<!-- Modal -->
+<div class="modal fade" id="addEditModal" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= site_url('/kelola-wisata/create') ?>" method="post" enctype="multipart/form-data">
+                <?= csrf_field() ?>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addEditModalLabel">Tambah Paket Baru</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
-    #packagePreview h6 {
-        font-weight: bold;
-    }
+                <div class="modal-body">
+                    <!-- Nama Paket -->
+                    <div class="form-group">
+                        <label for="nama_paket">Nama Paket</label>
+                        <input type="text" name="nama_paket" class="form-control" required>
+                    </div>
 
-    #packagePreview p {
-        margin: 5px 0;
-    }
+                    <!-- Kategori -->
+                    <div class="form-group">
+                        <label for="kategori">Kategori</label>
+                        <input type="text" name="kategori" class="form-control" required>
+                    </div>
 
-    .modal-header {
-        background-color: #007bff;
-        color: white;
-    }
+                    <!-- Harga -->
+                    <div class="form-group">
+                        <label for="harga">Harga</label>
+                        <input type="number" name="harga" class="form-control" required step="0.01">
+                    </div>
 
-    .modal-footer {
-        background-color: #f1f1f1;
-    }
+                    <!-- Durasi -->
+                    <div class="form-group">
+                        <label for="durasi">Durasi</label>
+                        <select name="durasi" class="form-control" required>
+                            <option value="1D1N">1 Hari 1 Malam</option>
+                            <option value="2D1N">2 Hari 1 Malam</option>
+                            <option value="3D2N">3 Hari 2 Malam</option>
+                            <option value="4D3N">4 Hari 3 Malam</option>
+                            <!-- Tambah sesuai kebutuhan -->
+                        </select>
+                    </div>
 
-    .card-body {
-        padding: 25px;
-    }
 
-    /* Style for the search box */
-    .form-control {
-        width: 300px;
-    }
-</style>
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select name="status" class="form-control" required>
+                            <option value="1">Aktif</option>
+                            <option value="2">Nonaktif</option>
+                        </select>
+                    </div>
 
-<!-- Bootstrap 4 JS, jQuery, and Popper.js -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    <!-- Gambar -->
+                    <div class="form-group">
+                        <label for="gambar">Gambar</label>
+                        <input type="file" name="gambar" class="form-control-file" required>
+                    </div>
+                </div>
 
-<script>
-    // Simulate a function to update the preview with data from the form
-    $('#savePackage').click(function() {
-        var name = $('#packageName').val();
-        var category = $('#packageCategory').val();
-        var price = $('#packagePrice').val();
-        var duration = $('#packageDuration').val();
-        var description = $('#packageDescription').val();
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-        // Update the preview
-        $('#previewName').text(name);
-        $('#previewCategory').text('Kategori: ' + category);
-        $('#previewPrice').text('Rp ' + price + '/orang');
-        $('#previewDuration').text('Durasi: ' + duration);
-        $('#previewDescription').text(description);
-
-        // Close the modal
-        $('#addEditModal').modal('hide');
-    });
-</script>
 
 <?= $this->endSection() ?>
