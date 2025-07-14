@@ -7,7 +7,12 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->get('login', 'Home::login');
+$routes->post('/auth/dologin', 'Auth::doLogin');
+$routes->get('/logout', 'Auth::logout');
+
 $routes->get('registration', 'Home::registration');
+$routes->post('/auth/doregistration', 'Auth::doRegistration');
+
 
 $routes->get('dashboard', 'Administrator::dashboard');
 $routes->get('kelola_pesanan', 'Administrator::kelola_pesanan');

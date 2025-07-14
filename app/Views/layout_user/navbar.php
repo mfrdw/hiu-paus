@@ -25,8 +25,14 @@
             <a href="#">Unggulan</a>
         </div>
         <div class="nav-right">
-            <a href="#">Masuk</a> | <a href="#">Daftar</a>
+            <?php if (session()->get('isLoggedIn')): ?>
+            <span>Hai, <?= session()->get('username'); ?> | </span>
+            <a href="<?= base_url('logout') ?>">Logout</a>
+            <?php else: ?>
+            <a href="<?= base_url('login') ?>">Masuk</a> | <a href="<?= base_url('registration') ?>">Daftar</a>
+            <?php endif; ?>
         </div>
+
     </nav>
 
 </header>

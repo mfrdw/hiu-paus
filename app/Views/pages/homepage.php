@@ -9,8 +9,8 @@
 <!-- Circle Icons Section -->
 <div class="circle-icons d-flex mb-5">
     <div class="text-center">
-        <img src="../dist/assets/images/ship.jpg" alt="Sewa Kapal" class="img-fluid mb-3">
-        <p>Sewa Kapal</p>
+        <img src="../dist/assets/images/ship.jpg" alt="Paket Trip Whale Shark" class="img-fluid mb-3">
+        <p>Paket Trip Whale Shark</p>
     </div>
     <div class="text-center">
         <img src="../dist/assets/images/vacation.jpg" alt="Paket Wisata" class="img-fluid mb-3">
@@ -39,7 +39,8 @@
             <!-- Card 1 -->
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
-                    <img src="../dist/assets/images/kapal-pesiar.jpg" class="card-img-top" alt="Open Trip Whale Shark Teluk Saleh">
+                    <img src="../dist/assets/images/kapal-pesiar.jpg" class="card-img-top"
+                        alt="Open Trip Whale Shark Teluk Saleh">
                     <div class="card-body text-center text-dark">
                         <h5 class="card-title">Open Trip Whale Shark Teluk Saleh</h5>
                         <p class="card-text">
@@ -57,15 +58,18 @@
                                 <li>Free Kamera GoPro (1 video + 5 foto underwater)</li>
                             </ul>
                         </div>
-                        <a href="https://wa.me/6281246408108" class="btn btn-light" target="_blank">BOOK NOW</a>
+                        <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#bookingModal">BOOK
+                            NOW</button>
                     </div>
                 </div>
             </div>
 
+
             <!-- Card 2 -->
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
-                    <img src="../dist/assets/images/kapal-pesiar2.jpg" class="card-img-top" alt="Private Trip Whale Shark">
+                    <img src="../dist/assets/images/kapal-pesiar2.jpg" class="card-img-top"
+                        alt="Private Trip Whale Shark">
                     <div class="card-body text-center text-dark">
                         <h5 class="card-title">Private Trip Whale Shark Teluk Saleh</h5>
                         <p class="card-text">
@@ -107,7 +111,8 @@
             <img src="../dist/assets/images/vacation.jpg" alt="Hiu Paus Gorontalo">
             <div class="card-body">
                 <h5 class="card-title">Hiu Paus Gorontalo</h5>
-                <p class="card-text">Rasakan sensasi berenang bersama hiu paus di perairan Gorontalo yang indah dan eksotis...</p>
+                <p class="card-text">Rasakan sensasi berenang bersama hiu paus di perairan Gorontalo yang indah dan
+                    eksotis...</p>
                 <a href="#" class="btn btn-warning">DETAILS</a>
             </div>
         </div>
@@ -116,7 +121,8 @@
             <img src="../dist/assets/images/vacation.jpg" alt="Diving di Gorontalo">
             <div class="card-body">
                 <h5 class="card-title">Diving di Gorontalo</h5>
-                <p class="card-text">Jelajahi keindahan bawah laut Gorontalo yang menakjubkan dengan berbagai spesies terumbu karang...</p>
+                <p class="card-text">Jelajahi keindahan bawah laut Gorontalo yang menakjubkan dengan berbagai spesies
+                    terumbu karang...</p>
                 <a href="#" class="btn btn-warning">DETAILS</a>
             </div>
         </div>
@@ -125,7 +131,8 @@
             <img src="../dist/assets/images/vacation.jpg" alt="Jalur Alam Gorontalo">
             <div class="card-body">
                 <h5 class="card-title">Jalur Alam Gorontalo</h5>
-                <p class="card-text">Nikmati petualangan trekking melewati hutan tropis yang rimbun dan pemandangan alam yang memukau...</p>
+                <p class="card-text">Nikmati petualangan trekking melewati hutan tropis yang rimbun dan pemandangan alam
+                    yang memukau...</p>
                 <a href="#" class="btn btn-warning">DETAILS</a>
             </div>
         </div>
@@ -134,7 +141,8 @@
             <img src="../dist/assets/images/vacation.jpg" alt="Jalur Alam Gorontalo">
             <div class="card-body">
                 <h5 class="card-title">Jalur Alam Gorontalo</h5>
-                <p class="card-text">Nikmati petualangan trekking melewati hutan tropis yang rimbun dan pemandangan alam yang memukau...</p>
+                <p class="card-text">Nikmati petualangan trekking melewati hutan tropis yang rimbun dan pemandangan alam
+                    yang memukau...</p>
                 <a href="#" class="btn btn-warning">DETAILS</a>
             </div>
         </div>
@@ -151,7 +159,8 @@
             <img src="../dist/assets/images/vacation.jpg" alt="Berenang dengan Hiu Paus">
             <div class="card-body">
                 <h5 class="card-title">Berenang dengan Hiu Paus</h5>
-                <p class="card-text">Rasakan pengalaman tak terlupakan berenang dengan Hiu Paus di perairan Gorontalo yang jernih...</p>
+                <p class="card-text">Rasakan pengalaman tak terlupakan berenang dengan Hiu Paus di perairan Gorontalo
+                    yang jernih...</p>
                 <a href="#" class="btn btn-warning">DETAILS</a>
             </div>
         </div>
@@ -160,7 +169,8 @@
             <img src="../dist/assets/images/vacation.jpg" alt="Snorkeling di Perairan Gorontalo">
             <div class="card-body">
                 <h5 class="card-title">Snorkeling di Perairan Gorontalo</h5>
-                <p class="card-text">Temukan keindahan dunia bawah laut Gorontalo dengan beragam terumbu karang dan ikan-ikan warna-warni...</p>
+                <p class="card-text">Temukan keindahan dunia bawah laut Gorontalo dengan beragam terumbu karang dan
+                    ikan-ikan warna-warni...</p>
                 <a href="#" class="btn btn-warning">DETAILS</a>
             </div>
         </div>
@@ -169,7 +179,8 @@
             <img src="../dist/assets/images/vacation.jpg" alt="Tur Pantai Gorontalo">
             <div class="card-body">
                 <h5 class="card-title">Tur Pantai Gorontalo</h5>
-                <p class="card-text">Nikmati pemandangan pantai eksotis dan bersantai sambil menikmati udara segar di Gorontalo...</p>
+                <p class="card-text">Nikmati pemandangan pantai eksotis dan bersantai sambil menikmati udara segar di
+                    Gorontalo...</p>
                 <a href="#" class="btn btn-warning">DETAILS</a>
             </div>
         </div>
@@ -178,12 +189,57 @@
             <img src="../dist/assets/images/vacation.jpg" alt="Tur Pantai Gorontalo">
             <div class="card-body">
                 <h5 class="card-title">Tur Pantai Gorontalo</h5>
-                <p class="card-text">Nikmati pemandangan pantai eksotis dan bersantai sambil menikmati udara segar di Gorontalo...</p>
+                <p class="card-text">Nikmati pemandangan pantai eksotis dan bersantai sambil menikmati udara segar di
+                    Gorontalo...</p>
                 <a href="#" class="btn btn-warning">DETAILS</a>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Modal Booking -->
+<!-- Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingModalLabel">Form Pemesanan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <div class="mb-3">
+                        <label for="orderId" class="form-label">Id Pesanan</label>
+                        <input type="text" class="form-control" id="orderId" name="orderId" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">Nama Pemesanan</label>
+                        <input type="text" class="form-control" id="customerName" name="customerName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="package" class="form-label">Paket</label>
+                        <input type="text" class="form-control" id="package" name="package"
+                            value="Open Trip Whale Shark Teluk Saleh" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bookingDate" class="form-label">Tanggal</label>
+                        <input type="date" class="form-control" id="bookingDate" name="bookingDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Jumlah Orang</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="totalCost" class="form-label">Total Biaya</label>
+                        <input type="text" class="form-control" id="totalCost" name="totalCost" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <?= $this->endSection() ?>

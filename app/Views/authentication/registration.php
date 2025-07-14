@@ -14,63 +14,63 @@
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Lobster&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background: url('../dist/assets/images/sea-gorontalo.jpg') center/cover no-repeat;
-        }
+    body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: url('../dist/assets/images/sea-gorontalo.jpg') center/cover no-repeat;
+    }
 
-        .title-section {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, .6)
-        }
+    .title-section {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #fff;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, .6)
+    }
 
+    .title-section .top-text {
+        font-family: 'Anton', sans-serif;
+        font-size: 3.5rem;
+        letter-spacing: 3px
+    }
+
+    .title-section .bottom-text {
+        font-family: 'Lobster', cursive;
+        font-size: 2rem;
+        letter-spacing: 1px;
+        margin-top: -6px
+    }
+
+    .auth-box {
+        max-width: 460px;
+        width: 100%;
+        background: #fff;
+        border-radius: 20px;
+        padding: 40px 30px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .2)
+    }
+
+    .form-control-lg {
+        border-radius: 12px
+    }
+
+    .btn-primary {
+        background: #0064ff;
+        border: none;
+        border-radius: 12px
+    }
+
+    .btn-primary:hover {
+        background: #0052cc
+    }
+
+    @media(max-width:768px) {
         .title-section .top-text {
-            font-family: 'Anton', sans-serif;
-            font-size: 3.5rem;
-            letter-spacing: 3px
+            font-size: 2.2rem
         }
 
         .title-section .bottom-text {
-            font-family: 'Lobster', cursive;
-            font-size: 2rem;
-            letter-spacing: 1px;
-            margin-top: -6px
+            font-size: 1.4rem
         }
-
-        .auth-box {
-            max-width: 460px;
-            width: 100%;
-            background: #fff;
-            border-radius: 20px;
-            padding: 40px 30px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, .2)
-        }
-
-        .form-control-lg {
-            border-radius: 12px
-        }
-
-        .btn-primary {
-            background: #0064ff;
-            border: none;
-            border-radius: 12px
-        }
-
-        .btn-primary:hover {
-            background: #0052cc
-        }
-
-        @media(max-width:768px) {
-            .title-section .top-text {
-                font-size: 2.2rem
-            }
-
-            .title-section .bottom-text {
-                font-size: 1.4rem
-            }
-        }
+    }
     </style>
 </head>
 
@@ -87,29 +87,43 @@
         <div class="auth-box text-center">
             <h4 class="fw-bold mb-4">Register</h4>
 
-            <form method="post" action="<?= base_url('register') ?>">
+            <form method="post" action="<?= base_url('auth/doregistration') ?>">
+                <?= csrf_field() ?>
+                <!-- CSRF protection -->
+
                 <div class="mb-3 text-start">
-                    <input type="text" name="nama_lengkap" class="form-control form-control-lg" placeholder="Nama lengkap" required>
+                    <label for="nama_lengkap">Nama Lengkap</label>
+                    <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control form-control-lg"
+                        placeholder="Nama lengkap" value="<?= old('nama_lengkap') ?>" required>
                 </div>
 
                 <div class="mb-3 text-start">
-                    <input type="text" name="username" class="form-control form-control-lg" placeholder="Username" required>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" class="form-control form-control-lg"
+                        placeholder="Username" value="<?= old('username') ?>" required>
                 </div>
 
                 <div class="mb-3 text-start">
-                    <input type="password" name="password" class="form-control form-control-lg" placeholder="Password" required>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control form-control-lg"
+                        placeholder="Password" required>
                 </div>
 
                 <div class="mb-3 text-start">
-                    <input type="text" name="kontak" class="form-control form-control-lg" placeholder="Kontak (No. HP/WA)" required>
+                    <label for="kontak">Kontak (No. HP/WA)</label>
+                    <input type="text" name="kontak" id="kontak" class="form-control form-control-lg"
+                        placeholder="Kontak (No. HP/WA)" value="<?= old('kontak') ?>" required>
                 </div>
 
                 <div class="mb-4 text-start">
-                    <input type="email" name="email" class="form-control form-control-lg" placeholder="Email" required>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Email"
+                        value="<?= old('email') ?>" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Daftar</button>
             </form>
+
 
             <p class="mb-2">
                 Sudah punya akun?
