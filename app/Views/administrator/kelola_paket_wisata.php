@@ -23,6 +23,91 @@
                     </div>
                 </div>
             </div>
+            <!-- Form Tambah/Edit Paket -->
+            <div class="col-md-12">
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h5>Form Tambah/Edit Paket</h5>
+                        <div class="row">
+                            <!-- Left side: Form Input -->
+                            <div class="col-md-6">
+                                <form id="formPaket" enctype="multipart/form-data">
+                                    <!-- Nama Paket -->
+                                    <div class="form-group">
+                                        <label for="nama_paket">Nama Paket</label>
+                                        <input type="text" name="nama_paket" class="form-control" required placeholder="Masukkan nama paket">
+                                    </div>
+
+                                    <!-- Kategori -->
+                                    <div class="form-group">
+                                        <label for="kategori">Kategori</label>
+                                        <select name="kategori" class="form-control" required>
+                                            <option value="" disabled selected>Pilih Kategori</option>
+                                            <option value="Open Trip">Open Trip</option>
+                                            <option value="Private Trip">Private Trip</option>
+                                        </select>
+                                    </div>
+
+
+                                    <!-- Harga -->
+                                    <div class="form-group">
+                                        <label for="harga">Harga per Orang</label>
+                                        <input type="number" name="harga" class="form-control" required step="0.01" placeholder="Masukkan harga per orang">
+                                    </div>
+
+                                    <!-- Durasi -->
+                                    <div class="form-group">
+                                        <label for="durasi">Durasi</label>
+                                        <select name="durasi" class="form-control" required>
+                                            <option value="1D1N">1 Hari 1 Malam</option>
+                                            <option value="2D1N">2 Hari 1 Malam</option>
+                                            <option value="3D2N">3 Hari 2 Malam</option>
+                                            <option value="4D3N">4 Hari 3 Malam</option>
+                                            <!-- Tambah sesuai kebutuhan -->
+                                        </select>
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select name="status" class="form-control" required>
+                                            <option value="1">Aktif</option>
+                                            <option value="2">Nonaktif</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Gambar -->
+                                    <div class="form-group">
+                                        <label for="gambar">Gambar</label>
+                                        <input type="file" name="gambar" class="form-control-file" required>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Right side: Preview -->
+                            <div class="col-md-6">
+                                <h5>Preview Paket</h5>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <div id="gambarPaket" style="height: 150px; border: 1px dashed #ccc;">
+                                                <p>Preview Gambar Paket</p>
+                                            </div>
+                                            <p id="previewNamaPaket">Nama Paket Wisata</p>
+                                            <p id="previewKategori">Kategori: Gunung</p>
+                                            <p id="previewHarga" class="text-danger">Rp 500.000/orang</p>
+                                            <p id="previewDurasi">Durasi: 2 hari 1 malam</p>
+                                            <p id="previewDeskripsi">Deskripsi paket akan tampil di sini</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
             <!-- Card for Daftar Paket Wisata -->
             <div class="col-md-12">

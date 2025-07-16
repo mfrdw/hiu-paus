@@ -1,9 +1,13 @@
 <?= $this->extend('layout_user/header') ?>
 <?= $this->section('content') ?>
 
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <!-- Video Section -->
 <div class="video-container mb-5">
-    <iframe src="https://www.youtube.com/embed/lbKOT68vGig?autoplay=1" allow="autoplay" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/" allow="autoplay" allowfullscreen></iframe>
 </div>
 
 <!-- Circle Icons Section -->
@@ -36,7 +40,7 @@
         </div>
 
         <div class="row justify-content-center">
-            <!-- Card 1 -->
+
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
                     <img src="../dist/assets/images/kapal-pesiar.jpg" class="card-img-top"
@@ -58,11 +62,13 @@
                                 <li>Free Kamera GoPro (1 video + 5 foto underwater)</li>
                             </ul>
                         </div>
-                        <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#bookingModal">BOOK
-                            NOW</button>
+                        <button class="btn btn-light" id="bookingButton">BOOK NOW</button>
                     </div>
                 </div>
             </div>
+
+
+
 
 
             <!-- Card 2 -->
@@ -198,22 +204,21 @@
 </section>
 
 <!-- Modal Booking -->
-<!-- Modal -->
+
+
+
+<!-- Modal Booking -->
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="bookingModalLabel">Form Pemesanan</h5>
+                <h5 class="modal-title" id="bookingModalLabel">Form Booking</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="bookingForm">
                     <div class="mb-3">
-                        <label for="orderId" class="form-label">Id Pesanan</label>
-                        <input type="text" class="form-control" id="orderId" name="orderId" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="customerName" class="form-label">Nama Pemesanan</label>
+                        <label for="customerName" class="form-label">Nama Lengkap</label>
                         <input type="text" class="form-control" id="customerName" name="customerName" required>
                     </div>
                     <div class="mb-3">
@@ -227,13 +232,15 @@
                     </div>
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Jumlah Orang</label>
-                        <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
+                        <input type="text" class="form-control" id="quantity" name="quantity" min="1" value="1" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="totalCost" class="form-label">Total Biaya</label>
-                        <input type="text" class="form-control" id="totalCost" name="totalCost" readonly>
+                        <input type="text" class="form-control" id="totalCost" name="totalCost" value="650.000" readonly>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn w-50">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -241,5 +248,40 @@
 </div>
 
 
+<!-- Bootstrap 5.3 JS (termasuk Popper.js untuk modal) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- JavaScript untuk Modal dan SweetAlert2 -->
+<script>
+    // Mengambil status login dari PHP
+    const isLoggedIn = <?= session()->get('isLoggedIn') ? 'true' : 'false'; ?>;
+
+    // Menangani event klik tombol BOOK NOW
+    document.getElementById('bookingButton').addEventListener('click', function() {
+        if (!isLoggedIn) {
+            // Jika belum login, tampilkan SweetAlert2
+            Swal.fire({
+                icon: 'warning',
+                title: 'Harap Login Terlebih Dahulu',
+                text: 'Anda harus login untuk melakukan pemesanan.',
+                confirmButtonText: 'Login',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect ke halaman login jika pengguna memilih 'Login'
+                    window.location.href = "<?= base_url('login'); ?>"; // Ganti dengan URL login aplikasi Anda
+                }
+            });
+        } else {
+            // Jika sudah login, buka modal booking
+            const myModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            myModal.show(); // Menampilkan modal
+        }
+    });
+</script>
 
 <?= $this->endSection() ?>
