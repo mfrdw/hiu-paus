@@ -13,6 +13,26 @@ class Home extends BaseController
 
         return view('pages/homepage', $data);
     }
+
+        public function detail(): string
+    {
+
+        $data = [
+            'title' => 'Detail',
+        ];
+
+        return view('pages/detail_wisata', $data);
+    }
+
+    public function booking(): string
+    {
+
+        $data = [
+            'title' => 'Booking',
+        ];
+
+        return view('pages/booking', $data);
+    }
     public function login(): string
     {
         $data = [

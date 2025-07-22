@@ -62,7 +62,7 @@
                                 <li>Free Kamera GoPro (1 video + 5 foto underwater)</li>
                             </ul>
                         </div>
-                        <button class="btn btn-light" id="bookingButton">BOOK NOW</button>
+                        <a href="<?= base_url('detail')?>" class="btn btn-light">BOOK NOW</a>
                     </div>
                 </div>
             </div>
@@ -232,11 +232,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Jumlah Orang</label>
-                        <input type="text" class="form-control" id="quantity" name="quantity" min="1" value="1" readonly>
+                        <input type="text" class="form-control" id="quantity" name="quantity" min="1" value="1"
+                            readonly>
                     </div>
                     <div class="mb-3">
                         <label for="totalCost" class="form-label">Total Biaya</label>
-                        <input type="text" class="form-control" id="totalCost" name="totalCost" value="650.000" readonly>
+                        <input type="text" class="form-control" id="totalCost" name="totalCost" value="650.000"
+                            readonly>
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn w-50">Submit</button>
@@ -256,32 +258,33 @@
 
 <!-- JavaScript untuk Modal dan SweetAlert2 -->
 <script>
-    // Mengambil status login dari PHP
-    const isLoggedIn = <?= session()->get('isLoggedIn') ? 'true' : 'false'; ?>;
+// Mengambil status login dari PHP
+const isLoggedIn = <?= session()->get('isLoggedIn') ? 'true' : 'false'; ?>;
 
-    // Menangani event klik tombol BOOK NOW
-    document.getElementById('bookingButton').addEventListener('click', function() {
-        if (!isLoggedIn) {
-            // Jika belum login, tampilkan SweetAlert2
-            Swal.fire({
-                icon: 'warning',
-                title: 'Harap Login Terlebih Dahulu',
-                text: 'Anda harus login untuk melakukan pemesanan.',
-                confirmButtonText: 'Login',
-                showCancelButton: true,
-                cancelButtonText: 'Batal',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect ke halaman login jika pengguna memilih 'Login'
-                    window.location.href = "<?= base_url('login'); ?>"; // Ganti dengan URL login aplikasi Anda
-                }
-            });
-        } else {
-            // Jika sudah login, buka modal booking
-            const myModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-            myModal.show(); // Menampilkan modal
-        }
-    });
+// Menangani event klik tombol BOOK NOW
+document.getElementById('bookingButton').addEventListener('click', function() {
+    if (!isLoggedIn) {
+        // Jika belum login, tampilkan SweetAlert2
+        Swal.fire({
+            icon: 'warning',
+            title: 'Harap Login Terlebih Dahulu',
+            text: 'Anda harus login untuk melakukan pemesanan.',
+            confirmButtonText: 'Login',
+            showCancelButton: true,
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect ke halaman login jika pengguna memilih 'Login'
+                window.location.href =
+                    "<?= base_url('login'); ?>"; // Ganti dengan URL login aplikasi Anda
+            }
+        });
+    } else {
+        // Jika sudah login, buka modal booking
+        const myModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+        myModal.show(); // Menampilkan modal
+    }
+});
 </script>
 
 <?= $this->endSection() ?>
