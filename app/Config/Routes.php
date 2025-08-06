@@ -12,6 +12,7 @@ $routes->get('/logout', 'Auth::logout');
 
 $routes->get('detail', 'Home::detail');
 $routes->get('booking', 'Home::booking');
+$routes->get('payment', 'Home::payment');
 
 $routes->get('registration', 'Home::registration');
 $routes->post('/auth/doregistration', 'Auth::doRegistration');
@@ -27,3 +28,10 @@ $routes->post('kelola-wisata/create', 'KelolaWisata::create');
 
 $routes->get('kelola-wisata/create', 'KelolaWisata::create');
 $routes->post('kelola-wisata/create', 'KelolaWisata::create');
+
+
+
+
+// payment
+$routes->get('/payment', 'PaymentController::createTransaction');
+$routes->post('/payment-notification', 'PaymentCallbackController::notification');

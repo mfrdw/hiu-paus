@@ -27,14 +27,13 @@
         <div class="nav-right">
             <?php if (session()->get('isLoggedIn')): ?>
             <div class="dropdown" style="position: relative;">
-                <!-- Foto/Gambar pengguna sebagai tombol dropdown -->
-                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false"
-                    style="padding: 0; border: none; background: transparent;">
+                <!-- Foto/Gambar pengguna sebagai tombol dropdown tanpa tanda panah -->
+                <button class="btn btn-link" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false" style="padding: 0; border: none; background: transparent;">
                     <img src="<?= base_url('../dist/assets/images/images-2.jpg') ?>" alt="Profile Picture"
                         style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; cursor: pointer;">
                 </button>
-                <!-- Dropdown menu, dipindahkan ke kiri -->
+                <!-- Dropdown menu, dipindahkan ke kiri tanpa tanda panah -->
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="left: -150px; top: 0;">
                     <li><span class="dropdown-item">Hai, <?= session()->get('username'); ?></span></li>
                     <li><a class="dropdown-item" href="<?= base_url('profile') ?>">Profile</a></li>
@@ -46,7 +45,6 @@
             <a href="<?= base_url('login') ?>">Masuk</a> | <a href="<?= base_url('registration') ?>">Daftar</a>
             <?php endif; ?>
         </div>
-
     </nav>
 </header>
 

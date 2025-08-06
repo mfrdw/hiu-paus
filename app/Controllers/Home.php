@@ -33,6 +33,16 @@ class Home extends BaseController
 
         return view('pages/booking', $data);
     }
+
+        public function payment(): string
+    {
+
+        $data = [
+            'title' => 'Payment',
+        ];
+
+        return view('pages/payment', $data);
+    }
     public function login(): string
     {
         $data = [
