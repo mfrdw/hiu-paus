@@ -4,9 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class M_PaymentDetails extends Model
+class M_BookingDetails extends Model
 {
-    protected $table = 'payment_details';
+    protected $table = 'booking_details';
     protected $primaryKey = 'id';
     protected $allowedFields = [
         'user_id',
@@ -21,6 +21,4 @@ class M_PaymentDetails extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-
-
 }

@@ -2,87 +2,73 @@
 <?= $this->section('content') ?>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    <?php if (session()->getFlashdata('success')): ?>
-    Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    }).fire({
-        icon: 'success',
-        title: '<?= session()->getFlashdata('success'); ?>'
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if (session()->getFlashdata('success')): ?>
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).fire({
+                icon: 'success',
+                title: '<?= session()->getFlashdata('success'); ?>'
+            });
+        <?php elseif (session()->getFlashdata('error')): ?>
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).fire({
+                icon: 'error',
+                title: '<?= session()->getFlashdata('error'); ?>'
+            });
+        <?php endif; ?>
     });
-    <?php elseif (session()->getFlashdata('error')): ?>
-    Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    }).fire({
-        icon: 'error',
-        title: '<?= session()->getFlashdata('error'); ?>'
-    });
-    <?php endif; ?>
-});
 </script>
-
 <div class="container mt-5">
+    <h2 class="text-center font-weight-bold mb-4">Pembayaran Open Trip Whale Shark Teluk Saleh</h2>
+    <p class="text-center mb-5">Silahkan lakukan pembayaran menggunakan salah satu metode di bawah ini.</p>
+
     <div class="row">
         <!-- Detail Pemesanan (Kiri) -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-body" style="padding: 30px; background-color: #f8f9fa;">
-                    <h4 class="mb-4" style="font-weight: bold;">Detail Pemesanan</h4>
-
-                    <!-- Nama Lengkap -->
-                    <div class="form-section" style="margin-bottom: 1.5rem;">
-                        <label for="fullName" class="form-label" style="font-weight: bold; font-size: 1rem;">Nama
-                            Lengkap</label>
-                        <input type="text" class="form-control" id="fullName" name="fullName"
-                            placeholder="contoh: John Maeda" required style="padding: 12px; font-size: 1rem;">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="mb-4 font-weight-bold">Detail Pemesanan</h4>
+                    <div class="form-section mb-4">
+                        <label for="fullName" class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="fullName" name="fullName" value="<?= esc($booking['full_name']); ?>" placeholder="contoh: John Maeda" required readonly>
                     </div>
-
-                    <!-- Email -->
-                    <div class="form-section" style="margin-bottom: 1.5rem;">
-                        <label for="email" class="form-label" style="font-weight: bold; font-size: 1rem;">Email</label>
-                        <input type="email" class="form-control" id="email" name="email"
-                            placeholder="contoh: email@example.com" required style="padding: 12px; font-size: 1rem;">
+                    <div class="form-section mb-4">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<?= esc($booking['email']); ?>" placeholder="contoh: email@example.com" required readonly>
                     </div>
-
-                    <!-- Nomor HP -->
-                    <div class="form-section" style="margin-bottom: 1.5rem;">
-                        <label for="mobile" class="form-label" style="font-weight: bold; font-size: 1rem;">Nomor
-                            HP</label>
-                        <input type="tel" class="form-control" id="mobile" name="mobile"
-                            placeholder="contoh: +62 8123456789" required style="padding: 12px; font-size: 1rem;">
+                    <div class="form-section mb-4">
+                        <label for="mobile" class="form-label">Nomor HP</label>
+                        <input type="tel" class="form-control" id="mobile" name="mobile" value="<?= esc($booking['kontak']); ?>" placeholder="contoh: +62 8123456789" required readonly>
                     </div>
-
-                    <!-- Jumlah Orang -->
-                    <div class="form-section" style="margin-bottom: 1.5rem;">
-                        <label for="peopleCount" class="form-label" style="font-weight: bold; font-size: 1rem;">Jumlah
-                            Orang</label>
-                        <input type="number" class="form-control" id="peopleCount" name="peopleCount"
-                            placeholder="contoh: 2" required style="padding: 12px; font-size: 1rem;">
+                    <div class="form-section mb-4">
+                        <label for="peopleCount" class="form-label">Jumlah Orang</label>
+                        <input type="number" class="form-control" id="peopleCount" name="peopleCount" value="<?= esc($booking['jumlah_orang']); ?>" placeholder="contoh: 2" required readonly>
                     </div>
                 </div>
             </div>
         </div>
 
+
         <!-- Pembayaran (Kanan) -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-body" style="padding: 30px; background-color: #f8f9fa;">
-                    <h4 class="mb-4" style="font-weight: bold;">Metode Pembayaran</h4>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="mb-4 font-weight-bold">Metode Pembayaran</h4>
 
                     <!-- Mode Pembayaran -->
-                    <div class="form-section" style="margin-bottom: 1.5rem;">
-                        <label for="paymentMode" class="form-label" style="font-weight: bold; font-size: 1rem;">Mode
-                            Pembayaran</label>
-                        <select class="form-control" id="paymentMode" name="paymentMode" required
-                            style="padding: 12px; font-size: 1rem;">
+                    <div class="form-section mb-4">
+                        <label for="paymentMode" class="form-label">Mode Pembayaran</label>
+                        <select class="form-control" id="paymentMode" name="paymentMode" required>
                             <option value="">Pilih Metode Pembayaran</option>
                             <option value="ewallet">E-wallet</option>
                             <option value="bank">Bank</option>
@@ -90,11 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
 
                     <!-- E-wallet Options (Gopay, Dana, Shopeepay) -->
-                    <div class="form-section" id="ewalletOptions" style="margin-bottom: 1.5rem; display: none;">
-                        <label for="ewalletChoice" class="form-label" style="font-weight: bold; font-size: 1rem;">Pilih
-                            E-wallet</label>
-                        <select class="form-control" id="ewalletChoice" name="ewalletChoice"
-                            style="padding: 12px; font-size: 1rem;">
+                    <div class="form-section mb-4" id="ewalletOptions" style="display: none;">
+                        <label for="ewalletChoice" class="form-label">Pilih E-wallet</label>
+                        <select class="form-control" id="ewalletChoice" name="ewalletChoice">
                             <option value="">Pilih E-wallet</option>
                             <option value="gopay">Gopay</option>
                             <option value="dana">Dana</option>
@@ -103,75 +87,67 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
 
                     <!-- Bank Option (BNI) -->
-                    <div class="form-section" id="bankOption" style="margin-bottom: 1.5rem; display: none;">
-                        <label for="bankAccount" class="form-label" style="font-weight: bold; font-size: 1rem;">Rekening
-                            Bank (BNI)</label>
-                        <input type="text" class="form-control" id="bankAccount" name="bankAccount"
-                            placeholder="contoh: 1234567890" required style="padding: 12px; font-size: 1rem;">
+                    <div class="form-section mb-4" id="bankOption" style="display: none;">
+                        <label for="bankAccount" class="form-label">Rekening Bank (BNI)</label>
+                        <input type="text" class="form-control" id="bankAccount" name="bankAccount" placeholder="contoh: 1234567890" required>
                     </div>
 
                     <!-- Total Biaya -->
-                    <div class="form-section" style="margin-bottom: 1.5rem;">
-                        <label for="totalCost" class="form-label" style="font-weight: bold; font-size: 1rem;">Total
-                            Biaya</label>
-                        <input type="number" class="form-control" id="totalCost" name="totalCost"
-                            placeholder="Masukkan total biaya" required style="padding: 12px; font-size: 1rem;">
+                    <div class="form-section mb-4">
+                        <label for="totalCost" class="form-label">Total Biaya</label>
+                        <input type="number" class="form-control" id="totalCost" name="totalCost" value="<?= esc($booking['total_biaya']); ?>" readonly>
                     </div>
 
                     <!-- Upload Bukti Pembayaran -->
-                    <div class="form-section" style="margin-bottom: 1.5rem;">
-                        <label for="paymentProof" class="form-label" style="font-weight: bold; font-size: 1rem;">Upload
-                            Bukti Pembayaran</label>
-                        <input type="file" class="form-control" id="paymentProof" name="paymentProof"
-                            accept="image/*,.pdf" required style="padding: 12px; font-size: 1rem;">
+                    <div class="form-section mb-4">
+                        <label for="paymentProof" class="form-label">Upload Bukti Pembayaran</label>
+                        <input type="file" class="form-control" id="paymentProof" name="paymentProof" accept="image/*,.pdf" required>
                     </div>
 
-                    <!-- Tombol Submit di Tengah -->
-                    <div class="d-flex justify-content-center mb-5" style="margin-top: 20px;">
-                        <button type="submit" class="btn btn-primary" style="padding: 12px; font-size: 1rem;">Submit
-                            Pembayaran</button>
+                    <!-- Tombol Submit -->
+                    <div class="d-flex justify-content-center mb-5">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit Pembayaran</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Gambar Metode Pembayaran di Bawah Form -->
-    <div class="payment-method"
-        style="display: flex; justify-content: space-evenly; flex-wrap: wrap; margin-top: 20px;">
-        <div style="flex-basis: 23%; text-align: center;">
-            <img src="../dist/assets/images/gopay.png" alt="Gopay" style="width: 100%; height: auto;" />
+    <!-- Gambar Metode Pembayaran -->
+    <div class="payment-method mt-5 d-flex justify-content-center flex-wrap">
+        <div class="payment-item p-3">
+            <img src="../dist/assets/images/gopay.png" alt="Gopay" class="img-fluid" style="max-width: 120px;">
         </div>
-        <div style="flex-basis: 23%; text-align: center;" class="mt-5">
-            <img src="../dist/assets/images/dana.png" alt="Dana" style="width: 100%; height: auto;" />
+        <div class="payment-item p-3">
+            <img src="../dist/assets/images/dana.png" alt="Dana" class="img-fluid" style="max-width: 120px;">
         </div>
-        <div style="flex-basis: 23%; text-align: center;" class="mt-5">
-            <img src="../dist/assets/images/shopeepay.png" alt="ShopeePay" style="width: 100%; height: auto;" />
+        <div class="payment-item p-3">
+            <img src="../dist/assets/images/shopeepay.png" alt="ShopeePay" class="img-fluid" style="max-width: 120px;">
         </div>
-        <div style="flex-basis: 23%; text-align: center;">
-            <img src="../dist/assets/images/bni.png" alt="BNI" style="width: 100%; height: auto;" />
+        <div class="payment-item p-3">
+            <img src="../dist/assets/images/bni.png" alt="BNI" class="img-fluid" style="max-width: 120px;">
         </div>
     </div>
 </div>
 
 <script>
-// Fungsi untuk menampilkan pilihan pembayaran yang sesuai
-document.getElementById('paymentMode').addEventListener('change', function() {
-    const paymentMode = this.value;
-    const ewalletOptions = document.getElementById('ewalletOptions');
-    const bankOption = document.getElementById('bankOption');
+    // Fungsi untuk menampilkan pilihan pembayaran yang sesuai
+    document.getElementById('paymentMode').addEventListener('change', function() {
+        const paymentMode = this.value;
+        const ewalletOptions = document.getElementById('ewalletOptions');
+        const bankOption = document.getElementById('bankOption');
 
-    if (paymentMode === 'ewallet') {
-        ewalletOptions.style.display = 'block';
-        bankOption.style.display = 'none';
-    } else if (paymentMode === 'bank') {
-        ewalletOptions.style.display = 'none';
-        bankOption.style.display = 'block';
-    } else {
-        ewalletOptions.style.display = 'none';
-        bankOption.style.display = 'none';
-    }
-});
+        if (paymentMode === 'ewallet') {
+            ewalletOptions.style.display = 'block';
+            bankOption.style.display = 'none';
+        } else if (paymentMode === 'bank') {
+            ewalletOptions.style.display = 'none';
+            bankOption.style.display = 'block';
+        } else {
+            ewalletOptions.style.display = 'none';
+            bankOption.style.display = 'none';
+        }
+    });
 </script>
 
 <?= $this->endSection() ?>
