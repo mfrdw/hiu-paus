@@ -1,4 +1,4 @@
-<footer>
+<!-- <footer>
     <div class="footer-container">
         <div class="footer-column">
             <img src="../dist/assets/images/logo.png" alt="Logo" class="footer-logo">
@@ -35,7 +35,7 @@
         </div>
     </div>
 </footer>
-
+ -->
 
 
 

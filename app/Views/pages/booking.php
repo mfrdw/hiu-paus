@@ -1,6 +1,32 @@
 <?= $this->extend('layout_user/header') ?>
 <?= $this->section('content') ?>
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    <?php if (session()->getFlashdata('success')): ?>
+    Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    }).fire({
+        icon: 'success',
+        title: '<?= session()->getFlashdata('success'); ?>'
+    });
+    <?php elseif (session()->getFlashdata('error')): ?>
+    Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    }).fire({
+        icon: 'error',
+        title: '<?= session()->getFlashdata('error'); ?>'
+    });
+    <?php endif; ?>
+});
+</script>
 <div class="container" style="max-width: 1200px; margin-top: 50px;">
     <h2>Pemesanan Open Trip Whale Shark Teluk Saleh</h2>
     <p>Pastikan semua detail pada halaman ini sudah benar sebelum melanjutkan ke pembayaran dan pemesanan trip.</p>
@@ -8,7 +34,7 @@
     <div class="row">
         <!-- Left Form Section -->
         <div class="col-md-8">
-            <form id="contactForm" action="<?= base_url('payment'); ?>" method="POST">
+            <form id="contactForm" action="<?= base_url('booking/proses_booking'); ?>" method="POST">
                 <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
                     <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
                         <h4 style="font-size: 1.4rem; font-weight: bold;">Detail Kontak</h4>
@@ -18,34 +44,39 @@
                         <div class="form-section" style="margin-bottom: 1.5rem;">
                             <label for="fullName" class="form-label" style="font-weight: bold; font-size: 1rem;">Nama
                                 Lengkap</label>
-                            <input type="text" class="form-control" id="fullName" placeholder="contoh: John Maeda"
-                                required style="padding: 12px; font-size: 1rem;" oninput="enableButton()">
+                            <input type="text" class="form-control" id="fullName" name="fullName"
+                                placeholder="contoh: John Maeda" required style="padding: 12px; font-size: 1rem;"
+                                oninput="enableButton()">
                         </div>
 
                         <!-- Email -->
                         <div class="form-section" style="margin-bottom: 1.5rem;">
                             <label for="email" class="form-label"
                                 style="font-weight: bold; font-size: 1rem;">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="contoh: email@example.com"
-                                required style="padding: 12px; font-size: 1rem;" oninput="enableButton()">
+                            <input type="email" class="form-control" id="email" name="email"
+                                placeholder="contoh: email@example.com" required style="padding: 12px; font-size: 1rem;"
+                                oninput="enableButton()">
                         </div>
 
                         <!-- Nomor HP -->
                         <div class="form-section" style="margin-bottom: 1.5rem;">
                             <label for="mobile" class="form-label" style="font-weight: bold; font-size: 1rem;">Nomor
                                 HP</label>
-                            <input type="tel" class="form-control" id="mobile" placeholder="contoh: +62 8123456789"
-                                required style="padding: 12px; font-size: 1rem;" oninput="enableButton()">
+                            <input type="tel" class="form-control" id="mobile" name="mobile"
+                                placeholder="contoh: +62 8123456789" required style="padding: 12px; font-size: 1rem;"
+                                oninput="enableButton()">
                         </div>
 
                         <!-- Jumlah Orang -->
                         <div class="form-section" style="margin-bottom: 1.5rem;">
                             <label for="peopleCount" class="form-label"
                                 style="font-weight: bold; font-size: 1rem;">Jumlah Orang</label>
-                            <input type="number" class="form-control" id="peopleCount" placeholder="contoh: 2" required
-                                style="padding: 12px; font-size: 1rem;" oninput="updateCost()">
+                            <input type="number" class="form-control" id="peopleCount" name="peopleCount"
+                                placeholder="contoh: 2" required style="padding: 12px; font-size: 1rem;"
+                                oninput="updateCost()">
                         </div>
                     </div>
+
                 </div>
                 <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
                     <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
@@ -69,11 +100,12 @@
                         </div>
 
                         <!-- Button Cancel & Reschedule -->
-                        <button type="button" class="btn btn-secondary" id="continueBtn"
+                        <button type="submit" class="btn btn-secondary" id="continueBtn"
                             style="width: 100%; padding: 12px; border-radius: 50px; font-weight: bold; background-color: #28a745; border: none; color: #fff; transition: background-color 0.3s ease;"
                             onclick="checkSession()">
                             Continue Payment
                         </button>
+
                     </div>
                 </div>
             </form>
@@ -139,8 +171,10 @@ function checkSession() {
             text: 'Silakan isi semua kolom yang diperlukan.',
         });
     } else {
+        // Check if user is logged in, then submit form
         <?php if (session()->get('isLoggedIn')): ?>
-        window.location.href = "<?= base_url('payment'); ?>";
+        // Submit the form
+        document.getElementById("contactForm").submit();
         <?php else: ?>
         Swal.fire({
             icon: 'error',
@@ -150,6 +184,7 @@ function checkSession() {
         <?php endif; ?>
     }
 }
+
 
 // Function to enable the continue button when all fields are filled
 function enableButton() {

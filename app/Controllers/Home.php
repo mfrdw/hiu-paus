@@ -28,7 +28,7 @@ class Home extends BaseController
     {
 
         $data = [
-            'title' => 'Booking',
+            'title' => 'Booking ',
         ];
 
         return view('pages/booking', $data);
@@ -38,7 +38,7 @@ class Home extends BaseController
     {
 
         $data = [
-            'title' => 'Payment',
+            'title' => 'Payment ',
         ];
 
         return view('pages/payment', $data);
@@ -46,7 +46,7 @@ class Home extends BaseController
     public function login(): string
     {
         $data = [
-            'title' => 'Login',
+            'title' => 'Login ',
         ];
         return view('authentication/login', $data);
     }
@@ -54,7 +54,7 @@ class Home extends BaseController
     public function registration(): string
     {
         $data = [
-            'title' => 'Registration',
+            'title' => 'Registration ',
         ];
         return view('authentication/registration', $data);
     }

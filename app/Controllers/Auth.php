@@ -7,13 +7,16 @@ use CodeIgniter\Controller;
 
 class Auth extends Controller
 {
-   public function doLogin()
+public function doLogin()
 {
     $username = $this->request->getPost('username');
     $password = $this->request->getPost('password');
 
-    $model = new M_Users();
+    if (!$username || !$password) {
+        return redirect()->to('/login')->with('error', 'Username dan password harus diisi.');
+    }
 
+    $model = new M_Users();
     $user = $model->where('username', $username)->first();
 
     if (!$user) {
@@ -37,6 +40,7 @@ class Auth extends Controller
         return redirect()->to('/dashboard');
     }
 }
+
     public function doRegistration()
     {
         $username = $this->request->getPost('username');

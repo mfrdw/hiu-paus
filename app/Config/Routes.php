@@ -35,3 +35,6 @@ $routes->post('kelola-wisata/create', 'KelolaWisata::create');
 // payment
 $routes->get('/payment', 'PaymentController::createTransaction');
 $routes->post('/payment-notification', 'PaymentCallbackController::notification');
+
+// Booking
+$routes->post('booking/proses_booking', 'BookingController::proses_booking');
