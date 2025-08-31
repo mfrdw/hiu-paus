@@ -22,10 +22,20 @@ class Home extends BaseController
     {
 
         $data = [
-            'title' => 'Detail',
+            'title' => 'Detail ',
         ];
 
         return view('pages/detail_wisata', $data);
+    }
+
+    public function detail_wisata_private(): string
+    {
+
+        $data = [
+            'title' => 'Detail ',
+        ];
+
+        return view('pages/detail_wisata_private', $data);
     }
 
     public function booking(): string
@@ -36,6 +46,16 @@ class Home extends BaseController
         ];
 
         return view('pages/booking', $data);
+    }
+
+    public function booking_private(): string
+    {
+
+        $data = [
+            'title' => 'Booking ',
+        ];
+
+        return view('pages/booking_private', $data);
     }
 
     public function payment($id): string
@@ -59,28 +79,40 @@ class Home extends BaseController
         return view('pages/payment', $data);
     }
 
-public function keranjang(): string
-{
-    $bookingModel = new M_BookingDetails();
+    public function keranjang(): string
+    {
+        $bookingModel = new M_BookingDetails();
 
-    $user_id = session()->get('id');
+        $user_id = session()->get('id');
 
-    if ($user_id) {
-        $orders = $bookingModel
-            ->where('user_id', $user_id)
-            ->orderBy('created_at', 'DESC')
-            ->findAll();
-    } else {
-        $orders = [];
+        if ($user_id) {
+            $orders = $bookingModel
+                ->where('user_id', $user_id)
+                ->orderBy('created_at', 'DESC')
+                ->findAll();
+        } else {
+            $orders = [];
+        }
+
+        $data = [
+            'title' => 'Riwayat Pesanan',
+            'orders' => $orders,
+        ];
+
+        return view('pages/keranjang', $data);
     }
 
-    $data = [
-        'title' => 'Riwayat Pesanan',
-        'orders' => $orders,
-    ];
+    public function payments_success($bookingId): string
+    {
+        $data = [
+            'title' => 'Pembayaran Berhasil',
+            'bookingId' => $bookingId,
+        ];
 
-    return view('pages/keranjang', $data);
-}
+        return view('pages/payment_success', $data);
+    }
+
+
 
 
 

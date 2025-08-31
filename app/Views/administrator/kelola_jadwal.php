@@ -11,7 +11,10 @@
 
                 <!-- Button Group for Adding and Viewing Full Schedule -->
                 <div class="btn-group my-3">
-                    <button class="btn btn-success"><i class="fas fa-calendar-plus"></i> Tambah Jadwal</button>
+                    <!-- Button Tambah Jadwal -->
+                    <button class="btn btn-success" data-toggle="modal" data-target="#tambahJadwalModal">
+                        <i class="fas fa-calendar-plus"></i> Tambah Jadwal
+                    </button>
                     <button class="btn btn-warning"><i class="fas fa-calendar-check"></i> Jadwal Penuh</button>
                 </div>
 
@@ -75,30 +78,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>15 Jul 2024</td>
-                                    <td>Paket Bromo</td>
-                                    <td>20 orang</td>
-                                    <td>12 orang</td>
-                                    <td>8 orang</td>
-                                    <td><span class="badge badge-success">Tersedia</span></td>
-                                    <td>
-                                        <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</button>
-                                        <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Tutup</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>16 Jul 2024</td>
-                                    <td>Paket Pantai</td>
-                                    <td>15 orang</td>
-                                    <td>15 orang</td>
-                                    <td>0 orang</td>
-                                    <td><span class="badge badge-danger">Penuh</span></td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm"><i class="fas fa-list"></i> Lihat</button>
-                                        <button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Tambah Slot</button>
-                                    </td>
-                                </tr>
+                                <?php foreach ($jadwals as $jadwal): ?>
+                                    <tr>
+                                        <td><?= date('d M Y', strtotime($jadwal['tanggal'])); ?></td>
+                                        <td><?= esc($jadwal['paket']); ?></td>
+                                        <td><?= esc($jadwal['kapasitas']) . ' orang'; ?></td>
+                                        <td><?= esc($jadwal['terisi']) . ' orang'; ?></td>
+                                        <td><?= esc($jadwal['sisa']) . ' orang'; ?></td>
+                                        <td>
+                                            <span class="badge 
+                                <?= ($jadwal['status'] == 'tersedia') ? 'badge-success' : (($jadwal['status'] == 'penuh') ? 'badge-danger' : 'badge-warning'); ?>">
+                                                <?= ucfirst($jadwal['status']); ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                                            <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Tutup</button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -108,6 +106,46 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Tambah Jadwal -->
+<div class="modal fade" id="tambahJadwalModal" tabindex="-1" role="dialog" aria-labelledby="tambahJadwalModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tambahJadwalModalLabel">Tambah Jadwal Trip</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('jadwal_trip/tambah') ?>" method="POST">
+                    <div class="form-group">
+                        <label for="tanggal">Tanggal Trip</label>
+                        <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="paket">Paket</label>
+                        <select class="form-control" id="paket" name="paket" required>
+                            <option value="Open Trip Whale Shark Teluk Saleh">Open Trip Whale Shark Teluk Saleh</option>
+                            <option value="Private Trip Whale Shark Teluk Saleh">Private Trip Whale Shark Teluk Saleh</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="kapasitas">Kapasitas</label>
+                        <input type="number" class="form-control" id="kapasitas" name="kapasitas" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Simpan Jadwal</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 4 JS & Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <!-- Custom CSS for Calendar and Buttons -->
 <style>

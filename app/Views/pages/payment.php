@@ -65,52 +65,78 @@
                 <div class="card-body">
                     <h4 class="mb-4 font-weight-bold">Metode Pembayaran</h4>
 
-                    <!-- Mode Pembayaran -->
-                    <div class="form-section mb-4">
-                        <label for="paymentMode" class="form-label">Mode Pembayaran</label>
-                        <select class="form-control" id="paymentMode" name="paymentMode" required>
-                            <option value="">Pilih Metode Pembayaran</option>
-                            <option value="ewallet">E-wallet</option>
-                            <option value="bank">Bank</option>
-                        </select>
-                    </div>
+                    <!-- FORM MULAI -->
+                    <form action="<?= base_url('payment/update') ?>" method="post" enctype="multipart/form-data">
+                        <?= csrf_field() ?>
+                        <input type="hidden" class="form-control" name="booking_id" value="<?= esc($booking['id']); ?>">
 
-                    <!-- E-wallet Options (Gopay, Dana, Shopeepay) -->
-                    <div class="form-section mb-4" id="ewalletOptions" style="display: none;">
-                        <label for="ewalletChoice" class="form-label">Pilih E-wallet</label>
-                        <select class="form-control" id="ewalletChoice" name="ewalletChoice">
-                            <option value="">Pilih E-wallet</option>
-                            <option value="gopay">Gopay</option>
-                            <option value="dana">Dana</option>
-                            <option value="shopeepay">ShopeePay</option>
-                        </select>
-                    </div>
+                        <?php
+                        $sudahBayar = !empty($booking['mode_pembayaran']) && !empty($booking['upload_gambar']);
+                        ?>
 
-                    <!-- Bank Option (BNI) -->
-                    <div class="form-section mb-4" id="bankOption" style="display: none;">
-                        <label for="bankAccount" class="form-label">Rekening Bank (BNI)</label>
-                        <input type="text" class="form-control" id="bankAccount" name="bankAccount" placeholder="contoh: 1234567890" required>
-                    </div>
+                        <!-- Mode Pembayaran -->
+                        <div class="form-section mb-4">
+                            <label for="paymentMode" class="form-label">Mode Pembayaran</label>
+                            <select class="form-control" id="paymentMode" name="paymentMode" <?= $sudahBayar ? 'disabled' : '' ?> required>
+                                <option value="">Pilih Metode Pembayaran</option>
+                                <option value="ewallet" <?= ($booking['mode_pembayaran'] != 'bni' && !empty($booking['mode_pembayaran'])) ? 'selected' : '' ?>>E-wallet</option>
+                                <option value="bank" <?= ($booking['mode_pembayaran'] == 'bni') ? 'selected' : '' ?>>Bank</option>
+                            </select>
+                        </div>
 
-                    <!-- Total Biaya -->
-                    <div class="form-section mb-4">
-                        <label for="totalCost" class="form-label">Total Biaya</label>
-                        <input type="number" class="form-control" id="totalCost" name="totalCost" value="<?= esc($booking['total_biaya']); ?>" readonly>
-                    </div>
+                        <!-- E-wallet Options -->
+                        <div class="form-section mb-4" id="ewalletOptions" style="display: <?= ($booking['mode_pembayaran'] != 'bni' && !empty($booking['mode_pembayaran'])) ? 'block' : 'none'; ?>;">
+                            <label for="ewalletChoice" class="form-label">Pilih E-wallet</label>
+                            <select class="form-control" id="ewalletChoice" name="ewalletChoice" <?= $sudahBayar ? 'disabled' : '' ?>>
+                                <option value="">Pilih E-wallet</option>
+                                <option value="gopay" <?= ($booking['mode_pembayaran'] == 'gopay') ? 'selected' : '' ?>>Gopay</option>
+                                <option value="dana" <?= ($booking['mode_pembayaran'] == 'dana') ? 'selected' : '' ?>>Dana</option>
+                                <option value="qris" <?= ($booking['mode_pembayaran'] == 'shopeepay') ? 'selected' : '' ?>>ShopeePay</option>
+                            </select>
+                        </div>
 
-                    <!-- Upload Bukti Pembayaran -->
-                    <div class="form-section mb-4">
-                        <label for="paymentProof" class="form-label">Upload Bukti Pembayaran</label>
-                        <input type="file" class="form-control" id="paymentProof" name="paymentProof" accept="image/*,.pdf" required>
-                    </div>
+                        <!-- Bank Option -->
+                        <div class="form-section mb-4" id="bankOption" style="display: <?= ($booking['mode_pembayaran'] == 'bni') ? 'block' : 'none'; ?>;">
+                            <label for="bankAccount" class="form-label">Rekening Bank (BNI)</label>
+                            <input type="text" class="form-control" id="bankAccount" name="bankAccount" value="<?= esc($booking['bank_account'] ?? '') ?>" <?= $sudahBayar ? 'readonly' : '' ?>>
+                        </div>
 
-                    <!-- Tombol Submit -->
-                    <div class="d-flex justify-content-center mb-5">
-                        <button type="submit" class="btn btn-primary btn-lg">Submit Pembayaran</button>
-                    </div>
+                        <!-- Total Biaya -->
+                        <div class="form-section mb-4">
+                            <label for="totalCost" class="form-label">Total Biaya</label>
+                            <input type="number" class="form-control" id="totalCost" name="totalCost" value="<?= esc($booking['total_biaya']); ?>" readonly>
+                        </div>
+
+                        <!-- Upload Bukti Pembayaran -->
+                        <div class="form-section mb-4">
+                            <label for="paymentProof" class="form-label">Upload Bukti Pembayaran</label>
+                            <?php if ($sudahBayar && !empty($booking['upload_gambar'])): ?>
+                                <div class="alert alert-success">
+                                    Bukti sudah diupload: <br>
+                                    <img src="<?= base_url('uploads/bukti_bayar/' . $booking['upload_gambar']); ?>" alt="Bukti" class="img-fluid mt-2 rounded" style="max-height:200px;">
+                                </div>
+                            <?php else: ?>
+                                <input type="file" class="form-control" id="paymentProof" name="paymentProof" accept="image/*,.pdf" required>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Tombol Submit -->
+                        <?php if (!$sudahBayar): ?>
+                            <div class="d-flex justify-content-center mb-5">
+                                <button type="submit" class="btn btn-primary btn-lg">Submit Pembayaran</button>
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-info text-center">
+                                Pembayaran sudah dilakukan. Tidak bisa mengubah data.
+                            </div>
+                        <?php endif; ?>
+                    </form>
+                    <!-- FORM SELESAI -->
+
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Gambar Metode Pembayaran -->

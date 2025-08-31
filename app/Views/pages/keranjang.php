@@ -19,29 +19,33 @@
             </thead>
             <tbody>
                 <?php if (!empty($orders)): ?>
-                <?php foreach ($orders as $index => $order): ?>
-                <tr>
-                    <td><?= $index + 1 ?></td>
-                    <td><?= $order['full_name'] ?></td>
-                    <td><?= $order['email'] ?></td>
-                    <td><?= $order['kontak'] ?></td>
-                    <td><?= $order['jumlah_orang'] ?></td>
-                    <td>Rp <?= number_format($order['total_biaya'], 0, ',', '.') ?></td>
-                    <td>
-                        <?php if ($order['role_payment'] == 'pending'): ?>
-                        <span class="badge bg-warning">Pending</span>
-                        <?php elseif ($order['role_payment'] == 'confirmed'): ?>
-                        <span class="badge bg-info">Confirmed</span>
-                        <?php elseif ($order['role_payment'] == 'completed'): ?>
-                        <span class="badge bg-success">Completed</span>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
+                    <?php foreach ($orders as $index => $order): ?>
+                        <tr>
+                            <td><?= $index + 1 ?></td>
+                            <td>
+                                <a href="<?= base_url('payment/' . $order['id']); ?>">
+                                    <?= esc($order['full_name']); ?>
+                                </a>
+                            </td>
+                            <td><?= $order['email'] ?></td>
+                            <td><?= $order['kontak'] ?></td>
+                            <td><?= $order['jumlah_orang'] ?></td>
+                            <td>Rp <?= number_format($order['total_biaya'], 0, ',', '.') ?></td>
+                            <td>
+                                <?php if ($order['role_payment'] == 'pending'): ?>
+                                    <span class="badge bg-warning">Pending</span>
+                                <?php elseif ($order['role_payment'] == 'confirmed'): ?>
+                                    <span class="badge bg-info">Confirmed</span>
+                                <?php elseif ($order['role_payment'] == 'completed'): ?>
+                                    <span class="badge bg-success">Completed</span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 <?php else: ?>
-                <tr>
-                    <td colspan="7" class="text-center">Tidak ada pemesanan untuk ditampilkan.</td>
-                </tr>
+                    <tr>
+                        <td colspan="7" class="text-center">Tidak ada pemesanan untuk ditampilkan.</td>
+                    </tr>
                 <?php endif; ?>
             </tbody>
         </table>

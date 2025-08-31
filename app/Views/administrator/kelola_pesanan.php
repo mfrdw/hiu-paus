@@ -42,45 +42,57 @@
                             <table class="table table-bordered table-hover text-center">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ID</th>
+                                        <th scope="col">No</th>
                                         <th scope="col">Nama Pemesan</th>
                                         <th scope="col">Paket</th>
                                         <th scope="col">Tanggal</th>
                                         <th scope="col">Jumlah</th>
                                         <th scope="col">Total</th>
                                         <th scope="col">Status</th>
+                                        <th scope="col">Bukti Bayar</th>
+                                        <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>#PW001</td>
-                                        <td>John Doe</td>
-                                        <td>Paket Gunung Bromo</td>
-                                        <td>2024-07-15</td>
-                                        <td>4 orang</td>
-                                        <td>Rp 2.000.000</td>
-                                        <td><span class="badge badge-warning">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#PW002</td>
-                                        <td>Jane Smith</td>
-                                        <td>Paket Pantai Malang</td>
-                                        <td>2024-07-16</td>
-                                        <td>2 orang</td>
-                                        <td>Rp 800.000</td>
-                                        <td><span class="badge badge-success">Confirmed</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#PW003</td>
-                                        <td>Bob Wilson</td>
-                                        <td>Paket City Tour</td>
-                                        <td>2024-07-10</td>
-                                        <td>6 orang</td>
-                                        <td>Rp 1.200.000</td>
-                                        <td><span class="badge badge-primary">Completed</span></td>
-                                    </tr>
+                                    <?php $index = 1; ?>
+                                    <?php foreach ($bookings as $booking): ?>
+                                        <tr>
+                                            <td><?= $index++; ?></td>
+                                            <td><?= esc($booking['full_name']); ?></td>
+                                            <td>
+                                                <?php
+                                                if ($booking['jumlah_orang'] == 1 && $booking['total_biaya'] == 650000) {
+                                                    echo 'Open Trip Whale Shark Teluk Saleh';
+                                                } else {
+                                                    echo 'Private Trip Whale Shark Teluk Saleh';
+                                                }
+                                                ?>
+                                            </td>
+                                            <td><?= esc($booking['created_at']); ?></td>
+                                            <td><?= esc($booking['jumlah_orang']); ?> orang</td>
+                                            <td>Rp <?= number_format($booking['total_biaya'], 0, ',', '.'); ?></td>
+                                            <td>
+                                                <span class="badge 
+                        <?= ($booking['role_payment'] == 'pending') ? 'badge-warning' : (($booking['role_payment'] == 'confirmed') ? 'badge-success' : 'badge-primary'); ?>">
+                                                    <?= ucfirst($booking['role_payment']); ?>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <?php if (!empty($booking['upload_gambar'])): ?>
+                                                    <a href="<?= base_url('uploads/bukti_bayar/' . $booking['upload_gambar']); ?>" target="_blank" class="btn btn-info btn-sm">Lihat Bukti</a>
+                                                <?php else: ?>
+                                                    <span class="text-muted">Belum Upload</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <a href="<?= base_url('admin/edit_booking/' . $booking['id']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                                <a href="<?= base_url('admin/delete_booking/' . $booking['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?');">Hapus</a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>

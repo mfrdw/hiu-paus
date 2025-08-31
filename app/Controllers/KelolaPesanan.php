@@ -2,13 +2,13 @@
 
 namespace App\Controllers;
 
-use App\Models\M_KelolaPesan;
+use App\Models\M_BookingDetails;
 
 class KelolaPesanan extends BaseController
 {
     public function index()
     {
-        $model = new M_KelolaPesan();
+        $model = new M_BookingDetails();
 
         // Mengambil semua data pemesanan
         $data['pesanan'] = $model->getAllPesanan();
@@ -18,7 +18,7 @@ class KelolaPesanan extends BaseController
 
     public function detail($id)
     {
-        $model = new M_KelolaPesan();
+        $model = new M_BookingDetails();
 
         // Mengambil data pesanan berdasarkan ID
         $data['pesanan'] = $model->getPesananById($id);
@@ -28,7 +28,7 @@ class KelolaPesanan extends BaseController
 
     public function pesananByUser($userId)
     {
-        $model = new M_KelolaPesan();
+        $model = new M_BookingDetails();
 
         // Mengambil pesanan berdasarkan id_users
         $data['pesanan'] = $model->getPesananByUserId($userId);
@@ -38,7 +38,7 @@ class KelolaPesanan extends BaseController
 
     public function totalBiayaByUser($userId)
     {
-        $model = new M_KelolaPesan();
+        $model = new M_BookingDetails();
 
         // Mengambil total biaya berdasarkan id_users
         $data['total'] = $model->getTotalBiayaByUser($userId);

@@ -16,6 +16,8 @@ class M_BookingDetails extends Model
         'jumlah_orang',
         'total_biaya',
         'role_payment',
+        'mode_pembayaran',
+        'upload_gambar',
         'created_at'
     ];
     protected $useTimestamps = true;
