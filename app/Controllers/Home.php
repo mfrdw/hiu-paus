@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\M_BookingDetails;
+use App\Models\M_Users;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Home extends BaseController
@@ -57,6 +58,31 @@ class Home extends BaseController
 
         return view('pages/payment', $data);
     }
+
+public function keranjang(): string
+{
+    $bookingModel = new M_BookingDetails();
+
+    $user_id = session()->get('id');
+
+    if ($user_id) {
+        $orders = $bookingModel
+            ->where('user_id', $user_id)
+            ->orderBy('created_at', 'DESC')
+            ->findAll();
+    } else {
+        $orders = [];
+    }
+
+    $data = [
+        'title' => 'Riwayat Pesanan',
+        'orders' => $orders,
+    ];
+
+    return view('pages/keranjang', $data);
+}
+
+
 
     public function login(): string
     {

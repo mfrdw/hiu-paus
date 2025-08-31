@@ -12,6 +12,7 @@ $routes->get('/logout', 'Auth::logout');
 
 $routes->get('detail', 'Home::detail');
 $routes->get('booking', 'Home::booking');
+$routes->get('keranjang', 'Home::keranjang');
 $routes->get('payment/(:num)', 'Home::payment/$1');
 
 $routes->get('registration', 'Home::registration');

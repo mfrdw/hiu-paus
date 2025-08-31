@@ -29,8 +29,11 @@ class BookingController extends Controller
         $insertId = $paymentModel->insert($data);
 
         if ($insertId) {
+            // Debugging insertId
+            var_dump($insertId);
             return redirect()->to('/payment/' . $insertId)->with('success', 'Pemesanan berhasil!');
         }
+
 
         return redirect()->to('/booking')->with('error', 'Gagal memproses pemesanan. Silakan coba lagi.');
     }

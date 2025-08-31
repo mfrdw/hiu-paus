@@ -76,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 oninput="updateCost()">
                         </div>
                     </div>
-
                 </div>
                 <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
                     <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
