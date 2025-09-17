@@ -8,7 +8,7 @@
 
 <!-- Video Section -->
 <div class="video-container mb-5">
-    <iframe src="https://www.youtube.com/" allow="autoplay" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/VxgaVjT5Lfk?si=rkG2LnXLG_3Ao1bV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
 <!-- Circle Icons Section -->
@@ -287,5 +287,168 @@
         }
     });
 </script>
+
+
+<!-- Iklan -->
+<style>
+    /* Popup Modal Style */
+    .promo-popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    /* Promo Content Styling */
+    .promo-content {
+        background: linear-gradient(145deg, #ff9e2c, #ff6a13);
+        /* Warna gradasi cerah */
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        position: relative;
+        color: white;
+    }
+
+    /* Styling untuk teks di dalam promo-content */
+    .promo-content p {
+        font-size: 1.2rem;
+        margin: 10px 0;
+        font-weight: 500;
+    }
+
+    .promo-content p strong {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    /* Align text inside the promo */
+    .promo-content .promo-header {
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    /* Teks harga */
+    .promo-content .promo-price {
+        margin: 15px 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    /* Button Styling */
+    .promo-content .btn-promo,
+    .promo-content .btn-whatsapp {
+        background-color: #ff6a13;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .promo-content .btn-promo:hover,
+    .promo-content .btn-whatsapp:hover {
+        background-color: #d94e0b;
+    }
+
+    /* Styling untuk tombol close */
+    .promo-content .close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.8rem;
+        color: #fff;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .promo-content .close:hover {
+        color: #f1c40f;
+    }
+
+    /* Animasi fadeIn */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* Responsivitas untuk ukuran mobile */
+    @media (max-width: 768px) {
+        .promo-content {
+            padding: 20px;
+        }
+
+        .promo-content p {
+            font-size: 1rem;
+        }
+
+        .promo-content .btn-promo,
+        .promo-content .btn-whatsapp {
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .promo-content .close {
+            top: 10px;
+            right: 10px;
+        }
+    }
+</style>
+<div id="promoPopup" class="promo-popup">
+    <div class="promo-content">
+        <span id="closePopup" class="close">&times;</span>
+        <div class="promo-header">
+            <p><strong>Diskon 25% untuk 10 Wisatawan Pertama!</strong></p>
+        </div>
+        <div class="promo-price">
+            <p>Snorkeling dengan Hiu Paus</p>
+            <p><strong>Harga Normal: Rp 200.000</strong></p>
+            <p><strong>Harga Diskon: Rp 150.000</strong></p>
+        </div>
+        <button class="btn-promo">Gunakan Promo Sekarang</button>
+        <button class="btn-whatsapp">Bagikan ke WhatsApp</button>
+        <div class="promo-footer">
+            <small><strong>Penawaran Terbatas - Jangan Sampai Terlewat!</strong></small>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    setTimeout(function() {
+        document.getElementById('promoPopup').style.display = 'flex';
+    }, 1000);
+
+    document.getElementById('closePopup').addEventListener('click', function() {
+        document.getElementById('promoPopup').style.display = 'none';
+    });
+
+    setTimeout(function() {
+        document.getElementById('promoPopup').style.display = 'none';
+    }, 7000);
+</script>
+
 
 <?= $this->endSection() ?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 09, 2025 at 03:53 PM
+-- Generation Time: Sep 17, 2025 at 05:13 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.29
 
@@ -60,24 +60,13 @@ CREATE TABLE `jadwal_trip` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `kelola_pesanan`
+-- Dumping data for table `jadwal_trip`
 --
 
-CREATE TABLE `kelola_pesanan` (
-  `id` int NOT NULL,
-  `id_users` int NOT NULL,
-  `nama_pemesan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `paket_wisata` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tanggal` date NOT NULL,
-  `jumlah` int NOT NULL,
-  `total_biaya` decimal(10,2) NOT NULL,
-  `status` enum('pending','confirmed','completed') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `jadwal_trip` (`id`, `tanggal`, `paket`, `kapasitas`, `terisi`, `sisa`, `status`, `created_at`, `updated_at`) VALUES
+(1, '2025-09-20', 'Open Trip Whale Shark Teluk Saleh', 20, 0, 20, 'tersedia', '2025-09-17 06:54:08', '2025-09-17 06:54:08'),
+(2, '2025-09-17', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-09-17 06:56:28', '2025-09-17 06:56:28');
 
 -- --------------------------------------------------------
 
@@ -116,6 +105,37 @@ CREATE TABLE `payments` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ulasan`
+--
+
+CREATE TABLE `ulasan` (
+  `id` int NOT NULL,
+  `id_user` int NOT NULL,
+  `id_trip` int NOT NULL,
+  `ulasan` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `pengalaman_rating` int NOT NULL DEFAULT '0',
+  `pemandu_rating` int NOT NULL DEFAULT '0',
+  `fasilitas_rating` int NOT NULL DEFAULT '0'
+) ;
+
+--
+-- Dumping data for table `ulasan`
+--
+
+INSERT INTO `ulasan` (`id`, `id_user`, `id_trip`, `ulasan`, `created_at`, `updated_at`, `pengalaman_rating`, `pemandu_rating`, `fasilitas_rating`) VALUES
+(8, 3, 1, 'keren sih', '2025-09-17 09:04:01', '2025-09-17 09:04:01', 5, 5, 3),
+(9, 1, 1, 'Next bakalan kesini lagi', '2025-09-17 09:14:12', '2025-09-17 09:14:12', 3, 4, 4),
+(10, 1, 1, 'MAntap sih ini, gokil banget', '2025-09-17 09:20:30', '2025-09-17 09:20:30', 5, 5, 5),
+(11, 1, 1, 'Guide nya jangan cuek dong\r\n', '2025-09-17 09:20:51', '2025-09-17 09:20:51', 5, 2, 5),
+(12, 1, 1, 'Tidak Rekomen', '2025-09-17 09:21:07', '2025-09-17 09:21:07', 1, 1, 1),
+(13, 1, 1, 'aaaa seruuuu', '2025-09-17 09:21:24', '2025-09-17 09:21:24', 5, 5, 5),
+(14, 1, 2, 'mantap sih ini', '2025-09-17 09:33:00', '2025-09-17 09:33:00', 5, 5, 5);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -136,7 +156,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `nama_lengkap`, `kontak`, `email`, `role_user`, `created_at`, `updated_at`) VALUES
-(1, 'user', '123', 'Muhammad Fikri Ridwan', '082250706412', 'mfikryrid@gmail.com', '1', NULL, NULL),
+(1, 'user', '123', 'Jarwo Kwat', '082250706412', 'mfikryrid@gmail.com', '1', NULL, NULL),
 (3, 'admin', '123', 'Muhammad Fikri Ridwan', '082250706412', 'mfikryrid2@gmail.com', '2', NULL, NULL);
 
 --
@@ -156,13 +176,6 @@ ALTER TABLE `jadwal_trip`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `kelola_pesanan`
---
-ALTER TABLE `kelola_pesanan`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_users` (`id_users`);
-
---
 -- Indexes for table `kelola_wisata`
 --
 ALTER TABLE `kelola_wisata`
@@ -174,6 +187,13 @@ ALTER TABLE `kelola_wisata`
 ALTER TABLE `payments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indexes for table `users`
@@ -190,19 +210,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking_details`
 --
 ALTER TABLE `booking_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `jadwal_trip`
 --
 ALTER TABLE `jadwal_trip`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `kelola_pesanan`
---
-ALTER TABLE `kelola_pesanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `kelola_wisata`
@@ -217,6 +231,12 @@ ALTER TABLE `payments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -227,16 +247,16 @@ ALTER TABLE `users`
 --
 
 --
--- Constraints for table `kelola_pesanan`
---
-ALTER TABLE `kelola_pesanan`
-  ADD CONSTRAINT `kelola_pesanan_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `payments`
 --
 ALTER TABLE `payments`
   ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  ADD CONSTRAINT `ulasan_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\M_BookingDetails;
 use App\Models\M_JadwalTrip;
+use App\Models\M_UlasanUsers;
 
 class Administrator extends BaseController
 {
@@ -49,5 +50,22 @@ class Administrator extends BaseController
             'title' => 'Kelola Paket Wisata',
         ];
         return view('administrator/kelola_paket_wisata', $data);
+    }
+    public function kelola_ulasan(): string
+    {
+        $model = new M_UlasanUsers();
+        $ulasan = $model->getUlasanWithUserAdmin();
+        $totalReviews = count($ulasan);
+
+        if ($totalReviews === 0) {
+            $ulasan = null;
+        }
+
+        $data = [
+            'title' => 'Kelola Ulasan',
+            'ulasan' => $ulasan,
+        ];
+
+        return view('administrator/kelola_ulasan', $data);
     }
 }

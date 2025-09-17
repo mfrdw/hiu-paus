@@ -11,13 +11,14 @@ $routes->post('/auth/dologin', 'Auth::doLogin');
 $routes->get('/logout', 'Auth::logout');
 
 $routes->get('detail', 'Home::detail');
-$routes->get('detail_wisata', 'Home::detail_wisata_p
-rivate');
+$routes->get('detail_wisata', 'Home::detail_wisata_private');
 $routes->get('booking', 'Home::booking');
 $routes->get('booking_private', 'Home::booking_private');
-$routes->get('keranjang', 'Home::keranjang');
+$routes->get('history', 'Home::history');
 $routes->get('payment/(:num)', 'Home::payment/$1');
 $routes->get('payment/success/(:num)', 'Home::payments_success/$1');
+$routes->post('submitReview', 'Home::submitReview');
+
 
 
 
@@ -31,6 +32,8 @@ $routes->get('kelola_pesanan', 'Administrator::kelola_pesanan');
 $routes->get('kelola_jadwal', 'Administrator::kelola_jadwal');
 $routes->get('kelola_paket_wisata', 'Administrator::kelola_paket_wisata');
 $routes->post('/kelola-wisata/create', 'KelolaWisata::create');
+
+$routes->get('kelola_ulasan', 'Administrator::kelola_ulasan');
 
 $routes->post('kelola-wisata/create', 'KelolaWisata::create');
 

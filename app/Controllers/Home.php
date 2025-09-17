@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\M_BookingDetails;
 use App\Models\M_Users;
+use App\Models\M_UlasanUsers;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Home extends BaseController
@@ -20,23 +21,91 @@ class Home extends BaseController
 
     public function detail(): string
     {
+        $model = new M_UlasanUsers();
+        $ulasan = $model->getUlasanWithUser();
+
+        $totalReviews = count($ulasan);
+
+        if ($totalReviews === 0) {
+            $ulasan = null;
+        }
+
+        $totalPengalaman = 0;
+        $totalPemandu = 0;
+        $totalFasilitas = 0;
+
+        if ($ulasan) {
+            foreach ($ulasan as $item) {
+                $totalPengalaman += $item['pengalaman_rating'];
+                $totalPemandu += $item['pemandu_rating'];
+                $totalFasilitas += $item['fasilitas_rating'];
+            }
+        }
+
+        $averagePengalaman = ($totalReviews > 0) ? $totalPengalaman / $totalReviews : 0;
+        $averagePemandu = ($totalReviews > 0) ? $totalPemandu / $totalReviews : 0;
+        $averageFasilitas = ($totalReviews > 0) ? $totalFasilitas / $totalReviews : 0;
+        $averageRating = ($averagePengalaman + $averagePemandu + $averageFasilitas) / 3;
 
         $data = [
             'title' => 'Detail ',
+            'ulasan' => $ulasan,
+            'totalReviews' => $totalReviews,
+            'averageRating' => round($averageRating, 1),
+            'averagePengalaman' => round($averagePengalaman, 1),
+            'averagePemandu' => round($averagePemandu, 1),
+            'averageFasilitas' => round($averageFasilitas, 1)
         ];
 
         return view('pages/detail_wisata', $data);
     }
 
+
+
+
+
     public function detail_wisata_private(): string
     {
+        $model = new M_UlasanUsers();
+        $ulasan = $model->getUlasanWithUserPrivate();
+
+        $totalReviews = count($ulasan);
+
+        if ($totalReviews === 0) {
+            $ulasan = null;
+        }
+
+        $totalPengalaman = 0;
+        $totalPemandu = 0;
+        $totalFasilitas = 0;
+
+        if ($ulasan) {
+            foreach ($ulasan as $item) {
+                $totalPengalaman += $item['pengalaman_rating'];
+                $totalPemandu += $item['pemandu_rating'];
+                $totalFasilitas += $item['fasilitas_rating'];
+            }
+        }
+
+        $averagePengalaman = ($totalReviews > 0) ? $totalPengalaman / $totalReviews : 0;
+        $averagePemandu = ($totalReviews > 0) ? $totalPemandu / $totalReviews : 0;
+        $averageFasilitas = ($totalReviews > 0) ? $totalFasilitas / $totalReviews : 0;
+        $averageRating = ($averagePengalaman + $averagePemandu + $averageFasilitas) / 3;
 
         $data = [
             'title' => 'Detail ',
+            'ulasan' => $ulasan,
+            'totalReviews' => $totalReviews,
+            'averageRating' => round($averageRating, 1),
+            'averagePengalaman' => round($averagePengalaman, 1),
+            'averagePemandu' => round($averagePemandu, 1),
+            'averageFasilitas' => round($averageFasilitas, 1)
         ];
 
         return view('pages/detail_wisata_private', $data);
     }
+
+
 
     public function booking(): string
     {
@@ -79,7 +148,7 @@ class Home extends BaseController
         return view('pages/payment', $data);
     }
 
-    public function keranjang(): string
+    public function history(): string
     {
         $bookingModel = new M_BookingDetails();
 
@@ -99,7 +168,7 @@ class Home extends BaseController
             'orders' => $orders,
         ];
 
-        return view('pages/keranjang', $data);
+        return view('pages/history', $data);
     }
 
     public function payments_success($bookingId): string
@@ -110,6 +179,32 @@ class Home extends BaseController
         ];
 
         return view('pages/payment_success', $data);
+    }
+
+    public function submitReview()
+    {
+        $pengalamanRating = $this->request->getPost('pengalaman_rating');
+        $pemanduRating = $this->request->getPost('pemandu_rating');
+        $fasilitasRating = $this->request->getPost('fasilitas_rating');
+        $ulasanFasilitas = $this->request->getPost('ulasanFasilitas');
+        $id_trip = $this->request->getPost('id_trip');
+
+
+        $data = [
+            'id_user' => session()->get('id'),
+            'id_trip' => $id_trip,
+            'pengalaman_rating' => $pengalamanRating,
+            'pemandu_rating' => $pemanduRating,
+            'fasilitas_rating' => $fasilitasRating,
+            'ulasan' => $ulasanFasilitas,
+        ];
+
+        $model = new M_UlasanUsers();
+        if ($model->save($data)) {
+            return redirect()->back()->with('success', 'Ulasan Anda berhasil dikirim!');
+        } else {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengirim ulasan.');
+        }
     }
 
 

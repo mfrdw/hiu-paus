@@ -1,6 +1,33 @@
 <?= $this->extend('layout_user/header') ?>
 <?= $this->section('content') ?>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if (session()->getFlashdata('success')): ?>
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).fire({
+                icon: 'success',
+                title: '<?= session()->getFlashdata('success'); ?>'
+            });
+        <?php elseif (session()->getFlashdata('error')): ?>
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).fire({
+                icon: 'error',
+                title: '<?= session()->getFlashdata('error'); ?>'
+            });
+        <?php endif; ?>
+    });
+</script>
 <!-- Main Content Section -->
 <div class="container mt-4">
 
@@ -38,36 +65,149 @@
         <div class="col-md-8">
             <div class="card mt-3" style="border-radius: 0.5rem; margin-bottom: 1rem;">
                 <div class="card-header" style="background-color: #f8f9fa;">
-                    <h5 class="card-title" style="font-size: 1.2rem; font-weight: bold;">Open Trip Whale Shark Teluk
-                        Saleh</h5>
+                    <h5 class="card-title" style="font-size: 1.2rem; font-weight: bold;">Open Trip Whale Shark Teluk Saleh</h5>
                 </div>
                 <div class="card-body">
-                    <p><strong>Rating:</strong> 9.0/10 <small>(2.420 review)</small></p>
-                    <p><strong>Kesan Mengikuti Trip Lain:</strong></p>
-                    <ul class="rating-item" style="list-style: none; padding-left: 0;">
-                        <li><i class="fas fa-star" style="color: #f39c12;"></i> Pengalaman: 9/10</li>
-                        <li><i class="fas fa-star" style="color: #f39c12;"></i> Pemandu: 8/10</li>
-                        <li><i class="fas fa-star" style="color: #f39c12;"></i> Fasilitas: 8/10</li>
-                    </ul>
+                    <?php if ($ulasan): ?>
+                        <p><strong>Rating:</strong> <?= esc($averageRating ?? 0); ?>/5 <small>(<?= esc($totalReviews); ?> review)</small></p>
 
+                        <p><strong>Kesan Mengikuti Trip Lain:</strong></p>
+                        <ul class="rating-item" style="list-style: none; padding-left: 0;">
+                            <li>
+                                <i class="fas fa-star" style="color: <?= $averagePengalaman >= 1 ? '#f39c12' : '#ccc'; ?>"></i>
+                                Pengalaman: <?= esc($averagePengalaman ?? 0); ?>/5
+                            </li>
+                            <li>
+                                <i class="fas fa-star" style="color: <?= $averagePemandu >= 1 ? '#f39c12' : '#ccc'; ?>"></i>
+                                Pemandu: <?= esc($averagePemandu ?? 0); ?>/5
+                            </li>
+                            <li>
+                                <i class="fas fa-star" style="color: <?= $averageFasilitas >= 1 ? '#f39c12' : '#ccc'; ?>"></i>
+                                Fasilitas: <?= esc($averageFasilitas ?? 0); ?>/5
+                            </li>
+                        </ul>
+
+                        <hr>
+                    <?php else: ?>
+                        <p><strong>Belum ada ulasan untuk trip ini.</strong></p>
+                    <?php endif; ?>
+
+
+                    <!-- Form untuk Rating dan Ulasan -->
+                    <form method="POST" action="<?= base_url('submitReview') ?>" id="ratingForm">
+                        <input type="hidden" name="id_trip" value="1">
+                        <div class="accordion" id="ratingAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingRating">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRating" aria-expanded="false" aria-controls="collapseRating">
+                                        Berikan Rating dan Ulasan Anda
+                                    </button>
+                                </h2>
+                                <div id="collapseRating" class="accordion-collapse collapse" aria-labelledby="headingRating" data-bs-parent="#ratingAccordion">
+                                    <div class="accordion-body">
+                                        <!-- Pengalaman Rating -->
+                                        <p><strong>Pengalaman</strong></p>
+                                        <div class="rating experience-rating" data-rating="0">
+                                            <i class="fas fa-star star" data-value="1"></i>
+                                            <i class="fas fa-star star" data-value="2"></i>
+                                            <i class="fas fa-star star" data-value="3"></i>
+                                            <i class="fas fa-star star" data-value="4"></i>
+                                            <i class="fas fa-star star" data-value="5"></i>
+                                        </div>
+                                        <!-- Input hidden untuk Pengalaman Rating -->
+                                        <input type="hidden" name="pengalaman_rating" id="pengalaman_rating" value="0">
+
+                                        <hr>
+
+                                        <!-- Pemandu Rating -->
+                                        <p><strong>Pemandu</strong></p>
+                                        <div class="rating guide-rating" data-rating="0">
+                                            <i class="fas fa-star star" data-value="1"></i>
+                                            <i class="fas fa-star star" data-value="2"></i>
+                                            <i class="fas fa-star star" data-value="3"></i>
+                                            <i class="fas fa-star star" data-value="4"></i>
+                                            <i class="fas fa-star star" data-value="5"></i>
+                                        </div>
+                                        <!-- Input hidden untuk Pemandu Rating -->
+                                        <input type="hidden" name="pemandu_rating" id="pemandu_rating" value="0">
+
+                                        <hr>
+
+                                        <!-- Fasilitas Rating -->
+                                        <p><strong>Fasilitas</strong></p>
+                                        <div class="rating facilities-rating" data-rating="0">
+                                            <i class="fas fa-star star" data-value="1"></i>
+                                            <i class="fas fa-star star" data-value="2"></i>
+                                            <i class="fas fa-star star" data-value="3"></i>
+                                            <i class="fas fa-star star" data-value="4"></i>
+                                            <i class="fas fa-star star" data-value="5"></i>
+                                        </div>
+                                        <!-- Input hidden untuk Fasilitas Rating -->
+                                        <input type="hidden" name="fasilitas_rating" id="fasilitas_rating" value="0">
+
+                                        <hr>
+
+                                        <textarea class="form-control mt-2" id="ulasanFasilitas" name="ulasanFasilitas" rows="3" placeholder="Tulis ulasan pengalaman di sini..."></textarea>
+
+                                        <hr>
+
+                                        <!-- Kirim Rating -->
+                                        <button class="btn btn-primary" type="submit" id="submit-rating">Kirim Ulasan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card mt-3"
-                style="border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+            <div class="card mt-3" style="border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
                 <div class="card-body" style="background-color: #f8f9fa; padding: 30px;">
                     <h4 style="font-size: 1.5rem; font-weight: bold; color: #28a745;">Harga mulai dari:</h4>
                     <p style="font-size: 1.2rem; font-weight: bold; color: #007bff;">Rp 650.000/Orang</p>
-                    <a href="<?= base_url('booking') ?>" class="btn btn-primary"
-                        style="width: 100%; padding: 15px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; transition: all 0.3s ease;">
+                    <a href="<?= base_url('booking') ?>" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; transition: all 0.3s ease;">
                         Pesan Sekarang
                     </a>
                 </div>
             </div>
         </div>
-
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fungsi untuk menangani klik pada bintang
+            document.querySelectorAll('.rating').forEach(function(ratingElement) {
+                ratingElement.querySelectorAll('.star').forEach(function(star) {
+                    star.addEventListener('click', function() {
+                        let ratingValue = this.getAttribute('data-value');
+                        ratingElement.setAttribute('data-rating', ratingValue);
+                        updateStars(ratingElement, ratingValue);
+
+                        // Perbarui nilai input hidden dengan rating yang dipilih
+                        if (ratingElement.classList.contains('experience-rating')) {
+                            document.getElementById('pengalaman_rating').value = ratingValue;
+                        } else if (ratingElement.classList.contains('guide-rating')) {
+                            document.getElementById('pemandu_rating').value = ratingValue;
+                        } else if (ratingElement.classList.contains('facilities-rating')) {
+                            document.getElementById('fasilitas_rating').value = ratingValue;
+                        }
+                    });
+                });
+            });
+
+            // Fungsi untuk mengupdate warna bintang berdasarkan rating
+            function updateStars(ratingElement, ratingValue) {
+                ratingElement.querySelectorAll('.star').forEach(function(star) {
+                    if (star.getAttribute('data-value') <= ratingValue) {
+                        star.style.color = '#f39c12'; // Warna bintang yang dipilih
+                    } else {
+                        star.style.color = '#ccc'; // Warna bintang yang tidak dipilih
+                    }
+                });
+            }
+        });
+    </script>
+
 
     <!-- Kalender Trip -->
     <div class="row mb-4">
@@ -94,18 +234,28 @@
         <div class="col-md-8">
             <div class="card" style="border-radius: 0.5rem; margin-bottom: 1rem;">
                 <div class="card-header" style="background-color: #f8f9fa;">
-                    <h4 class="review-header" style="font-size: 1.1rem; font-weight: bold;">Kesan Mengikuti Trip Lain
-                    </h4>
+                    <h4 class="review-header" style="font-size: 1.1rem; font-weight: bold;">Kesan Mengikuti Trip Lain</h4>
                 </div>
                 <div class="card-body">
-                    <p><strong>Andi D.</strong> - <em>Pengalaman melihat hiu paus di Teluk Saleh sangat luar biasa!
-                            Pemandu trip sangat berpengalaman, memberikan penjelasan yang jelas dan sangat membantu.
-                            Perjalanan ini benar-benar mengesankan!</em></p>
-                    <p><strong>Rina S.</strong> - <em>Trip ini sangat menyenangkan dan penuh petualangan! Meskipun cuaca
-                            sedikit kurang mendukung, pengalaman berenang bersama hiu paus tetap menjadi momen yang tak
-                            terlupakan. Pemandu sangat ramah dan siap membantu kapan saja.</em></p>
+                    <?php if ($ulasan): ?>
+
+                        <?php
+                        usort($ulasan, function ($a, $b) {
+                            return strtotime($b['created_at']) - strtotime($a['created_at']);
+                        });
+
+                        $ulasanTerbaru = array_slice($ulasan, 0, 5);
+                        ?>
+                        <?php foreach ($ulasanTerbaru as $item): ?>
+                            <p><strong><?= esc($item['nama_lengkap']); ?></strong> - <em><?= esc($item['ulasan']); ?></em></p>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p><strong>Belum ada ulasan untuk trip ini.</strong></p>
+                    <?php endif; ?>
                 </div>
+
             </div>
+
         </div>
 
         <div class="col-md-4">
@@ -166,6 +316,11 @@
 
 </div>
 
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
 <script>
