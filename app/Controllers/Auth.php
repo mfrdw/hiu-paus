@@ -7,39 +7,39 @@ use CodeIgniter\Controller;
 
 class Auth extends Controller
 {
-public function doLogin()
-{
-    $username = $this->request->getPost('username');
-    $password = $this->request->getPost('password');
+    public function doLogin()
+    {
+        $username = $this->request->getPost('username');
+        $password = $this->request->getPost('password');
 
-    if (!$username || !$password) {
-        return redirect()->to('/login')->with('error', 'Username dan password harus diisi.');
+        if (!$username || !$password) {
+            return redirect()->to('/login')->with('error', 'Username dan password harus diisi.');
+        }
+
+        $model = new M_Users();
+        $user = $model->where('username', $username)->first();
+
+        if (!$user) {
+            return redirect()->to('/login')->with('error', 'Username tidak ditemukan.');
+        }
+
+        if ($user['password'] !== $password) {
+            return redirect()->to('/login')->with('error', 'Password salah.');
+        }
+
+        session()->set([
+            'id'         => $user['id'],
+            'username'   => $user['username'],
+            'role_user'  => $user['role_user'],
+            'isLoggedIn' => true
+        ]);
+
+        if ($user['role_user'] == '1') {
+            return redirect()->to('/');
+        } else {
+            return redirect()->back()->with('error', 'User tidak ditemukan atau tidak memiliki akses');
+        }
     }
-
-    $model = new M_Users();
-    $user = $model->where('username', $username)->first();
-
-    if (!$user) {
-        return redirect()->to('/login')->with('error', 'Username tidak ditemukan.');
-    }
-
-    if ($user['password'] !== $password) {
-        return redirect()->to('/login')->with('error', 'Password salah.');
-    }
-
-    session()->set([
-        'id'         => $user['id'],
-        'username'   => $user['username'],
-        'role_user'  => $user['role_user'],
-        'isLoggedIn' => true
-    ]);
-
-    if ($user['role_user'] == '1') {
-        return redirect()->to('/');
-    } else {
-        return redirect()->to('/dashboard');
-    }
-}
 
     public function doRegistration()
     {
@@ -54,7 +54,7 @@ public function doLogin()
         $model->insert([
             'username'    => $username,
             'password'    => $password,
-            'nama_lengkap'=> $nama_lengkap,
+            'nama_lengkap' => $nama_lengkap,
             'kontak'      => $kontak,
             'email'       => $email,
             'role_user'   => $role_user,

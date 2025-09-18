@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\M_BookingDetails;
 use App\Models\M_JadwalTrip;
 use App\Models\M_UlasanUsers;
+use App\Models\M_Users;
 
 class Administrator extends BaseController
 {
@@ -67,5 +68,69 @@ class Administrator extends BaseController
         ];
 
         return view('administrator/kelola_ulasan', $data);
+    }
+
+    public function setting(): string
+    {
+        $data = [
+            'title' => 'Setting ',
+        ];
+        return view('administrator/setting', $data);
+    }
+
+    public function setting_payments(): string
+    {
+        $data = [
+            'title' => 'Setting Payments ',
+        ];
+        return view('administrator/setting_payments', $data);
+    }
+
+
+    public function login(): string
+    {
+        $data = [
+            'title' => 'Login Administrator',
+        ];
+        return view('administrator/login', $data);
+    }
+    public function doLogin()
+    {
+        $username = $this->request->getPost('username');
+        $password = $this->request->getPost('password');
+
+        if (!$username || !$password) {
+            return redirect()->to('/administrator')->with('error', 'Username dan password harus diisi.');
+        }
+
+        $model = new M_Users();
+        $user = $model->where('username', $username)->first();
+
+        if (!$user) {
+            return redirect()->to('/administrator')->with('error', 'Username tidak ditemukan.');
+        }
+
+        if ($user['password'] !== $password) {
+            return redirect()->to('/administrator')->with('error', 'Password salah.');
+        }
+
+        session()->set([
+            'id'         => $user['id'],
+            'username'   => $user['username'],
+            'role_user'  => $user['role_user'],
+            'isLoggedIn' => true
+        ]);
+
+        if ($user['role_user'] == '2') {
+            return redirect()->to('/dashboard');
+        } else {
+            return redirect()->back()->with('error', 'User tidak ditemukan atau tidak memiliki akses');
+        }
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/administrator');
     }
 }

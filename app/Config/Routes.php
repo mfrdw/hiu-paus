@@ -19,12 +19,12 @@ $routes->get('payment/(:num)', 'Home::payment/$1');
 $routes->get('payment/success/(:num)', 'Home::payments_success/$1');
 $routes->post('submitReview', 'Home::submitReview');
 
-
-
-
-
 $routes->get('registration', 'Home::registration');
 $routes->post('/auth/doregistration', 'Auth::doRegistration');
+
+$routes->get('administrator', 'Administrator::login');
+$routes->post('/administrator/dologin', 'Administrator::doLogin');
+$routes->get('/doLogout', 'Administrator::logout');
 
 
 $routes->get('dashboard', 'Administrator::dashboard');
@@ -39,6 +39,9 @@ $routes->post('kelola-wisata/create', 'KelolaWisata::create');
 
 $routes->get('kelola-wisata/create', 'KelolaWisata::create');
 $routes->post('kelola-wisata/create', 'KelolaWisata::create');
+
+$routes->get('setting', 'Administrator::setting');
+$routes->get('setting_payments', 'Administrator::setting_payments');
 
 
 
