@@ -13,12 +13,14 @@ class M_BookingDetails extends Model
         'full_name',
         'email',
         'kontak',
+        'paket',
         'jumlah_orang',
         'total_biaya',
         'role_payment',
         'mode_pembayaran',
         'upload_gambar',
-        'created_at'
+        'created_at',
+        'updated_at'
     ];
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';

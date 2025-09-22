@@ -108,53 +108,30 @@
 
 
 
+
 <!-- Paket Wisata Pilihan Section -->
 <section class="mb-5">
     <div class="section-title text-center mb-4">
         <h2>Paket Wisata Pilihan</h2>
     </div>
     <div class="custom-card-container">
-        <div class="custom-card">
-            <img src="../dist/assets/images/vacation.jpg" alt="Hiu Paus Gorontalo">
-            <div class="card-body">
-                <h5 class="card-title">Hiu Paus Gorontalo</h5>
-                <p class="card-text">Rasakan sensasi berenang bersama hiu paus di perairan Gorontalo yang indah dan
-                    eksotis...</p>
-                <a href="#" class="btn btn-warning">DETAILS</a>
-            </div>
-        </div>
-
-        <div class="custom-card">
-            <img src="../dist/assets/images/vacation.jpg" alt="Diving di Gorontalo">
-            <div class="card-body">
-                <h5 class="card-title">Diving di Gorontalo</h5>
-                <p class="card-text">Jelajahi keindahan bawah laut Gorontalo yang menakjubkan dengan berbagai spesies
-                    terumbu karang...</p>
-                <a href="#" class="btn btn-warning">DETAILS</a>
-            </div>
-        </div>
-
-        <div class="custom-card">
-            <img src="../dist/assets/images/vacation.jpg" alt="Jalur Alam Gorontalo">
-            <div class="card-body">
-                <h5 class="card-title">Jalur Alam Gorontalo</h5>
-                <p class="card-text">Nikmati petualangan trekking melewati hutan tropis yang rimbun dan pemandangan alam
-                    yang memukau...</p>
-                <a href="#" class="btn btn-warning">DETAILS</a>
-            </div>
-        </div>
-
-        <div class="custom-card">
-            <img src="../dist/assets/images/vacation.jpg" alt="Jalur Alam Gorontalo">
-            <div class="card-body">
-                <h5 class="card-title">Jalur Alam Gorontalo</h5>
-                <p class="card-text">Nikmati petualangan trekking melewati hutan tropis yang rimbun dan pemandangan alam
-                    yang memukau...</p>
-                <a href="#" class="btn btn-warning">DETAILS</a>
-            </div>
-        </div>
+        <?php if (!empty($wisata_pilihan) && is_array($wisata_pilihan)): ?>
+            <?php foreach ($wisata_pilihan as $item): ?>
+                <div class="custom-card">
+                    <img src="<?= base_url('uploads/kelola_wisata/' . $item['gambar']) ?>" alt="<?= esc($item['nama_wisata']) ?>">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= esc($item['nama_wisata']) ?></h5>
+                        <p class="card-text"><?= esc($item['deskripsi']) ?></p>
+                        <a href="#" class="btn btn-warning">DETAILS</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Tidak ada paket wisata pilihan tersedia.</p>
+        <?php endif; ?>
     </div>
 </section>
+
 
 <!-- Aktivitas Unggulan Taman Hiu Paus Section -->
 <section class="mb-5">
@@ -162,51 +139,22 @@
         <h2>Aktivitas Unggulan Taman Hiu Paus</h2>
     </div>
     <div class="custom-card-container">
-        <div class="custom-card">
-            <img src="../dist/assets/images/vacation.jpg" alt="Berenang dengan Hiu Paus">
-            <div class="card-body">
-                <h5 class="card-title">Berenang dengan Hiu Paus</h5>
-                <p class="card-text">Rasakan pengalaman tak terlupakan berenang dengan Hiu Paus di perairan Gorontalo
-                    yang jernih...</p>
-                <a href="#" class="btn btn-warning">DETAILS</a>
-            </div>
-        </div>
-
-        <div class="custom-card">
-            <img src="../dist/assets/images/vacation.jpg" alt="Snorkeling di Perairan Gorontalo">
-            <div class="card-body">
-                <h5 class="card-title">Snorkeling di Perairan Gorontalo</h5>
-                <p class="card-text">Temukan keindahan dunia bawah laut Gorontalo dengan beragam terumbu karang dan
-                    ikan-ikan warna-warni...</p>
-                <a href="#" class="btn btn-warning">DETAILS</a>
-            </div>
-        </div>
-
-        <div class="custom-card">
-            <img src="../dist/assets/images/vacation.jpg" alt="Tur Pantai Gorontalo">
-            <div class="card-body">
-                <h5 class="card-title">Tur Pantai Gorontalo</h5>
-                <p class="card-text">Nikmati pemandangan pantai eksotis dan bersantai sambil menikmati udara segar di
-                    Gorontalo...</p>
-                <a href="#" class="btn btn-warning">DETAILS</a>
-            </div>
-        </div>
-
-        <div class="custom-card">
-            <img src="../dist/assets/images/vacation.jpg" alt="Tur Pantai Gorontalo">
-            <div class="card-body">
-                <h5 class="card-title">Tur Pantai Gorontalo</h5>
-                <p class="card-text">Nikmati pemandangan pantai eksotis dan bersantai sambil menikmati udara segar di
-                    Gorontalo...</p>
-                <a href="#" class="btn btn-warning">DETAILS</a>
-            </div>
-        </div>
+        <?php if (!empty($wisata_unggulan) && is_array($wisata_unggulan)): ?>
+            <?php foreach ($wisata_unggulan as $item): ?>
+                <div class="custom-card">
+                    <img src="<?= base_url('uploads/kelola_wisata/' . $item['gambar']) ?>" alt="<?= esc($item['nama_wisata']) ?>">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= esc($item['nama_wisata']) ?></h5>
+                        <p class="card-text"><?= esc($item['deskripsi']) ?></p>
+                        <a href="#" class="btn btn-warning">DETAILS</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Tidak ada aktivitas unggulan yang tersedia.</p>
+        <?php endif; ?>
     </div>
 </section>
-
-<!-- Modal Booking -->
-
-
 
 <!-- Modal Booking -->
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
@@ -416,24 +364,76 @@
         }
     }
 </style>
-<div id="promoPopup" class="promo-popup">
-    <div class="promo-content">
-        <span id="closePopup" class="close">&times;</span>
-        <div class="promo-header">
-            <p><strong>Diskon 25% untuk 10 Wisatawan Pertama!</strong></p>
-        </div>
-        <div class="promo-price">
-            <p>Snorkeling dengan Hiu Paus</p>
-            <p><strong>Harga Normal: Rp 200.000</strong></p>
-            <p><strong>Harga Diskon: Rp 150.000</strong></p>
-        </div>
-        <button class="btn-promo">Gunakan Promo Sekarang</button>
-        <button class="btn-whatsapp">Bagikan ke WhatsApp</button>
-        <div class="promo-footer">
-            <small><strong>Penawaran Terbatas - Jangan Sampai Terlewat!</strong></small>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= esc($title) ?></title>
+    <link rel="stylesheet" href="path/to/your/css/style.css">
+</head>
+
+<body>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <h4>Promosi Wisata</h4>
+
+            <!-- Tombol untuk memunculkan popup -->
+            <button id="promoBtn" class="btn btn-primary">Lihat Promo</button>
         </div>
     </div>
-</div>
+
+    <!-- Popup Modal untuk Promosi -->
+    <div id="promoPopup" class="promo-popup">
+        <div class="promo-content">
+            <span id="closePopup" class="close">&times;</span>
+            <?php if (!empty($promosi)): ?>
+                <div class="promo-header">
+                    <p><strong><?= esc($promosi['nama_promosi']) ?></strong></p>
+                </div>
+                <div class="promo-price">
+                    <p><?= esc($promosi['nama_promosi']) ?></p>
+                    <p><strong>Harga Normal: Rp <?= number_format($promosi['harga_normal'], 0, ',', '.') ?></strong></p>
+                    <p><strong>Harga Diskon: Rp <?= number_format($promosi['harga_diskon'], 0, ',', '.') ?></strong></p>
+                </div>
+                <button class="btn-promo">Gunakan Promo Sekarang</button>
+                <button class="btn-whatsapp" onclick="window.open('https://wa.me/?text=<?= urlencode($promosi['nama_promosi']) ?>')">Bagikan ke WhatsApp</button>
+                <div class="promo-footer">
+                    <small><strong>Penawaran Terbatas - Jangan Sampai Terlewat!</strong></small>
+                </div>
+            <?php else: ?>
+                <p>Tidak ada promosi aktif saat ini.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Script untuk Menampilkan dan Menutup Popup -->
+    <script>
+        const promoBtn = document.getElementById("promoBtn");
+        const promoPopup = document.getElementById("promoPopup");
+        const closePopup = document.getElementById("closePopup");
+
+        promoBtn.onclick = function() {
+            promoPopup.style.display = "block";
+        }
+
+        closePopup.onclick = function() {
+            promoPopup.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == promoPopup) {
+                promoPopup.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
 
 
 <script>

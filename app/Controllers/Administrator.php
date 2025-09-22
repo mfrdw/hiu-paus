@@ -6,6 +6,8 @@ use App\Models\M_BookingDetails;
 use App\Models\M_JadwalTrip;
 use App\Models\M_UlasanUsers;
 use App\Models\M_Users;
+use App\Models\M_KelolaWisata;
+use App\Models\M_Promosi;
 
 class Administrator extends BaseController
 {
@@ -44,14 +46,66 @@ class Administrator extends BaseController
         return view('administrator/kelola_pesanan', $data);
     }
 
+    public function update_booking($id)
+    {
+        $model = new M_BookingDetails();
+
+        if ($this->request->getMethod() === 'post') {
+            $data = [
+                'full_name' => $this->request->getPost('full_name'),
+                'paket' => $this->request->getPost('paket'),
+                'jumlah_orang' => $this->request->getPost('jumlah_orang'),
+                'total_biaya' => $this->request->getPost('total_biaya'),
+                'role_payment' => $this->request->getPost('role_payment'),
+            ];
+
+            if ($model->update($id, $data)) {
+                session()->setFlashdata('success', 'Data berhasil diperbarui');
+                return redirect()->to('/kelola_pemesanan');
+            } else {
+                session()->setFlashdata('error', 'Gagal memperbarui data');
+                return redirect()->back();
+            }
+        }
+    }
+
 
     public function kelola_paket_wisata(): string
     {
+        $model = new M_KelolaWisata();
+
         $data = [
-            'title' => 'Kelola Paket Wisata',
+            'title' => 'Kelola Wisata',
+            'wisata' => $model->findAll(),
         ];
+
+        // Kirim data ke view
         return view('administrator/kelola_paket_wisata', $data);
     }
+
+    public function data_wisatawan(): string
+    {
+        $model = new M_BookingDetails();
+
+        $data = [
+            'title' => 'Data Wisatawan',
+            'wisatawan' => $model->findAll(),
+        ];
+
+        return view('administrator/data_wisatawan', $data);
+    }
+
+    public function promosi()
+    {
+        $model = new M_Promosi();
+        $data = [
+            'title' => 'Promosi ',
+            'promosi' => $model->findAll(),
+        ];
+        return view('administrator/promosi', $data);
+    }
+
+
     public function kelola_ulasan(): string
     {
         $model = new M_UlasanUsers();

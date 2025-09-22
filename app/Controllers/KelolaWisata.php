@@ -8,34 +8,45 @@ class KelolaWisata extends BaseController
 {
     public function create()
     {
-        if ($this->request->getMethod() == 'post') {
-            $model = new M_KelolaWisata();
+        $model = new M_KelolaWisata();
 
-            $gambar = $this->request->getFile('gambar');
-            if ($gambar->isValid() && !$gambar->hasMoved()) {
-                $newName = $gambar->getRandomName();
-                $gambar->move(WRITEPATH . '/uploads', $newName);
-            } else {
-                $newName = null;
+        // Mengambil semua file gambar yang di-upload
+        $gambarFiles = $this->request->getFiles();
+
+        // Cek apakah gambar ada
+        if (isset($gambarFiles['gambar']) && count($gambarFiles['gambar']) > 0) {
+            $uploadedFiles = [];
+
+            foreach ($gambarFiles['gambar'] as $gambar) {
+                if ($gambar->isValid() && !$gambar->hasMoved()) {
+                    $newName = $gambar->getRandomName();
+                    $gambar->move('uploads/kelola_wisata', $newName);  // Menyimpan gambar di 'uploads/kelola_wisata'
+                    $uploadedFiles[] = $newName;
+                } else {
+                    session()->setFlashdata('error', 'Gambar tidak valid atau gagal di-upload');
+                    return redirect()->back();
+                }
             }
 
+            // Menyimpan nama gambar pertama di database
             $data = [
-                'nama_paket' => $this->request->getPost('nama_paket'),
-                'kategori'   => $this->request->getPost('kategori'),
-                'harga'      => $this->request->getPost('harga'),
-                'durasi'     => $this->request->getPost('durasi'),
-                'status'     => $this->request->getPost('status')
+                'nama_wisata' => $this->request->getPost('nama_wisata'),
+                'kategori' => $this->request->getPost('kategori'),
+                'deskripsi' => $this->request->getPost('deskripsi'),
+                'gambar' => $uploadedFiles[0],  // Menyimpan gambar pertama
             ];
 
-            if ($model->save($data)) {
-                return redirect()->to('/kelola_paket_wisata')->with('message', 'Paket wisata berhasil ditambahkan.');
+            if ($model->insert($data)) {
+                session()->setFlashdata('success', 'Data berhasil ditambahkan');
+                return redirect()->to('/kelola_wisata');
             } else {
-                return redirect()->back()->with('errors', $model->errors())->withInput();
+                session()->setFlashdata('error', 'Gagal menambahkan data');
+                return redirect()->back();
             }
+        } else {
+            session()->setFlashdata('error', 'Tidak ada gambar yang di-upload');
+            return redirect()->back();
         }
-
-        // Kalau GET langsung, redirect ke halaman utama
-        return redirect()->to('/kelola_paket_wisata');
     }
 
 

@@ -27,10 +27,16 @@ $routes->post('/administrator/dologin', 'Administrator::doLogin');
 $routes->get('/doLogout', 'Administrator::logout');
 
 
-$routes->get('dashboard', 'Administrator::dashboard');
+$routes->get('dashboard', 'Administrator::dashboard', ['filter' => 'auth']);
 $routes->get('kelola_pesanan', 'Administrator::kelola_pesanan');
+$routes->post('update_booking/(:num)', 'Administrator::update_booking/$1');
+
+
 $routes->get('kelola_jadwal', 'Administrator::kelola_jadwal');
-$routes->get('kelola_paket_wisata', 'Administrator::kelola_paket_wisata');
+$routes->get('kelola_wisata', 'Administrator::kelola_paket_wisata');
+$routes->get('data_wisatawan', 'Administrator::data_wisatawan');
+$routes->get('promosi', 'Administrator::promosi');
+$routes->post('promosi/create', 'Promosi::create');
 $routes->post('/kelola-wisata/create', 'KelolaWisata::create');
 
 $routes->get('kelola_ulasan', 'Administrator::kelola_ulasan');

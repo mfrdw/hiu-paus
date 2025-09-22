@@ -5,15 +5,24 @@ namespace App\Controllers;
 use App\Models\M_BookingDetails;
 use App\Models\M_Users;
 use App\Models\M_UlasanUsers;
+use App\Models\M_KelolaWisata;
+use App\Models\M_Promosi;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Home extends BaseController
 {
     public function index(): string
     {
+        $model = new M_KelolaWisata();
+        $model_promosi = new M_Promosi();
 
         $data = [
-            'title' => 'Beranda ',
+            'title' => 'Beranda',
+            'wisata_pilihan' => $model->where('kategori', 'wisata_pilihan')->findAll(),
+            'wisata_unggulan' => $model->where('kategori', 'wisata_unggulan')->findAll(),
+            'promosi' => $model_promosi->where('status', 1)
+                ->orderBy('updated_at', 'DESC')
+                ->first()
         ];
 
         return view('pages/homepage', $data);

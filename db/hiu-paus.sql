@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 17, 2025 at 05:13 PM
+-- Generation Time: Sep 22, 2025 at 07:10 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.29
 
@@ -33,6 +33,7 @@ CREATE TABLE `booking_details` (
   `full_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `kontak` varchar(20) NOT NULL,
+  `paket` varchar(11) NOT NULL,
   `jumlah_orang` int NOT NULL,
   `total_biaya` int NOT NULL,
   `role_payment` enum('pending','confirmed','completed') DEFAULT 'pending',
@@ -41,6 +42,13 @@ CREATE TABLE `booking_details` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `booking_details`
+--
+
+INSERT INTO `booking_details` (`id`, `user_id`, `full_name`, `email`, `kontak`, `paket`, `jumlah_orang`, `total_biaya`, `role_payment`, `mode_pembayaran`, `upload_gambar`, `created_at`, `updated_at`) VALUES
+(3, 1, 'Muhammad Fikri Ridwan', 'mfikryrid@gmail.com', '082250706412', '1', 9, 5850000, 'pending', 'gopay', '1758217756_5bb8d12c45b1778a135d.png', '2025-09-18 10:24:58', '2025-09-22 18:57:22');
 
 -- --------------------------------------------------------
 
@@ -76,11 +84,9 @@ INSERT INTO `jadwal_trip` (`id`, `tanggal`, `paket`, `kapasitas`, `terisi`, `sis
 
 CREATE TABLE `kelola_wisata` (
   `id` int NOT NULL,
-  `nama_paket` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `kategori` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `harga` decimal(10,2) NOT NULL,
-  `durasi` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('1','2') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_wisata` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kategori` enum('wisata_pilihan','wisata_unggulan') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `deskripsi` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `gambar` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -105,33 +111,41 @@ CREATE TABLE `payments` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ulasan`
+-- Table structure for table `promosi`
 --
 
-CREATE TABLE `ulasan` (
+CREATE TABLE `promosi` (
   `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `id_trip` int NOT NULL,
-  `ulasan` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_promosi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `harga_normal` decimal(10,2) NOT NULL,
+  `harga_diskon` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `pengalaman_rating` int NOT NULL DEFAULT '0',
-  `pemandu_rating` int NOT NULL DEFAULT '0',
-  `fasilitas_rating` int NOT NULL DEFAULT '0'
-) ;
+  `status` enum('1','2') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1' COMMENT '1 = Aktif, 2 = Tidak Aktif'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `ulasan`
+-- Dumping data for table `promosi`
 --
 
-INSERT INTO `ulasan` (`id`, `id_user`, `id_trip`, `ulasan`, `created_at`, `updated_at`, `pengalaman_rating`, `pemandu_rating`, `fasilitas_rating`) VALUES
-(8, 3, 1, 'keren sih', '2025-09-17 09:04:01', '2025-09-17 09:04:01', 5, 5, 3),
-(9, 1, 1, 'Next bakalan kesini lagi', '2025-09-17 09:14:12', '2025-09-17 09:14:12', 3, 4, 4),
-(10, 1, 1, 'MAntap sih ini, gokil banget', '2025-09-17 09:20:30', '2025-09-17 09:20:30', 5, 5, 5),
-(11, 1, 1, 'Guide nya jangan cuek dong\r\n', '2025-09-17 09:20:51', '2025-09-17 09:20:51', 5, 2, 5),
-(12, 1, 1, 'Tidak Rekomen', '2025-09-17 09:21:07', '2025-09-17 09:21:07', 1, 1, 1),
-(13, 1, 1, 'aaaa seruuuu', '2025-09-17 09:21:24', '2025-09-17 09:21:24', 5, 5, 5),
-(14, 1, 2, 'mantap sih ini', '2025-09-17 09:33:00', '2025-09-17 09:33:00', 5, 5, 5);
+INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `created_at`, `updated_at`, `status`) VALUES
+(1, 'Diskon 25% Paket Private Pax 5', 800000.00, 650000.00, '2025-09-22 11:33:09', '2025-09-22 11:33:09', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_payments`
+--
+
+CREATE TABLE `setting_payments` (
+  `id` int NOT NULL,
+  `payments` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci DEFAULT 'active',
+  `logo` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -189,11 +203,16 @@ ALTER TABLE `payments`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `ulasan`
+-- Indexes for table `promosi`
 --
-ALTER TABLE `ulasan`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_user` (`id_user`);
+ALTER TABLE `promosi`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_payments`
+--
+ALTER TABLE `setting_payments`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -210,7 +229,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking_details`
 --
 ALTER TABLE `booking_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jadwal_trip`
@@ -222,7 +241,7 @@ ALTER TABLE `jadwal_trip`
 -- AUTO_INCREMENT for table `kelola_wisata`
 --
 ALTER TABLE `kelola_wisata`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -231,9 +250,15 @@ ALTER TABLE `payments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `ulasan`
+-- AUTO_INCREMENT for table `promosi`
 --
-ALTER TABLE `ulasan`
+ALTER TABLE `promosi`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_payments`
+--
+ALTER TABLE `setting_payments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
@@ -251,12 +276,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `payments`
   ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `ulasan`
---
-ALTER TABLE `ulasan`
-  ADD CONSTRAINT `ulasan_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

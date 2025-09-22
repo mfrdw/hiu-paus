@@ -1,6 +1,34 @@
 <?= $this->extend('layout_admin/header') ?>
 <?= $this->section('content') ?>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if (session()->getFlashdata('success')): ?>
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).fire({
+                icon: 'success',
+                title: '<?= session()->getFlashdata('success'); ?>'
+            });
+        <?php elseif (session()->getFlashdata('error')): ?>
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).fire({
+                icon: 'error',
+                title: '<?= session()->getFlashdata('error'); ?>'
+            });
+        <?php endif; ?>
+    });
+</script>
+
 <!-- Main Content -->
 <div class="main-content">
     <div class="container-fluid">
@@ -85,7 +113,14 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="<?= base_url('admin/edit_booking/' . $booking['id']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editBookingModal"
+                                                    data-id="<?= $booking['id']; ?>"
+                                                    data-full_name="<?= esc($booking['full_name']); ?>"
+                                                    data-paket="<?= $booking['jumlah_orang'] == 1 && $booking['total_biaya'] == 650000 ? 'Open Trip Whale Shark Teluk Saleh' : 'Private Trip Whale Shark Teluk Saleh'; ?>"
+                                                    data-jumlah_orang="<?= esc($booking['jumlah_orang']); ?>"
+                                                    data-total_biaya="<?= esc($booking['total_biaya']); ?>"
+                                                    data-role_payment="<?= esc($booking['role_payment']); ?>"
+                                                    data-upload_gambar="<?= esc($booking['upload_gambar']); ?>">Edit</button>
                                                 <a href="<?= base_url('admin/delete_booking/' . $booking['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?');">Hapus</a>
                                             </td>
                                         </tr>
@@ -100,7 +135,71 @@
 
         </div>
     </div>
+</div><!-- Modal Edit -->
+<div class="modal fade" id="editBookingModal" tabindex="-1" role="dialog" aria-labelledby="editBookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= base_url('update_booking/' . $booking['id']); ?>" method="post">
+                <?= csrf_field() ?>
+                <input type="hidden" name="id" id="booking_id" value="<?= esc($booking['id']) ?>">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editBookingModalLabel">Edit Booking</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Nama Pemesan -->
+                    <div class="form-group">
+                        <label for="full_name">Nama Pemesan</label>
+                        <input type="text" name="full_name" id="full_name" class="form-control" value="<?= esc($booking['full_name']) ?>" required>
+                    </div>
+
+                    <!-- Paket -->
+                    <div class="form-group">
+                        <label for="paket">Paket</label>
+                        <select name="paket" id="paket" class="form-control" required>
+                            <option value="1" <?= $booking['paket'] == 1 ? 'selected' : '' ?>>Open Trip Whale Shark Teluk Saleh</option>
+                            <option value="2" <?= $booking['paket'] == 2 ? 'selected' : '' ?>>Private Trip Whale Shark Teluk Saleh</option>
+                        </select>
+                    </div>
+
+                    <!-- Jumlah Orang -->
+                    <div class="form-group">
+                        <label for="jumlah_orang">Jumlah Orang</label>
+                        <input type="number" name="jumlah_orang" id="jumlah_orang" class="form-control" value="<?= esc($booking['jumlah_orang']) ?>" required min="1">
+                    </div>
+
+                    <!-- Total Biaya -->
+                    <div class="form-group">
+                        <label for="total_biaya">Total Biaya</label>
+                        <input type="number" name="total_biaya" id="total_biaya" class="form-control" value="<?= esc($booking['total_biaya']) ?>" required min="0">
+                    </div>
+
+                    <!-- Status Pembayaran -->
+                    <div class="form-group">
+                        <label for="role_payment">Status Pembayaran</label>
+                        <select name="role_payment" id="role_payment" class="form-control">
+                            <option value="pending" <?= $booking['role_payment'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+                            <option value="confirmed" <?= $booking['role_payment'] == 'confirmed' ? 'selected' : '' ?>>Confirmed</option>
+                            <option value="cancelled" <?= $booking['role_payment'] == 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+
+
 
 <!-- Custom CSS for Table and Layout -->
 <style>
@@ -134,5 +233,8 @@
         margin-right: 10px;
     }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <?= $this->endSection() ?>
