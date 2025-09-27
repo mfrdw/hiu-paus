@@ -28,18 +28,29 @@ $routes->get('/doLogout', 'Administrator::logout');
 
 
 $routes->get('dashboard', 'Administrator::dashboard', ['filter' => 'auth']);
+
+// Kelola Pesanan
 $routes->get('kelola_pesanan', 'Administrator::kelola_pesanan');
 $routes->post('update_booking/(:num)', 'Administrator::update_booking/$1');
+$routes->get('delete/(:segment)', 'Administrator::delete_booking/$1');
 
 
 $routes->get('kelola_jadwal', 'Administrator::kelola_jadwal');
+
+// Kelola Wisata
 $routes->get('kelola_wisata', 'Administrator::kelola_paket_wisata');
+$routes->post('update_wisata/(:segment)', 'Administrator::update_wisata/$1');
+$routes->get('delete_wisata/(:segment)', 'Administrator::delete_wisata/$1');
+
+
 $routes->get('data_wisatawan', 'Administrator::data_wisatawan');
 $routes->get('promosi', 'Administrator::promosi');
 $routes->post('promosi/create', 'Promosi::create');
 $routes->post('/kelola-wisata/create', 'KelolaWisata::create');
 
 $routes->get('kelola_ulasan', 'Administrator::kelola_ulasan');
+$routes->post('update_ulasan/(:segment)', 'Administrator::update_ulasan/$1');
+$routes->get('delete_ulasan/(:segment)', 'Administrator::delete_ulasan/$1');
 
 $routes->post('kelola-wisata/create', 'KelolaWisata::create');
 
@@ -63,3 +74,5 @@ $routes->post('payment/update', 'BookingController::update_payments');
 
 // Jadwal Trip
 $routes->post('jadwal_trip/tambah', 'JadwalTripController::tambah');
+$routes->post('update/(:segment)', 'JadwalTripController::update/$1');
+$routes->get('delete_jadwal/(:segment)', 'JadwalTripController::delete/$1');
