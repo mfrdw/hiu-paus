@@ -13,6 +13,11 @@ $routes->get('/logout', 'Auth::logout');
 $routes->get('detail', 'Home::detail');
 $routes->get('detail_wisata', 'Home::detail_wisata_private');
 $routes->get('booking', 'Home::booking');
+$routes->get('booking_jadwal', 'Home::booking_jadwal');
+$routes->get('booking_payment', 'Home::booking_payment');
+$routes->get('verifikasi', 'Home::verifikasi_pembayaran');
+
+
 $routes->get('booking_private', 'Home::booking_private');
 $routes->get('history', 'Home::history');
 $routes->get('payment/(:num)', 'Home::payment/$1');

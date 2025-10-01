@@ -21,17 +21,14 @@ class BookingController extends Controller
             'email'        => $this->request->getPost('email'),
             'kontak'       => $this->request->getPost('mobile'),
             'jumlah_orang' => $this->request->getPost('peopleCount'),
-            'total_biaya'  => $this->hitungTotalBiaya($this->request->getPost('peopleCount')),
-            'role_payment' => 'Pending',
+            'paket'        => '1',
             'created_at'   => date('Y-m-d H:i:s')
         ];
 
         $insertId = $paymentModel->insert($data);
 
         if ($insertId) {
-            // Debugging insertId
-            var_dump($insertId);
-            return redirect()->to('/payment/' . $insertId)->with('success', 'Pemesanan berhasil!');
+            return redirect()->to('/booking_jadwal/' . $insertId)->with('success', 'Pemesanan berhasil!');
         }
 
 
@@ -39,11 +36,9 @@ class BookingController extends Controller
     }
 
 
-
-    // Fungsi untuk menghitung total biaya
     private function hitungTotalBiaya($jumlahOrang)
     {
-        $hargaPerOrang = 650000; // Harga per orang
+        $hargaPerOrang = 650000;
         return $jumlahOrang * $hargaPerOrang;
     }
 

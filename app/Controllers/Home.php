@@ -126,6 +126,44 @@ class Home extends BaseController
         return view('pages/booking', $data);
     }
 
+    public function booking_jadwal(): string
+    {
+        $model = new M_BookingDetails();
+        $jadwal = $model->findAll();
+
+        $data = [
+            'title' => 'Booking Jadwal',
+            'booking' => $jadwal
+        ];
+
+        return view('pages/booking_jadwal', $data);
+    }
+    public function booking_payment(): string
+    {
+        $model = new M_BookingDetails();
+        $jadwal = $model->findAll();
+
+        $data = [
+            'title' => 'Metode Pembayaran',
+            'booking' => $jadwal
+        ];
+
+        return view('pages/booking_payment', $data);
+    }
+
+    public function verifikasi_pembayaran(): string
+    {
+        $model = new M_BookingDetails();
+        $jadwal = $model->findAll();
+
+        $data = [
+            'title' => 'Verifikasi Pembayaran',
+            'booking' => $jadwal
+        ];
+
+        return view('pages/booking_upload_bukti', $data);
+    }
+
     public function booking_private(): string
     {
 
