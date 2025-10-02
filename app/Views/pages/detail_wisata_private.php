@@ -32,7 +32,6 @@
 
 <div class="container mt-4">
 
-    <!-- 1) Header Gambar -->
     <div class="row mb-4">
         <div class="col-md-8">
             <div class="card" style="border-radius:.5rem;">

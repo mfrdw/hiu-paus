@@ -36,34 +36,44 @@
     <div class="row">
         <div class="col-md-12">
 
-            <form id="contactForm" action="<?= base_url('booking/proses_booking'); ?>" method="POST">
-                <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
 
-                    <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
-                        <div class="progress" style="height: 20px; margin-bottom: 10px;">
-                            <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 1rem; color: #007bff;">
-                            <span style="font-weight: bold;">1</span>
-                            <span style="font-weight: bold;">2</span>
-                            <span style="font-weight: bold;">3</span>
-                            <span style="font-weight: bold;">4</span>
-                        </div>
+            <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+
+                <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
+                    <div class="progress" style="height: 20px; margin-bottom: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1rem; color: #007bff;">
+                        <span style="font-weight: bold;">1</span>
+                        <span style="font-weight: bold;">2</span>
+                        <span style="font-weight: bold;">3</span>
+                        <span style="font-weight: bold;">4</span>
+                    </div>
+                </div>
 
-                    <div class="card-body" style="padding: 30px; background-color: #f8f9fa;">
-                        <h4 style="font-size: 1.4rem; font-weight: bold;">Pilih Jadwal</h4>
-
+                <div class="card-body" style="padding: 30px; background-color: #f8f9fa;">
+                    <h4 style="font-size: 1.4rem; font-weight: bold;">Pilih Jadwal</h4>
+                    <form id="contactForm" action="<?= base_url('add_jadwal'); ?>" method="POST">
+                        <input type="hidden" name="id" value="<?= $booking['id_bookings']; ?>">
                         <!-- Tanggal Trip -->
                         <div class="form-section" style="margin-bottom: 1.2rem;">
                             <label for="tripDate" class="form-label" style="font-weight: bold; font-size: 1rem;">
                                 <i class="fas fa-calendar-day" style="margin-right: 5px;"></i> Tanggal Trip
                             </label>
-                            <input type="date" class="form-control" id="tripDate" name="tripDate" required style="padding: 12px; font-size: 1rem;" value="<?= date('Y-m-d'); ?>">
+                            <input type="date" class="form-control" id="tripDate" name="tripDate" required style="padding: 12px; font-size: 1rem;">
 
-                            <!-- Alert untuk ketersediaan (dapat diganti sesuai status) -->
-                            <div class="alert alert-success mt-2" role="alert">
-                                <i class="fas fa-check-circle" style="margin-right: 5px;"></i> Tersedia! Sisa slot: 12 dari 20 orang
+                            <!-- Tempat untuk menampilkan alert ketersediaan -->
+                            <div id="availabilityAlert" style="display: none;">
+                                <div class="alert alert-success mt-2" role="alert">
+                                    <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
+                                    Tersedia! Sisa slot: <span id="sisaSlot"></span> dari <span id="kapasitas"></span> orang
+                                </div>
+                            </div>
+                            <div id="errorAlert" style="display: none;">
+                                <div class="alert alert-danger mt-2" role="alert">
+                                    <i class="fas fa-times-circle" style="margin-right: 5px;"></i>
+                                    Jadwal tidak ditemukan atau tidak tersedia.
+                                </div>
                             </div>
                         </div>
 
@@ -90,76 +100,46 @@
                                 <i class="fas fa-arrow-right" style="margin-right: 5px;"></i> Lanjutkan
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
-    // Function to check if user is logged in and redirect or show alert
-    function checkSession() {
-        const fullName = document.getElementById('fullName').value;
-        const email = document.getElementById('email').value;
-        const mobile = document.getElementById('mobile').value;
-        const peopleCount = document.getElementById('peopleCount').value;
+    document.getElementById('tripDate').addEventListener('change', function() {
+        const selectedDate = this.value; // Ambil tanggal yang dipilih
+        const errorAlert = document.getElementById('errorAlert');
+        const availabilityAlert = document.getElementById('availabilityAlert');
+        const kapasitas = document.getElementById('kapasitas');
+        const sisaSlot = document.getElementById('sisaSlot');
 
-        // Check if all fields are filled
-        if (!fullName || !email || !mobile || !peopleCount) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Formulir belum lengkap!',
-                text: 'Silakan isi semua kolom yang diperlukan.',
+        // Mengirimkan permintaan AJAX ke server untuk mendapatkan jadwal berdasarkan tanggal yang dipilih
+        fetch('/get_jadwal_by_date?tanggal=' + selectedDate)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    // Menampilkan pesan error jika tidak ada jadwal ditemukan
+                    errorAlert.style.display = 'block';
+                    availabilityAlert.style.display = 'none';
+                } else {
+                    // Menampilkan informasi jadwal jika ditemukan
+                    const jadwal = data[0]; // Ambil jadwal pertama jika ada
+                    const sisa = jadwal.kapasitas - jadwal.terisi;
+                    sisaSlot.textContent = sisa;
+                    kapasitas.textContent = jadwal.kapasitas;
+                    availabilityAlert.style.display = 'block';
+                    errorAlert.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorAlert.style.display = 'block';
+                availabilityAlert.style.display = 'none';
             });
-        } else {
-            // Check if user is logged in, then submit form
-            <?php if (session()->get('isLoggedIn')): ?>
-                // Submit the form
-                document.getElementById("contactForm").submit();
-            <?php else: ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Harus Login Terlebih Dahulu',
-                    text: 'Silakan login untuk melanjutkan pembayaran.',
-                });
-            <?php endif; ?>
-        }
-    }
-
-
-    // Function to enable the continue button when all fields are filled
-    function enableButton() {
-        const fullName = document.getElementById('fullName').value;
-        const email = document.getElementById('email').value;
-        const mobile = document.getElementById('mobile').value;
-        const peopleCount = document.getElementById('peopleCount').value;
-
-        const continueBtn = document.getElementById('continueBtn');
-
-        // Enable the button if all fields are filled
-        if (fullName && email && mobile && peopleCount) {
-            continueBtn.disabled = false;
-        } else {
-            continueBtn.disabled = false; // Keep the button active even if some fields are empty
-        }
-    }
-
-    // Function to update the total cost based on the number of people
-    function updateCost() {
-        const pricePerPerson = 650000;
-        const peopleCount = document.getElementById('peopleCount').value;
-        const totalCost = pricePerPerson * peopleCount;
-
-        // Update the people count and total cost dynamically
-        document.getElementById('peopleCountDisplay').innerText = peopleCount;
-        document.getElementById('totalCostDisplay').innerText = 'Rp ' + totalCost.toLocaleString();
-    }
+    });
 </script>
+
 
 <?= $this->endSection() ?>

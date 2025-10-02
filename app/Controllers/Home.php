@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\M_BookingDetails;
+use App\Models\M_JadwalTrip;
 use App\Models\M_Users;
 use App\Models\M_UlasanUsers;
 use App\Models\M_KelolaWisata;
@@ -126,18 +127,41 @@ class Home extends BaseController
         return view('pages/booking', $data);
     }
 
-    public function booking_jadwal(): string
+    public function booking_jadwal($id_bookings): string
     {
         $model = new M_BookingDetails();
-        $jadwal = $model->findAll();
+        $model_jadwal = new M_JadwalTrip();
+
+        $booking = $model->where('id_bookings', $id_bookings)->first();
+
+        $jadwal = $model_jadwal->where('paket', '')->findAll();
 
         $data = [
             'title' => 'Booking Jadwal',
-            'booking' => $jadwal
+            'booking' => $booking,
+            'jadwal' => $jadwal
         ];
 
         return view('pages/booking_jadwal', $data);
     }
+    public function get_jadwal_by_date()
+    {
+        $tanggal = $this->request->getGet('tanggal');
+
+        $model_jadwal = new M_JadwalTrip();
+
+        $jadwal = $model_jadwal->where('tanggal', $tanggal)->findAll();
+
+        if ($jadwal) {
+            return $this->response->setJSON($jadwal);
+        } else {
+            return $this->response->setJSON(['error' => 'Jadwal tidak ditemukan.']);
+        }
+    }
+
+
+
+
     public function booking_payment(): string
     {
         $model = new M_BookingDetails();
@@ -254,6 +278,19 @@ class Home extends BaseController
         }
     }
 
+    public function views_details($id): string
+    {
+        $model = new M_KelolaWisata();
+
+        $wisata = $model->find($id);
+
+        $data = [
+            'title' => 'Detail Wisata',
+            'wisata' => $wisata
+        ];
+
+        return view('pages/detail_deskripsi_wisata', $data);
+    }
 
 
 

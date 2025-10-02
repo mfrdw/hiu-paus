@@ -14,6 +14,7 @@ class BookingController extends Controller
         }
 
         $paymentModel = new M_BookingDetails();
+        $generateID = $paymentModel->generateIdBooking();
 
         $data = [
             'user_id'      => session()->get('id'),
@@ -21,7 +22,8 @@ class BookingController extends Controller
             'email'        => $this->request->getPost('email'),
             'kontak'       => $this->request->getPost('mobile'),
             'jumlah_orang' => $this->request->getPost('peopleCount'),
-            'paket'        => '1',
+            'paket'        => 'Open Trip Whale Shark Teluk Saleh',
+            'id_bookings'  => $generateID,
             'created_at'   => date('Y-m-d H:i:s')
         ];
 
@@ -31,9 +33,9 @@ class BookingController extends Controller
             return redirect()->to('/booking_jadwal/' . $insertId)->with('success', 'Pemesanan berhasil!');
         }
 
-
         return redirect()->to('/booking')->with('error', 'Gagal memproses pemesanan. Silakan coba lagi.');
     }
+
 
 
     private function hitungTotalBiaya($jumlahOrang)
@@ -41,6 +43,36 @@ class BookingController extends Controller
         $hargaPerOrang = 650000;
         return $jumlahOrang * $hargaPerOrang;
     }
+
+    public function add_jadwal()
+    {
+        $id_bookings = $this->request->getPost('id');
+        $tripDate = $this->request->getPost('tripDate');
+        $departureTime = $this->request->getPost('departureTime');
+
+        $model_booking = new M_BookingDetails();
+
+        $booking = $model_booking->where('id_bookings', $id_bookings)->first();
+
+        if (!$booking) {
+            return redirect()->to('/booking')->with('error', 'Booking tidak ditemukan.');
+        }
+
+        $data = [
+            'tanggal_trip' => $tripDate,
+            'jam_trip'     => $departureTime,
+            'updated_at'   => date('Y-m-d H:i:s')
+        ];
+
+        $updateStatus = $model_booking->update($id_bookings, $data);
+
+        if ($updateStatus) {
+            return redirect()->to('/booking_jadwal/' . $id_bookings)->with('success', 'Pemesanan berhasil diperbarui!');
+        }
+
+        return redirect()->to('/booking')->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
+    }
+
 
     public function update_payments()
     {

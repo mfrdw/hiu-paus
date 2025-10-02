@@ -127,7 +127,7 @@
                         <div class="card-body">
                             <h5 class="card-title"><?= esc($item['nama_wisata']) ?></h5>
                             <p class="card-text"><?= esc($item['deskripsi']) ?></p>
-                            <a href="#" class="btn btn-warning">DETAILS</a>
+                            <a href="<?= base_url('views_details/' . $item['id']) ?>" class="btn btn-warning">DETAILS</a>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -148,7 +148,7 @@
                         <div class="card-body">
                             <h5 class="card-title"><?= esc($item['nama_wisata']) ?></h5>
                             <p class="card-text"><?= esc($item['deskripsi']) ?></p>
-                            <a href="#" class="btn btn-warning">DETAILS</a>
+                            <a href="<?= base_url('views_details/' . $item['id']) ?>" class="btn btn-warning">DETAILS</a>
                         </div>
                     </div>
                 <?php endforeach; ?>
