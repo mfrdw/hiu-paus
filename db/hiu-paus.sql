@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 22, 2025 at 07:10 PM
+-- Generation Time: Oct 02, 2025 at 04:40 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.29
 
@@ -29,26 +29,22 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `booking_details` (
   `id` int NOT NULL,
+  `id_bookings` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `user_id` int UNSIGNED DEFAULT NULL,
   `full_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `kontak` varchar(20) NOT NULL,
-  `paket` varchar(11) NOT NULL,
+  `paket` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `jumlah_orang` int NOT NULL,
   `total_biaya` int NOT NULL,
   `role_payment` enum('pending','confirmed','completed') DEFAULT 'pending',
   `mode_pembayaran` enum('gopay','dana','shopeepay','bni') DEFAULT NULL,
   `upload_gambar` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `tanggal_trip` date DEFAULT NULL,
+  `jam_trip` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `booking_details`
---
-
-INSERT INTO `booking_details` (`id`, `user_id`, `full_name`, `email`, `kontak`, `paket`, `jumlah_orang`, `total_biaya`, `role_payment`, `mode_pembayaran`, `upload_gambar`, `created_at`, `updated_at`) VALUES
-(3, 1, 'Muhammad Fikri Ridwan', 'mfikryrid@gmail.com', '082250706412', '1', 9, 5850000, 'pending', 'gopay', '1758217756_5bb8d12c45b1778a135d.png', '2025-09-18 10:24:58', '2025-09-22 18:57:22');
 
 -- --------------------------------------------------------
 
@@ -74,7 +70,8 @@ CREATE TABLE `jadwal_trip` (
 
 INSERT INTO `jadwal_trip` (`id`, `tanggal`, `paket`, `kapasitas`, `terisi`, `sisa`, `status`, `created_at`, `updated_at`) VALUES
 (1, '2025-09-20', 'Open Trip Whale Shark Teluk Saleh', 20, 0, 20, 'tersedia', '2025-09-17 06:54:08', '2025-09-17 06:54:08'),
-(2, '2025-09-17', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-09-17 06:56:28', '2025-09-17 06:56:28');
+(2, '2025-09-17', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-09-17 06:56:28', '2025-09-17 06:56:28'),
+(3, '2025-10-04', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-10-02 09:04:58', '2025-10-02 09:04:58');
 
 -- --------------------------------------------------------
 
@@ -150,6 +147,24 @@ CREATE TABLE `setting_payments` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ulasan`
+--
+
+CREATE TABLE `ulasan` (
+  `id` int NOT NULL,
+  `id_user` int NOT NULL,
+  `id_trip` int NOT NULL,
+  `ulasan` text NOT NULL,
+  `pengalaman_rating` decimal(3,2) NOT NULL,
+  `pemandu_rating` decimal(3,2) NOT NULL,
+  `fasilitas_rating` decimal(3,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -215,6 +230,13 @@ ALTER TABLE `setting_payments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_user` (`id_user`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -229,19 +251,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking_details`
 --
 ALTER TABLE `booking_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `jadwal_trip`
 --
 ALTER TABLE `jadwal_trip`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kelola_wisata`
 --
 ALTER TABLE `kelola_wisata`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -262,6 +284,12 @@ ALTER TABLE `setting_payments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -276,6 +304,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `payments`
   ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  ADD CONSTRAINT `ulasan_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
