@@ -35,24 +35,23 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form id="contactForm" action="<?= base_url('booking/proses_booking'); ?>" method="POST">
-                <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-
-                    <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
-                        <div class="progress" style="height: 20px; margin-bottom: 10px;">
-                            <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 1rem; color: #007bff;">
-                            <span style="font-weight: bold;">1</span>
-                            <span style="font-weight: bold;">2</span>
-                            <span style="font-weight: bold;">3</span>
-                            <span style="font-weight: bold;">4</span>
-                        </div>
+            <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
+                    <div class="progress" style="height: 20px; margin-bottom: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1rem; color: #007bff;">
+                        <span style="font-weight: bold;">1</span>
+                        <span style="font-weight: bold;">2</span>
+                        <span style="font-weight: bold;">3</span>
+                        <span style="font-weight: bold;">4</span>
+                    </div>
+                </div>
 
-                    <div class="card-body" style="padding:30px; background-color:#f8f9fa;">
-                        <h4 style="font-size:1.4rem; font-weight:bold;">Metode Pembayaran</h4>
-
+                <div class="card-body" style="padding:30px; background-color:#f8f9fa;">
+                    <h4 style="font-size:1.4rem; font-weight:bold;">Metode Pembayaran</h4>
+                    <form id="paymentForm" action="<?= base_url('add_payments'); ?>" method="POST">
+                        <input type="hidden" name="id" value="<?= isset($booking['id']) ? $booking['id'] : ''; ?>">
                         <!-- Kategori Pembayaran -->
                         <ul class="nav nav-pills gap-2 mb-3" id="payTab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -177,9 +176,9 @@
                                 <i class="fas fa-arrow-right" style="margin-right: 5px;"></i> Lanjutkan
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

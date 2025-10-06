@@ -24,6 +24,7 @@ class BookingController extends Controller
             'jumlah_orang' => $this->request->getPost('peopleCount'),
             'paket'        => 'Open Trip Whale Shark Teluk Saleh',
             'id_bookings'  => $generateID,
+            'total_biaya'  => $this->hitungTotalBiaya($this->request->getPost('peopleCount')),
             'created_at'   => date('Y-m-d H:i:s')
         ];
 
@@ -44,15 +45,20 @@ class BookingController extends Controller
         return $jumlahOrang * $hargaPerOrang;
     }
 
+
+
+
+
+
     public function add_jadwal()
     {
-        $id_bookings = $this->request->getPost('id');
+        $id = $this->request->getPost('id');
         $tripDate = $this->request->getPost('tripDate');
         $departureTime = $this->request->getPost('departureTime');
 
         $model_booking = new M_BookingDetails();
 
-        $booking = $model_booking->where('id_bookings', $id_bookings)->first();
+        $booking = $model_booking->where('id', $id)->first();
 
         if (!$booking) {
             return redirect()->to('/booking')->with('error', 'Booking tidak ditemukan.');
@@ -64,17 +70,73 @@ class BookingController extends Controller
             'updated_at'   => date('Y-m-d H:i:s')
         ];
 
-        $updateStatus = $model_booking->update($id_bookings, $data);
+        $updateStatus = $model_booking->update($id, $data);
 
         if ($updateStatus) {
-            return redirect()->to('/booking_jadwal/' . $id_bookings)->with('success', 'Pemesanan berhasil diperbarui!');
+            return redirect()->to('/booking_payment/' . $id)->with('success', 'Pemesanan berhasil diperbarui!');
         }
 
         return redirect()->to('/booking')->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
     }
 
+    public function add_payments()
+    {
+        $model = new M_BookingDetails();
 
-    public function update_payments()
+        $id = $this->request->getPost('id');
+        $payment_channel = $this->request->getPost('payment_channel');
+
+        $booking = $model->where('id', $id)->first();
+
+        if (!$booking) {
+            return redirect()->to('/booking')->with('error', 'Booking tidak ditemukan.');
+        }
+        $data = [
+            'mode_pembayaran' => $payment_channel,
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $updatePayment = $model->update($id, $data);
+
+        if ($updatePayment) {
+            return redirect()->to('/verifikasi/' . $id)->with('success', 'Pembayaran Berhasil!');
+        }
+
+        return redirect()->to('/booking_payment/' . $id)->with('error', 'Gagal melakukan Pembayaran. Silakan coba lagi.');
+    }
+    public function add_bukti()
+    {
+        if (!$this->validate([
+            'paymentProof' => 'uploaded[paymentProof]|max_size[paymentProof,1024]|ext_in[paymentProof,jpg,jpeg,png,pdf]' // Maksimal 1MB dan hanya ekstensi jpg, jpeg, png, pdf
+        ])) {
+            return redirect()->back()->with('error', 'File yang diupload tidak valid!')->withInput();
+        }
+
+        $file = $this->request->getFile('paymentProof');
+
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $fileName = $file->getRandomName();
+
+            $file->move(FCPATH . 'uploads/bukti_bayar', $fileName);
+
+            $idBooking = $this->request->getPost('id');
+
+            $model = new M_BookingDetails();
+            $model->update($idBooking, [
+                'upload_gambar' => $fileName
+            ]);
+
+            // Berikan pesan sukses dan redirect
+            session()->setFlashdata('success', 'Bukti pembayaran berhasil diupload.');
+            return redirect()->to('payment/success/' . $idBooking)->with('success', 'Pembayaran Berhasil!');
+        } else {
+            // Jika upload gagal, tampilkan pesan error
+            session()->setFlashdata('error', 'Terjadi kesalahan saat mengupload file.');
+            return redirect()->back()->withInput();
+        }
+    }
+
+    public function add_buki()
     {
         $bookingModel = new M_BookingDetails();
 

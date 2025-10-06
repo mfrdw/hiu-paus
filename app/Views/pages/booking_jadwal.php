@@ -54,7 +54,8 @@
                 <div class="card-body" style="padding: 30px; background-color: #f8f9fa;">
                     <h4 style="font-size: 1.4rem; font-weight: bold;">Pilih Jadwal</h4>
                     <form id="contactForm" action="<?= base_url('add_jadwal'); ?>" method="POST">
-                        <input type="hidden" name="id" value="<?= $booking['id_bookings']; ?>">
+                        <input type="hidden" name="id" value="<?= isset($booking['id']) ? $booking['id'] : ''; ?>">
+
                         <!-- Tanggal Trip -->
                         <div class="form-section" style="margin-bottom: 1.2rem;">
                             <label for="tripDate" class="form-label" style="font-weight: bold; font-size: 1rem;">

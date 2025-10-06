@@ -8,12 +8,14 @@ use App\Models\M_Users;
 use App\Models\M_UlasanUsers;
 use App\Models\M_KelolaWisata;
 use App\Models\M_Promosi;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class Home extends BaseController
 {
     public function index(): string
     {
+
+
+
         $model = new M_KelolaWisata();
         $model_promosi = new M_Promosi();
 
@@ -127,12 +129,12 @@ class Home extends BaseController
         return view('pages/booking', $data);
     }
 
-    public function booking_jadwal($id_bookings): string
+    public function booking_jadwal($id): string
     {
         $model = new M_BookingDetails();
         $model_jadwal = new M_JadwalTrip();
 
-        $booking = $model->where('id_bookings', $id_bookings)->first();
+        $booking = $model->where('id', $id)->first();
 
         $jadwal = $model_jadwal->where('paket', '')->findAll();
 
@@ -162,27 +164,27 @@ class Home extends BaseController
 
 
 
-    public function booking_payment(): string
+    public function booking_payment($id): string
     {
         $model = new M_BookingDetails();
-        $jadwal = $model->findAll();
+        $booking = $model->where('id', $id)->first();
 
         $data = [
             'title' => 'Metode Pembayaran',
-            'booking' => $jadwal
+            'booking' => $booking
         ];
 
         return view('pages/booking_payment', $data);
     }
 
-    public function verifikasi_pembayaran(): string
+    public function verifikasi_pembayaran($id): string
     {
         $model = new M_BookingDetails();
-        $jadwal = $model->findAll();
+        $booking = $model->where('id', $id)->first();
 
         $data = [
             'title' => 'Verifikasi Pembayaran',
-            'booking' => $jadwal
+            'booking' => $booking
         ];
 
         return view('pages/booking_upload_bukti', $data);
