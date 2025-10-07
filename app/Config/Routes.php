@@ -10,9 +10,21 @@ $routes->get('login', 'Home::login');
 $routes->post('/auth/dologin', 'Auth::doLogin');
 $routes->get('/logout', 'Auth::logout');
 
+
+$routes->get('views_details/(:num)', 'Home::views_details/$1');
 $routes->get('detail', 'Home::detail');
 $routes->get('detail_wisata', 'Home::detail_wisata_private');
 $routes->get('booking', 'Home::booking');
+$routes->get('booking_jadwal/(:num)', 'Home::booking_jadwal/$1');
+$routes->get('get_jadwal_by_date', 'Home::get_jadwal_by_date');
+
+
+$routes->get('booking_payment/(:num)', 'Home::booking_payment/$1');
+
+
+$routes->get('verifikasi/(:num)', 'Home::verifikasi_pembayaran/$1');
+
+
 $routes->get('booking_private', 'Home::booking_private');
 $routes->get('history', 'Home::history');
 $routes->get('payment/(:num)', 'Home::payment/$1');
@@ -68,6 +80,10 @@ $routes->post('/payment-notification', 'PaymentCallbackController::notification'
 
 // Booking
 $routes->post('booking/proses_booking', 'BookingController::proses_booking');
+$routes->post('add_jadwal', 'BookingController::add_jadwal');
+
+$routes->post('add_payments', 'BookingController::add_payments');
+$routes->post('add_bukti', 'BookingController::add_bukti');
 $routes->post('booking/proses_booking_private', 'BookingController::proses_booking_private');
 $routes->post('payment/update', 'BookingController::update_payments');
 

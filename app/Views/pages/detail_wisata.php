@@ -209,26 +209,6 @@
     </script>
 
 
-    <!-- Kalender Trip -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card" style="border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-                <div class="card-header" style="background-color: #fff; padding: 20px;">
-                    <h4 class="card-title" style="font-size: 1.8rem; font-weight: bold; color: #007bff;">Kalender Trip</h4>
-                </div>
-                <div class="card-body" style="padding: 30px; background-color: #f8f9fa;">
-                    <!-- Calendar Header -->
-                    <div id="calendar-header" style="text-align: right; margin-bottom: 15px; font-size: 1.1rem; font-weight: bold;">
-                        <span id="current-month-year"></span>
-                    </div>
-
-                    <div id="calendar"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <!-- Review Section -->
     <div class="row mb-4">
         <div class="col-md-8">

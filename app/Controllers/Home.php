@@ -3,16 +3,19 @@
 namespace App\Controllers;
 
 use App\Models\M_BookingDetails;
+use App\Models\M_JadwalTrip;
 use App\Models\M_Users;
 use App\Models\M_UlasanUsers;
 use App\Models\M_KelolaWisata;
 use App\Models\M_Promosi;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class Home extends BaseController
 {
     public function index(): string
     {
+
+
+
         $model = new M_KelolaWisata();
         $model_promosi = new M_Promosi();
 
@@ -126,6 +129,67 @@ class Home extends BaseController
         return view('pages/booking', $data);
     }
 
+    public function booking_jadwal($id): string
+    {
+        $model = new M_BookingDetails();
+        $model_jadwal = new M_JadwalTrip();
+
+        $booking = $model->where('id', $id)->first();
+
+        $jadwal = $model_jadwal->where('paket', '')->findAll();
+
+        $data = [
+            'title' => 'Booking Jadwal',
+            'booking' => $booking,
+            'jadwal' => $jadwal
+        ];
+
+        return view('pages/booking_jadwal', $data);
+    }
+    public function get_jadwal_by_date()
+    {
+        $tanggal = $this->request->getGet('tanggal');
+
+        $model_jadwal = new M_JadwalTrip();
+
+        $jadwal = $model_jadwal->where('tanggal', $tanggal)->findAll();
+
+        if ($jadwal) {
+            return $this->response->setJSON($jadwal);
+        } else {
+            return $this->response->setJSON(['error' => 'Jadwal tidak ditemukan.']);
+        }
+    }
+
+
+
+
+    public function booking_payment($id): string
+    {
+        $model = new M_BookingDetails();
+        $booking = $model->where('id', $id)->first();
+
+        $data = [
+            'title' => 'Metode Pembayaran',
+            'booking' => $booking
+        ];
+
+        return view('pages/booking_payment', $data);
+    }
+
+    public function verifikasi_pembayaran($id): string
+    {
+        $model = new M_BookingDetails();
+        $booking = $model->where('id', $id)->first();
+
+        $data = [
+            'title' => 'Verifikasi Pembayaran',
+            'booking' => $booking
+        ];
+
+        return view('pages/booking_upload_bukti', $data);
+    }
+
     public function booking_private(): string
     {
 
@@ -216,6 +280,19 @@ class Home extends BaseController
         }
     }
 
+    public function views_details($id): string
+    {
+        $model = new M_KelolaWisata();
+
+        $wisata = $model->find($id);
+
+        $data = [
+            'title' => 'Detail Wisata',
+            'wisata' => $wisata
+        ];
+
+        return view('pages/detail_deskripsi_wisata', $data);
+    }
 
 
 

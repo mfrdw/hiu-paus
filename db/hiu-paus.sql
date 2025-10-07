@@ -29,12 +29,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `booking_details` (
   `id` int NOT NULL,
+<<<<<<< HEAD
   `id_bookings` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+=======
+  `id_bookings` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+>>>>>>> 71950b5cdfb093efb965e8d2e40443b6f4f038f5
   `user_id` int UNSIGNED DEFAULT NULL,
   `full_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `kontak` varchar(20) NOT NULL,
+<<<<<<< HEAD
   `paket` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+=======
+  `paket` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+>>>>>>> 71950b5cdfb093efb965e8d2e40443b6f4f038f5
   `jumlah_orang` int NOT NULL,
   `total_biaya` int NOT NULL,
   `role_payment` enum('pending','confirmed','completed') DEFAULT 'pending',
@@ -44,7 +52,11 @@ CREATE TABLE `booking_details` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `tanggal_trip` date DEFAULT NULL,
   `jam_trip` time DEFAULT NULL
+<<<<<<< HEAD
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> 71950b5cdfb093efb965e8d2e40443b6f4f038f5
 
 -- --------------------------------------------------------
 
@@ -160,7 +172,11 @@ CREATE TABLE `ulasan` (
   `fasilitas_rating` decimal(3,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+<<<<<<< HEAD
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> 71950b5cdfb093efb965e8d2e40443b6f4f038f5
 
 -- --------------------------------------------------------
 
