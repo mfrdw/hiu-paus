@@ -15,7 +15,6 @@ class Home extends BaseController
     {
 
 
-
         $model = new M_KelolaWisata();
         $model_promosi = new M_Promosi();
 

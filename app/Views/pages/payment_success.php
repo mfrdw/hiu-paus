@@ -109,7 +109,7 @@
         <a href="<?= base_url('/') ?>" class="btn btn-primary btn-lg">
             <i class="bi bi-house-door"></i> Kembali ke Beranda
         </a>
-        <a href="<?= base_url('history') ?>" class="btn btn-outline-success btn-lg">
+        <a href="<?= base_url('/history') ?>" class="btn btn-outline-success btn-lg">
             <i class="bi bi-clock-history"></i> Lihat Riwayat Booking
         </a>
     </div>

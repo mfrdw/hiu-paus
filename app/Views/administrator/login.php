@@ -45,7 +45,7 @@
     <div class="login-container">
         <div class="login-card">
             <h2>Login Admin</h2>
-            <form action="<?= base_url('administrator/dologin') ?>" method="post">
+            <form action="<?= base_url('/auth/dologin') ?>" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
                     <input type="username" class="form-control" id="username" name="username" placeholder="Username" required>

@@ -36,10 +36,13 @@ class Auth extends Controller
 
         if ($user['role_user'] == '1') {
             return redirect()->to('/');
+        } elseif ($user['role_user'] == '2') {
+            return redirect()->to('/dashboard');
         } else {
             return redirect()->back()->with('error', 'User tidak ditemukan atau tidak memiliki akses');
         }
     }
+
 
     public function doRegistration()
     {
@@ -66,7 +69,15 @@ class Auth extends Controller
 
     public function logout()
     {
+        $role_user = session()->get('role_user');
+
         session()->destroy();
-        return redirect()->to('/login');
+        if ($role_user == '1') {
+            return redirect()->to('/login');
+        } elseif ($role_user == '2') {
+            return redirect()->to('/administrator');
+        } else {
+            return redirect()->to('/login');
+        }
     }
 }
