@@ -46,46 +46,46 @@ class Administrator extends BaseController
         return view('administrator/kelola_pesanan', $data);
     }
 
-        public function update_booking($booking_id)
-        {
+    public function update_booking($booking_id)
+    {
 
-            $model = new M_BookingDetails();
-            $booking = $model->find($booking_id);
+        $model = new M_BookingDetails();
+        $booking = $model->find($booking_id);
 
-            if (!$booking) {
-                return redirect()->to('/booking')->with('error', 'Pemesanan tidak ditemukan.');
-            }
-
-            $updatedData = [
-                'full_name'    => $this->request->getPost('fullName'),
-                'email'        => $this->request->getPost('email'),
-                'kontak'       => $this->request->getPost('mobile'),
-                'jumlah_orang' => $this->request->getPost('peopleCount'),
-                'role_payment' => $this->request->getPost('rolePayment'),
-                'updated_at'   => date('Y-m-d H:i:s')
-            ];
-
-            $updated = $model->update($booking_id, $updatedData);
-
-            if ($updated) {
-                return redirect()->to('/kelola_pesanan')->with('success', 'Pemesanan berhasil diperbarui!');
-            }
-
-            return redirect()->to('/kelola_pesanan')->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
+        if (!$booking) {
+            return redirect()->to('/booking')->with('error', 'Pemesanan tidak ditemukan.');
         }
 
-        public function delete_booking($booking_id)
-        {
-            $model = new M_BookingDetails();
+        $updatedData = [
+            'full_name'    => $this->request->getPost('fullName'),
+            'email'        => $this->request->getPost('email'),
+            'kontak'       => $this->request->getPost('mobile'),
+            'jumlah_orang' => $this->request->getPost('peopleCount'),
+            'role_payment' => $this->request->getPost('rolePayment'),
+            'updated_at'   => date('Y-m-d H:i:s')
+        ];
 
-            $deleted = $model->delete($booking_id);
+        $updated = $model->update($booking_id, $updatedData);
 
-            if ($deleted) {
-                return redirect()->to('/kelola_pesanan')->with('success', 'Pemesanan berhasil dihapus!');
-            }
-
-            return redirect()->to('/kelola_pesanan')->with('error', 'Gagal menghapus pemesanan. Silakan coba lagi.');
+        if ($updated) {
+            return redirect()->to('/kelola_pesanan')->with('success', 'Pemesanan berhasil diperbarui!');
         }
+
+        return redirect()->to('/kelola_pesanan')->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
+    }
+
+    public function delete_booking($booking_id)
+    {
+        $model = new M_BookingDetails();
+
+        $deleted = $model->delete($booking_id);
+
+        if ($deleted) {
+            return redirect()->to('/kelola_pesanan')->with('success', 'Pemesanan berhasil dihapus!');
+        }
+
+        return redirect()->to('/kelola_pesanan')->with('error', 'Gagal menghapus pemesanan. Silakan coba lagi.');
+    }
 
 
 
@@ -166,7 +166,7 @@ class Administrator extends BaseController
     {
         $model = new M_UlasanUsers();
         $ulasan = $model->getUlasanWithUserAdmin();
-        
+
         // Pastikan ulasan selalu berupa array (kosong jika tidak ada data)
         if ($ulasan === null) {
             $ulasan = [];
@@ -184,7 +184,7 @@ class Administrator extends BaseController
     }
 
 
-  public function update_ulasan()
+    public function update_ulasan()
     {
         // Membuat instance dari model M_UlasanUsers
         $model = new M_UlasanUsers();
@@ -260,44 +260,5 @@ class Administrator extends BaseController
             'title' => 'Login Administrator',
         ];
         return view('administrator/login', $data);
-    }
-    public function doLogin()
-    {
-        $username = $this->request->getPost('username');
-        $password = $this->request->getPost('password');
-
-        if (!$username || !$password) {
-            return redirect()->to('/administrator')->with('error', 'Username dan password harus diisi.');
-        }
-
-        $model = new M_Users();
-        $user = $model->where('username', $username)->first();
-
-        if (!$user) {
-            return redirect()->to('/administrator')->with('error', 'Username tidak ditemukan.');
-        }
-
-        if ($user['password'] !== $password) {
-            return redirect()->to('/administrator')->with('error', 'Password salah.');
-        }
-
-        session()->set([
-            'id'         => $user['id'],
-            'username'   => $user['username'],
-            'role_user'  => $user['role_user'],
-            'isLoggedIn' => true
-        ]);
-
-        if ($user['role_user'] == '2') {
-            return redirect()->to('/dashboard');
-        } else {
-            return redirect()->back()->with('error', 'User tidak ditemukan atau tidak memiliki akses');
-        }
-    }
-
-    public function logout()
-    {
-        session()->destroy();
-        return redirect()->to('/administrator');
     }
 }
