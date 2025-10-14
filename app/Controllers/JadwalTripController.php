@@ -37,7 +37,7 @@ class JadwalTripController extends Controller
 
     public function update($id)
     {
-    
+
         $tanggal = $this->request->getPost('tanggal');
         $paket = $this->request->getPost('paket');
         $kapasitas = $this->request->getPost('kapasitas');
@@ -81,5 +81,43 @@ class JadwalTripController extends Controller
     }
 
 
+    public function get_calendar_data()
+    {
+        $month = $this->request->getVar('month');  // bulan dalam format 1-12
+        $year = $this->request->getVar('year');    // tahun
 
+        $model_jadwal = new M_JadwalTrip();
+
+        // Ambil data jadwal untuk bulan dan tahun yang diminta
+        $jadwal = $model_jadwal->where('MONTH(tanggal)', $month)
+            ->where('YEAR(tanggal)', $year)
+            ->findAll();
+
+        // Format data jadwal untuk dikirim ke frontend
+        $result = [];
+        foreach ($jadwal as $item) {
+            $result[] = [
+                'tanggal' => $item['tanggal'],
+                'kapasitas' => $item['kapasitas'],
+                'terisi' => $item['terisi'],
+                'status' => $this->get_status($item['kapasitas'], $item['terisi'])
+            ];
+        }
+
+        return $this->response->setJSON($result);
+    }
+
+    // Fungsi untuk menentukan status berdasarkan kapasitas dan terisi
+    private function get_status($kapasitas, $terisi)
+    {
+        $sisa = $kapasitas - $terisi;
+
+        if ($sisa == 0) {
+            return 'full';  // Penuh
+        } elseif ($sisa <= 5) {
+            return 'almost-full';  // Hampir penuh
+        } else {
+            return 'available';  // Tersedia
+        }
+    }
 }

@@ -234,7 +234,6 @@
     });
 </script>
 
-
 <!-- Iklan -->
 <style>
     /* Popup Modal Style */
@@ -254,8 +253,8 @@
 
     /* Promo Content Styling */
     .promo-content {
-        background: linear-gradient(145deg, #ff9e2c, #ff6a13);
-        /* Warna gradasi cerah */
+        background: linear-gradient(145deg, #6a11cb, #2575fc);
+        /* Ubah ke gradasi biru */
         padding: 30px;
         border-radius: 15px;
         text-align: center;
@@ -296,7 +295,8 @@
     /* Button Styling */
     .promo-content .btn-promo,
     .promo-content .btn-whatsapp {
-        background-color: #ff6a13;
+        background-color: #2575fc;
+        /* Ubah warna tombol menjadi biru */
         color: white;
         padding: 12px 30px;
         border: none;
@@ -311,7 +311,8 @@
 
     .promo-content .btn-promo:hover,
     .promo-content .btn-whatsapp:hover {
-        background-color: #d94e0b;
+        background-color: #0056b3;
+        /* Ubah warna tombol saat hover menjadi biru lebih gelap */
     }
 
     /* Styling untuk tombol close */
@@ -363,6 +364,8 @@
     }
 </style>
 
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Popup Modal untuk Promosi -->
 <div id="promoPopup" class="promo-popup">
     <div class="promo-content">
@@ -373,11 +376,19 @@
             </div>
             <div class="promo-price">
                 <p><?= esc($promosi['nama_promosi']) ?></p>
-                <p><strong>Harga Normal: Rp <?= number_format($promosi['harga_normal'], 0, ',', '.') ?></strong></p>
+                <p><strong>Harga Normal: Rp <span class="text-decoration-line-through"><?= number_format($promosi['harga_normal'], 0, ',', '.') ?></span></strong></p>
                 <p><strong>Harga Diskon: Rp <?= number_format($promosi['harga_diskon'], 0, ',', '.') ?></strong></p>
             </div>
-            <button class="btn-promo">Gunakan Promo Sekarang</button>
+
+            <!-- Form untuk menggunakan promo -->
+            <form id="promoForm" action="<?= base_url('/get_promo') ?>" method="POST">
+                <input type="hidden" name="promo_id" value="<?= esc($promosi['id']) ?>"> <!-- Kirim ID promo -->
+                <button type="submit" class="btn-promo" id="promoBtn">Gunakan Promo Sekarang</button>
+            </form>
+
+            <!-- WhatsApp Button -->
             <button class="btn-whatsapp" onclick="window.open('https://wa.me/?text=<?= urlencode($promosi['nama_promosi']) ?>')">Bagikan ke WhatsApp</button>
+
             <div class="promo-footer">
                 <small><strong>Penawaran Terbatas - Jangan Sampai Terlewat!</strong></small>
             </div>
@@ -387,41 +398,57 @@
     </div>
 </div>
 
-<!-- Script untuk Menampilkan dan Menutup Popup -->
 <script>
-    const promoBtn = document.getElementById("promoBtn");
-    const promoPopup = document.getElementById("promoPopup");
-    const closePopup = document.getElementById("closePopup");
+    // Cek apakah promo sudah aktif (nilai promo = 2)
+    document.addEventListener("DOMContentLoaded", function() {
+        const promoButton = document.getElementById('promoBtn'); // Tombol promo
 
-    promoBtn.onclick = function() {
-        promoPopup.style.display = "block";
-    }
+        <?php if (session()->get('promo') == 2): ?>
+            // Jika promo sudah aktif, sembunyikan tombol atau ubah teks tombol
+            promoButton.style.display = 'none'; // Menyembunyikan tombol
+            // Atau Anda bisa mengganti teks tombol
+            promoButton.textContent = 'Promo Sudah Digunakan';
+        <?php else: ?>
+            // Jika promo belum aktif, tampilkan modal dan tombol
+            document.getElementById('promoPopup').style.display = 'flex';
+        <?php endif; ?>
+    });
 
-    closePopup.onclick = function() {
-        promoPopup.style.display = "none";
-    }
+    // Menangani tombol "Gunakan Promo Sekarang"
+    document.querySelector('.btn-promo').addEventListener('click', function(event) {
+        event.preventDefault(); // Mencegah form untuk langsung submit
 
-    window.onclick = function(event) {
-        if (event.target == promoPopup) {
-            promoPopup.style.display = "none";
-        }
-    }
-</script>
+        // Mengecek apakah user sudah login (memeriksa session)
+        <?php if (!session()->get('id')): ?>
+            // Jika belum login, tampilkan SweetAlert2
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Anda harus login terlebih dahulu!',
+                confirmButtonText: 'Login',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '<?= base_url('/login') ?>'; // Arahkan ke halaman login
+                }
+            });
+        <?php else: ?>
+            // Jika sudah login, submit form
+            document.getElementById('promoForm').submit();
+        <?php endif; ?>
+    });
 
-
-<script>
-    setTimeout(function() {
-        document.getElementById('promoPopup').style.display = 'flex';
-    }, 1000);
-
+    // Script untuk menutup popup
     document.getElementById('closePopup').addEventListener('click', function() {
         document.getElementById('promoPopup').style.display = 'none';
     });
 
+    // Otomatis sembunyikan popup setelah beberapa detik (7 detik)
     setTimeout(function() {
         document.getElementById('promoPopup').style.display = 'none';
     }, 7000);
 </script>
+
+
 
 <style>
     /* Styling untuk kalender */
@@ -527,21 +554,21 @@
     let currentDate = new Date();
 
     function renderCalendar(date) {
-        const currentMonth = date.getMonth();
+        const currentMonth = date.getMonth() + 1; // Menyesuaikan bulan (1-12)
         const currentYear = date.getFullYear();
 
         // Display month and year
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        monthYearDisplay.textContent = `${months[currentMonth]} ${currentYear}`;
+        monthYearDisplay.textContent = `${months[currentMonth - 1]} ${currentYear}`;
 
         // Clear the calendar days
         calendarDaysContainer.innerHTML = '';
 
         // Get the first day of the month
-        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const firstDay = new Date(currentYear, currentMonth - 1, 1).getDay();
 
         // Get the last day of the month
-        const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const lastDate = new Date(currentYear, currentMonth, 0).getDate();
 
         // Create empty divs for the first week (if necessary)
         for (let i = 0; i < firstDay; i++) {
@@ -549,20 +576,50 @@
             calendarDaysContainer.appendChild(emptyDiv);
         }
 
-        // Create day buttons for each date in the month
-        for (let day = 1; day <= lastDate; day++) {
-            const dayButton = document.createElement('div');
-            dayButton.textContent = day;
-            dayButton.classList.add('day');
+        // Fetch data for the current month and year
+        fetch(`/get_calendar_data?month=${currentMonth}&year=${currentYear}`)
+            .then(response => response.json())
+            .then(data => {
+                // Create day buttons for each date in the month
+                for (let day = 1; day <= lastDate; day++) {
+                    const dayButton = document.createElement('div');
+                    dayButton.textContent = day;
+                    dayButton.classList.add('day');
 
-            // Assign random availability status (for demonstration)
-            const status = getRandomStatus();
-            dayButton.classList.add(status);
+                    // Find the status for the current day
+                    const dayStatus = data.find(item => new Date(item.tanggal).getDate() === day);
+                    const status = dayStatus ? dayStatus.status : 'past'; // Default to 'past' if no data
 
-            dayButton.addEventListener('click', () => selectDate(day));
+                    // Get the current date (today)
+                    const today = new Date();
+                    const currentDay = new Date(currentYear, currentMonth - 1, day);
 
-            calendarDaysContainer.appendChild(dayButton);
-        }
+                    // Assign the status class to the day
+                    if (status === 'available') {
+                        // If the day is today, it should not be past
+                        if (currentDay.toDateString() === today.toDateString()) {
+                            dayButton.style.backgroundColor = 'gray'; // Tanggal hari ini jadi abu
+                        } else {
+                            dayButton.style.backgroundColor = 'green'; // Tersedia
+                        }
+                    } else if (status === 'almost-full') {
+                        dayButton.style.backgroundColor = 'yellow'; // Hampir penuh
+                    } else if (status === 'full') {
+                        // If the day is today, it should be red
+                        if (currentDay.toDateString() === today.toDateString()) {
+                            dayButton.style.backgroundColor = 'red'; // Penuh, merah
+                        } else {
+                            dayButton.style.backgroundColor = 'red'; // Penuh
+                        }
+                    } else if (status === 'past') {
+                        dayButton.style.backgroundColor = 'gray'; // Tanggal lewat, abu-abu
+                    }
+
+                    dayButton.addEventListener('click', () => selectDate(day));
+                    calendarDaysContainer.appendChild(dayButton);
+                }
+            })
+            .catch(error => console.error('Error fetching calendar data:', error));
     }
 
     function selectDate(day) {
@@ -575,13 +632,6 @@
                 dayElement.classList.add('selected');
             }
         });
-    }
-
-    // Function to randomly assign status (for demonstration)
-    function getRandomStatus() {
-        const statuses = ['available', 'almost-full', 'full'];
-        const randomIndex = Math.floor(Math.random() * statuses.length);
-        return statuses[randomIndex];
     }
 
     // Event listeners for next and previous buttons

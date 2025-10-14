@@ -116,7 +116,7 @@
                     title: 'Harus Login Terlebih Dahulu',
                     text: 'Silakan login untuk melanjutkan pembayaran.',
                 }).then(() => {
-                    window.location.href = '<?= base_url('/login'); ?>';
+                    window.location.href = '<?= base_url('/booking'); ?>';
                 });
             <?php endif; ?>
         }

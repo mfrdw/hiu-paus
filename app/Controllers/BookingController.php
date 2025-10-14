@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\M_BookingDetails;
+use App\Models\M_JadwalTrip;
 use CodeIgniter\Controller;
 
 class BookingController extends Controller
@@ -49,35 +50,67 @@ class BookingController extends Controller
 
 
 
-
     public function add_jadwal()
     {
+        // Ambil data dari request POST
         $id = $this->request->getPost('id');
         $tripDate = $this->request->getPost('tripDate');
         $departureTime = $this->request->getPost('departureTime');
+        $jumlahOrang = $this->request->getPost('jumlahOrang');  // Menangkap jumlah orang
 
+        // Model untuk Booking Details
         $model_booking = new M_BookingDetails();
+        // Model untuk Jadwal Trip
+        $model_jadwal_trip = new M_JadwalTrip();
 
+        // Ambil booking berdasarkan ID
         $booking = $model_booking->where('id', $id)->first();
 
         if (!$booking) {
             return redirect()->to('/booking')->with('error', 'Booking tidak ditemukan.');
         }
 
+        // Data yang akan diupdate di booking
         $data = [
             'tanggal_trip' => $tripDate,
             'jam_trip'     => $departureTime,
             'updated_at'   => date('Y-m-d H:i:s')
         ];
 
+        // Update data booking
         $updateStatus = $model_booking->update($id, $data);
 
         if ($updateStatus) {
-            return redirect()->to('/booking_payment/' . $id)->with('success', 'Pemesanan berhasil diperbarui!');
+            // Setelah berhasil update booking, kita akan update M_JadwalTrip
+            // Cari trip dengan paket dan tanggal trip yang sesuai
+            $jadwalTrip = $model_jadwal_trip->where('paket', $booking['paket'])
+                ->where('tanggal', $tripDate)
+                ->first();
+
+            if ($jadwalTrip) {
+                // Hitung nilai terisi baru (jumlah orang ditambah dengan terisi sebelumnya)
+                $terisi = $jadwalTrip['terisi'] + $jumlahOrang;
+                $sisa = $jadwalTrip['kapasitas'] - $terisi;
+
+                // Update kolom 'terisi' dan 'sisa' secara manual
+                $model_jadwal_trip->update($jadwalTrip['id'], [
+                    'terisi'    => $terisi,
+                    'sisa'      => $sisa,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+
+                // Redirect dengan sukses
+                return redirect()->to('/booking_payment/' . $id)->with('success', 'Pemesanan berhasil diperbarui!');
+            }
+
+            return redirect()->to('/booking_jadwal/' . $id)->with('error', 'Jadwal tidak ditemukan atau tidak tersedia.');
         }
 
         return redirect()->to('/booking')->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
     }
+
+
+
 
     public function add_payments()
     {
@@ -212,7 +245,7 @@ class BookingController extends Controller
 
         // Validasi data
         if (empty($fullName) || empty($email) || empty($mobile) || empty($peopleCount)) {
-            return redirect()->to('/booking')->with('error', 'Semua kolom harus diisi.');
+            return redirect()->to('/booking_private')->with('error', 'Semua kolom harus diisi.');
         }
 
         // Hitung total biaya berdasarkan jumlah orang
@@ -226,6 +259,7 @@ class BookingController extends Controller
             'jumlah_orang' => $peopleCount,
             'total_biaya'  => $totalBiaya,
             'role_payment' => 'pending',
+            'paket' => 'Private Trip Whale Shark Teluk Saleh',
             'created_at'   => date('Y-m-d H:i:s')
         ];
 
@@ -235,14 +269,14 @@ class BookingController extends Controller
 
             if ($insertId) {
                 // Jika berhasil insert, redirect ke halaman pembayaran
-                return redirect()->to('/payment/' . $insertId)->with('success', 'Pemesanan berhasil!');
+                return redirect()->to('/booking_jadwal/' . $insertId)->with('success', 'Pemesanan berhasil!');
             } else {
                 // Jika gagal insert
-                return redirect()->to('/booking')->with('error', 'Gagal memproses pemesanan. Silakan coba lagi.');
+                return redirect()->to('/booking_private')->with('error', 'Gagal memproses pemesanan. Silakan coba lagi.');
             }
         } catch (\Exception $e) {
             // Menangani error
-            return redirect()->to('/booking')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->to('/booking_private')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 

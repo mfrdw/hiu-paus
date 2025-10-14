@@ -27,7 +27,7 @@
         <?php endif; ?>
     });
 </script>
-<div class="container" style="max-width: 1200px; margin-top: 50px;">
+<div class="container mb-5" style="max-width: 1200px; margin-top: 50px;">
     <div class="text-center">
         <h2>BOOKING WHALE SHARK TRIP</h2>
         <p>Teluk Saleh, Sumbawa.</p>
@@ -55,6 +55,8 @@
                     <h4 style="font-size: 1.4rem; font-weight: bold;">Pilih Jadwal</h4>
                     <form id="contactForm" action="<?= base_url('add_jadwal'); ?>" method="POST">
                         <input type="hidden" name="id" value="<?= isset($booking['id']) ? $booking['id'] : ''; ?>">
+                        <input type="hidden" name="jumlahOrang" value="<?= isset($booking['jumlah_orang']) ? $booking['jumlah_orang'] : ''; ?>">
+                        <input type="hidden" name="paket" value="<?= isset($booking['jumlah_orang']) ? $booking['paket'] : ''; ?>">
 
                         <!-- Tanggal Trip -->
                         <div class="form-section" style="margin-bottom: 1.2rem;">
@@ -76,7 +78,114 @@
                                     Jadwal tidak ditemukan atau tidak tersedia.
                                 </div>
                             </div>
+                            <div id="fullAlert" style="display: none;">
+                                <div class="alert alert-danger mt-2" role="alert">
+                                    <i class="fas fa-times-circle" style="margin-right: 5px;"></i>
+                                    Jadwal Penuh! Tidak ada slot yang tersedia.
+                                </div>
+                            </div>
+                            <div id="almostFullAlert" style="display: none;">
+                                <div class="alert alert-warning mt-2" role="alert">
+                                    <i class="fas fa-exclamation-circle" style="margin-right: 5px;"></i>
+                                    Jadwal Hampir Penuh! Sisa slot tinggal sedikit.
+                                </div>
+                            </div>
+
+                            <!-- Menampilkan 3 jadwal yang masih ada slot -->
+                            <div id="recommendedSchedules" style="display: none; margin-top: 20px;">
+                                <h5>Rekomendasi Jadwal Tersedia:</h5>
+                                <ul id="scheduleList" class="list-group">
+                                    <!-- 3 jadwal yang masih ada slot akan ditambahkan di sini -->
+                                </ul>
+                            </div>
                         </div>
+                        <script>
+                            document.getElementById('tripDate').addEventListener('change', function() {
+                                const selectedDate = this.value; // Ambil tanggal yang dipilih
+                                const errorAlert = document.getElementById('errorAlert');
+                                const availabilityAlert = document.getElementById('availabilityAlert');
+                                const fullAlert = document.getElementById('fullAlert');
+                                const almostFullAlert = document.getElementById('almostFullAlert');
+                                const kapasitas = document.getElementById('kapasitas');
+                                const sisaSlot = document.getElementById('sisaSlot');
+                                const recommendedSchedules = document.getElementById('recommendedSchedules');
+                                const scheduleList = document.getElementById('scheduleList');
+
+                                // Menyembunyikan semua alert terlebih dahulu
+                                errorAlert.style.display = 'none';
+                                availabilityAlert.style.display = 'none';
+                                fullAlert.style.display = 'none';
+                                almostFullAlert.style.display = 'none';
+                                recommendedSchedules.style.display = 'none';
+                                scheduleList.innerHTML = ''; // Kosongkan daftar jadwal yang ditampilkan
+
+                                // Mengirimkan permintaan AJAX ke server untuk mendapatkan jadwal berdasarkan tanggal yang dipilih
+                                fetch('/get_jadwal_by_date?tanggal=' + selectedDate)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.error) {
+                                            // Menampilkan pesan error jika tidak ada jadwal ditemukan
+                                            errorAlert.style.display = 'block';
+
+                                            // Menampilkan rekomendasi 3 jadwal dengan sisa slot yang masih ada
+                                            fetch('/get_jadwal_by_date?tanggal=' + selectedDate) // Menyaring jadwal lain yang masih tersedia
+                                                .then(res => res.json())
+                                                .then(availableData => {
+                                                    const availableSchedules = availableData.filter(jadwal => jadwal.kapasitas - jadwal.terisi > 0); // Filter jadwal yang masih tersedia
+                                                    const topSchedules = availableSchedules.slice(0, 3); // Ambil 3 jadwal pertama yang tersedia
+
+                                                    if (topSchedules.length > 0) {
+                                                        recommendedSchedules.style.display = 'block'; // Tampilkan rekomendasi jadwal
+                                                        topSchedules.forEach(jadwal => {
+                                                            const li = document.createElement('li');
+                                                            li.classList.add('list-group-item');
+                                                            li.textContent = `Paket: ${jadwal.paket}, Tanggal: ${jadwal.tanggal}, Sisa Slot: ${jadwal.kapasitas - jadwal.terisi}`;
+                                                            scheduleList.appendChild(li);
+                                                        });
+                                                    }
+                                                });
+                                        } else {
+                                            // Menampilkan informasi jadwal jika ditemukan
+                                            const jadwal = data[0]; // Ambil jadwal pertama jika ada
+                                            const sisa = jadwal.kapasitas - jadwal.terisi;
+                                            sisaSlot.textContent = sisa;
+                                            kapasitas.textContent = jadwal.kapasitas;
+
+                                            // Menampilkan status ketersediaan berdasarkan sisa slot
+                                            if (sisa === 0) {
+                                                fullAlert.style.display = 'block'; // Tampilkan alert "Penuh"
+                                            } else if (sisa <= 3) {
+                                                almostFullAlert.style.display = 'block'; // Tampilkan alert "Hampir Penuh"
+                                                // Tampilkan rekomendasi 3 jadwal dengan sisa slot yang masih ada
+                                                recommendedSchedules.style.display = 'block'; // Tampilkan rekomendasi jadwal
+                                                fetch('/get_jadwal_by_date?tanggal=' + selectedDate) // Menyaring jadwal lain yang masih tersedia
+                                                    .then(res => res.json())
+                                                    .then(availableData => {
+                                                        const availableSchedules = availableData.filter(jadwal => jadwal.kapasitas - jadwal.terisi > 0); // Filter jadwal yang masih tersedia
+                                                        const topSchedules = availableSchedules.slice(0, 3); // Ambil 3 jadwal pertama yang tersedia
+
+                                                        if (topSchedules.length > 0) {
+                                                            topSchedules.forEach(jadwal => {
+                                                                const li = document.createElement('li');
+                                                                li.classList.add('list-group-item');
+                                                                li.textContent = `Paket: ${jadwal.paket}, Tanggal: ${jadwal.tanggal}, Sisa Slot: ${jadwal.kapasitas - jadwal.terisi}`;
+                                                                scheduleList.appendChild(li);
+                                                            });
+                                                        }
+                                                    });
+                                            } else {
+                                                availabilityAlert.style.display = 'block'; // Tampilkan alert "Tersedia"
+                                            }
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        errorAlert.style.display = 'block';
+                                    });
+                            });
+                        </script>
+
+
 
                         <!-- Waktu Keberangkatan -->
                         <div class="form-section" style="margin-bottom: 1.2rem;">
@@ -108,39 +217,7 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('tripDate').addEventListener('change', function() {
-        const selectedDate = this.value; // Ambil tanggal yang dipilih
-        const errorAlert = document.getElementById('errorAlert');
-        const availabilityAlert = document.getElementById('availabilityAlert');
-        const kapasitas = document.getElementById('kapasitas');
-        const sisaSlot = document.getElementById('sisaSlot');
 
-        // Mengirimkan permintaan AJAX ke server untuk mendapatkan jadwal berdasarkan tanggal yang dipilih
-        fetch('/get_jadwal_by_date?tanggal=' + selectedDate)
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    // Menampilkan pesan error jika tidak ada jadwal ditemukan
-                    errorAlert.style.display = 'block';
-                    availabilityAlert.style.display = 'none';
-                } else {
-                    // Menampilkan informasi jadwal jika ditemukan
-                    const jadwal = data[0]; // Ambil jadwal pertama jika ada
-                    const sisa = jadwal.kapasitas - jadwal.terisi;
-                    sisaSlot.textContent = sisa;
-                    kapasitas.textContent = jadwal.kapasitas;
-                    availabilityAlert.style.display = 'block';
-                    errorAlert.style.display = 'none';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                errorAlert.style.display = 'block';
-                availabilityAlert.style.display = 'none';
-            });
-    });
-</script>
 
 
 <?= $this->endSection() ?>
