@@ -58,8 +58,12 @@
                                             <td>Rp <?= number_format($item['harga_normal'], 0, ',', '.') ?></td>
                                             <td>Rp <?= number_format($item['harga_diskon'], 0, ',', '.') ?></td>
                                             <td>
-                                                <a href="#" class="btn btn-warning btn-sm">Gunakan Promo Sekarang</a>
-                                                <a href="https://wa.me/?text=<?= urlencode($item['nama_promosi']) ?>" class="btn btn-success btn-sm" target="_blank">Bagikan ke WhatsApp</a>
+                                                <a href="#" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this promo?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -70,6 +74,7 @@
                                 <?php endif; ?>
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>

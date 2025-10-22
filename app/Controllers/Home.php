@@ -176,15 +176,23 @@ class Home extends BaseController
     public function booking_payment($id): string
     {
         $model = new M_BookingDetails();
+        $promo = new M_Promosi();
+
+        // Ambil data booking
         $booking = $model->where('id', $id)->first();
+
+        // Ambil semua voucher yang memiliki status 1 (aktif)
+        $voucher = $promo->where('status', 1)->findAll();
 
         $data = [
             'title' => 'Metode Pembayaran',
-            'booking' => $booking
+            'booking' => $booking,
+            'voucher' => $voucher
         ];
 
         return view('pages/booking_payment', $data);
     }
+
 
     public function verifikasi_pembayaran($id): string
     {

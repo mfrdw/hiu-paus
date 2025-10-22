@@ -52,20 +52,40 @@
                     <h4 style="font-size:1.4rem; font-weight:bold;">Metode Pembayaran</h4>
                     <form id="paymentForm" action="<?= base_url('add_payments'); ?>" method="POST">
                         <input type="hidden" name="id" value="<?= isset($booking['id']) ? $booking['id'] : ''; ?>">
-                        <!-- Kategori Pembayaran -->
+                        <input type="hidden" name="total_biaya" value="<?= isset($booking['total_biaya']) ? $booking['total_biaya'] : ''; ?>">
                         <ul class="nav nav-pills gap-2 mb-3" id="payTab" role="tablist">
+                            <!-- Tab: E-Wallet -->
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="wallet-tab" data-bs-toggle="tab" data-bs-target="#wallet"
                                     type="button" role="tab" aria-controls="wallet" aria-selected="true">
                                     <i class="fas fa-wallet me-2"></i>E-Wallet
                                 </button>
                             </li>
+                            <!-- Tab: Transfer Bank -->
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="bank-tab" data-bs-toggle="tab" data-bs-target="#bank"
                                     type="button" role="tab" aria-controls="bank" aria-selected="false">
                                     <i class="fas fa-university me-2"></i>Transfer Bank
                                 </button>
                             </li>
+                            <!-- Voucher Section -->
+                            <div class="d-flex justify-content-between ms-auto">
+                                <div class="d-flex align-items-center">
+                                    <!-- Loop untuk menampilkan voucher -->
+                                    <?php foreach ($voucher as $v): ?>
+                                        <div class="me-2">
+                                            <!-- Label untuk Voucher -->
+                                            <label for="voucher_<?= $v['id']; ?>" class="voucher-label" data-id="<?= $v['id']; ?>">
+                                                <strong><?= $v['nama_promosi']; ?></strong>
+                                            </label>
+
+                                            <!-- Hidden Input untuk harga diskon -->
+                                            <input type="hidden" name="voucher[<?= $v['id']; ?>][id]" value="<?= $v['id']; ?>">
+                                            <input type="hidden" name="voucher[<?= $v['id']; ?>][diskon]" value="<?= $v['harga_diskon']; ?>" class="voucher-diskon-<?= $v['id']; ?>" />
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
                         </ul>
 
                         <div class="tab-content" id="payTabContent">
@@ -246,6 +266,73 @@
         document.getElementById('peopleCountDisplay').innerText = peopleCount;
         document.getElementById('totalCostDisplay').innerText = 'Rp ' + totalCost.toLocaleString();
     }
+</script>
+
+<!-- Custom CSS for label click effect -->
+<style>
+    /* Default state of the label (white with info border) */
+    .voucher-label {
+        cursor: pointer;
+        padding: 3px;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        border: 2px solid #17a2b8;
+        /* Info color */
+        border-radius: 5px;
+        background-color: white;
+        color: #17a2b8;
+        /* Info text color */
+    }
+
+    /* Hover effect to indicate it can be clicked */
+    .voucher-label:hover {
+        background-color: #e0f7fa;
+        /* Light info background */
+    }
+
+    /* When clicked, the label will have an active state (warning color) */
+    .voucher-label.active {
+        background-color: #f0be19ff;
+        /* Warning color (yellow) */
+        color: white;
+        /* White text */
+        border-color: #f0be19ff;
+        /* Yellow border */
+    }
+</style>
+
+<script>
+    // JavaScript to handle label click effect
+    const voucherLabels = document.querySelectorAll('.voucher-label');
+
+    // Event listener to toggle the active class when clicked
+    voucherLabels.forEach(label => {
+        label.addEventListener('click', function() {
+            // Deactivate all other labels
+            voucherLabels.forEach(otherLabel => {
+                if (otherLabel !== label) {
+                    otherLabel.classList.remove('active');
+                    // Reset the hidden input for the other labels
+                    const voucherId = otherLabel.getAttribute('data-id');
+                    const voucherDiskonInput = document.querySelector(`.voucher-diskon-${voucherId}`);
+                    voucherDiskonInput.value = ''; // Clear value for unselected vouchers
+                }
+            });
+
+            // Toggle active state on the clicked label
+            this.classList.toggle('active');
+
+            // Get the hidden input for this voucher
+            const voucherId = this.getAttribute('data-id');
+            const voucherDiskonInput = document.querySelector(`.voucher-diskon-${voucherId}`);
+
+            // If active, add voucher diskon value to the input, else reset it
+            if (this.classList.contains('active')) {
+                voucherDiskonInput.value = voucherDiskonInput.value; // Ensuring the value is sent
+            } else {
+                voucherDiskonInput.value = ''; // Reset the value if not selected
+            }
+        });
+    });
 </script>
 
 <?= $this->endSection() ?>

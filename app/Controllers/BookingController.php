@@ -3,40 +3,105 @@
 namespace App\Controllers;
 
 use App\Models\M_BookingDetails;
+use App\Models\M_BookingDetailsVisitors;
+use App\Models\M_Promosi;
 use App\Models\M_JadwalTrip;
 use CodeIgniter\Controller;
 
 class BookingController extends Controller
 {
+
+    protected $db;
+
+    public function __construct()
+    {
+        // Load database service
+        $this->db = \Config\Database::connect();
+    }
     public function proses_booking()
     {
+        // Pastikan user sudah login
         if (!session()->get('isLoggedIn')) {
             return redirect()->to('/login')->with('error', 'Anda harus login terlebih dahulu.');
         }
 
-        $paymentModel = new M_BookingDetails();
-        $generateID = $paymentModel->generateIdBooking();
+        // Memulai transaksi
+        $this->db->transStart();
 
-        $data = [
-            'user_id'      => session()->get('id'),
-            'full_name'    => $this->request->getPost('fullName'),
-            'email'        => $this->request->getPost('email'),
-            'kontak'       => $this->request->getPost('mobile'),
-            'jumlah_orang' => $this->request->getPost('peopleCount'),
-            'paket'        => 'Open Trip Whale Shark Teluk Saleh',
-            'id_bookings'  => $generateID,
-            'total_biaya'  => $this->hitungTotalBiaya($this->request->getPost('peopleCount')),
-            'created_at'   => date('Y-m-d H:i:s')
-        ];
+        try {
+            // Membuat ID booking baru
+            $paymentModel = new M_BookingDetails();
+            $generateID = $paymentModel->generateIdBooking();
 
-        $insertId = $paymentModel->insert($data);
+            // Menyiapkan data untuk tabel booking_details
+            $data = [
+                'user_id'      => session()->get('id'),
+                'full_name'    => $this->request->getPost('fullName'),
+                'email'        => $this->request->getPost('email'),
+                'kontak'       => $this->request->getPost('mobile'),
+                'jumlah_orang' => $this->request->getPost('peopleCount'),
+                'paket'        => 'Open Trip Whale Shark Teluk Saleh',
+                'id_bookings'  => $generateID,
+                'total_biaya'  => $this->hitungTotalBiaya($this->request->getPost('peopleCount')),
+                'created_at'   => date('Y-m-d H:i:s')
+            ];
 
-        if ($insertId) {
-            return redirect()->to('/booking_jadwal/' . $insertId)->with('success', 'Pemesanan berhasil!');
+            // Insert ke tabel booking_details
+            $insertId = $paymentModel->insert($data);
+
+            // Debugging untuk memastikan apakah insert berhasil
+            log_message('debug', 'Booking Details Insert ID: ' . $insertId);
+
+            // Jika insert booking_details gagal, rollback dan tampilkan error
+            if (!$insertId) {
+                $this->db->transRollback();
+                return redirect()->to('/booking')->with('error', 'Gagal memproses pemesanan. Silakan coba lagi.');
+            }
+
+            // Ambil data pengunjung
+            $visitors = $this->request->getPost('visitors');
+            log_message('debug', 'Data pengunjung yang diterima: ' . print_r($visitors, true)); // Debugging data pengunjung
+
+            // Model untuk tabel bookings_details_visitors
+            $visitorModel = new M_BookingDetailsVisitors();
+
+            // Siapkan array untuk insert data pengunjung
+            $visitorData = [];
+            foreach ($visitors as $index => $visitor) {
+                $visitorData[] = [
+                    'id_bookings'      => $generateID,
+                    'nama_visitors'    => $visitor['fullName'],
+                    'usia'             => $visitor['age'],
+                    'jenis_kelamin'    => $visitor['gender'],
+                    'kewarganegaraan'  => $visitor['citizenship'],
+                    'created_at'       => date('Y-m-d H:i:s'),
+                    'updated_at'       => date('Y-m-d H:i:s')
+                ];
+            }
+
+            // Debugging untuk memastikan array data pengunjung sudah benar
+            log_message('debug', 'Visitor Data: ' . print_r($visitorData, true));
+
+            // Insert data pengunjung ke tabel bookings_details_visitors
+            if ($visitorModel->insertBatch($visitorData)) {
+                // Commit transaksi jika semua berhasil
+                $this->db->transCommit();
+                return redirect()->to('/booking_jadwal/' . $insertId)->with('success', 'Pemesanan berhasil!');
+            } else {
+                // Jika gagal menyimpan data pengunjung, rollback transaksi
+                $this->db->transRollback();
+                return redirect()->to('/booking')->with('error', 'Gagal menyimpan data pengunjung. Silakan coba lagi.');
+            }
+        } catch (\Exception $e) {
+            // Jika terjadi error, rollback transaksi
+            $this->db->transRollback();
+            log_message('error', 'Error occurred: ' . $e->getMessage()); // Log error
+            return redirect()->to('/booking')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        return redirect()->to('/booking')->with('error', 'Gagal memproses pemesanan. Silakan coba lagi.');
     }
+
+
+
 
 
 
@@ -115,20 +180,45 @@ class BookingController extends Controller
     public function add_payments()
     {
         $model = new M_BookingDetails();
+        $promo = new M_Promosi();  // Model untuk mengambil data promosi (voucher)
 
-        $id = $this->request->getPost('id');
-        $payment_channel = $this->request->getPost('payment_channel');
+        $id = $this->request->getPost('id');  // Booking ID
+        $payment_channel = $this->request->getPost('payment_channel');  // Payment method
+        $voucherData = $this->request->getPost('voucher');  // Array of selected vouchers
 
+        // Ambil data booking berdasarkan ID
         $booking = $model->where('id', $id)->first();
 
         if (!$booking) {
-            return redirect()->to('/booking')->with('error', 'Booking tidak ditemukan.');
+            return redirect()->to('/booking_payment/' . $id)->with('error', 'Booking tidak ditemukan.');
         }
+
+        // Inisialisasi data voucher yang dipilih
+        $voucherId = null;
+        $voucherDiskon = 0;
+
+        // Periksa apakah ada voucher yang dipilih
+        if (!empty($voucherData)) {
+            foreach ($voucherData as $voucher) {
+                $voucherId = $voucher['id'];  // ID Voucher
+                $voucherDiskon = $voucher['diskon'];  // Nilai diskon voucher
+            }
+        }
+
+        // Hitung total biaya setelah diskon
+        $totalBiaya = $booking['total_biaya'];  // Total biaya sebelum diskon
+        $totalBiayaSetelahDiskon = $totalBiaya - $voucherDiskon;  // Total biaya setelah dikurangi diskon
+
+        // Siapkan data untuk update pembayaran
         $data = [
             'mode_pembayaran' => $payment_channel,
+            'voucher' => $voucherId,  // Simpan ID voucher yang dipilih
+            'nilai_voucher' => $voucherDiskon,  // Simpan nilai diskon
+            'total_biaya' => $totalBiayaSetelahDiskon,  // Update total biaya setelah diskon
             'created_at' => date('Y-m-d H:i:s'),
         ];
 
+        // Update data pembayaran di booking_details
         $updatePayment = $model->update($id, $data);
 
         if ($updatePayment) {
@@ -137,6 +227,10 @@ class BookingController extends Controller
 
         return redirect()->to('/booking_payment/' . $id)->with('error', 'Gagal melakukan Pembayaran. Silakan coba lagi.');
     }
+
+
+
+
     public function add_bukti()
     {
         if (!$this->validate([
