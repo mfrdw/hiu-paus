@@ -18,6 +18,8 @@ class M_BookingDetails extends Model
         'jumlah_orang',
         'tanggal_trip',
         'jam_trip',
+        'voucher',
+        'nilai_voucher',
         'total_biaya',
         'role_payment',
         'mode_pembayaran',

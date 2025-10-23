@@ -27,44 +27,51 @@
         <?php endif; ?>
     });
 </script>
+
+
 <div class="container" style="max-width: 1200px; margin-top: 50px;">
-    <h2>Pemesanan Private Trip Whale Shark Teluk Saleh</h2>
-    <p>Pastikan semua detail pada halaman ini sudah benar sebelum melanjutkan ke pembayaran dan pemesanan trip.</p>
+    <div class="text-center">
+        <h2>BOOKING WHALE SHARK TRIP</h2>
+        <p>Teluk Saleh, Sumbawa.</p>
+    </div>
 
     <div class="row">
-        <!-- Left Form Section -->
-        <div class="col-md-8">
+        <div class="col-md-12">
+
             <form id="contactForm" action="<?= base_url('booking/proses_booking_private'); ?>" method="POST">
+                <input type="hidden" id="totalCost" name="totalCost" value="">
                 <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+
                     <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
-                        <h4 style="font-size: 1.4rem; font-weight: bold;">Detail Kontak</h4>
+                        <div class="progress" style="height: 20px; margin-bottom: 10px;">
+                            <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 1rem; color: #007bff;">
+                            <span style="font-weight: bold;">1</span>
+                            <span style="font-weight: bold;">2</span>
+                            <span style="font-weight: bold;">3</span>
+                            <span style="font-weight: bold;">4</span>
+                        </div>
                     </div>
+
                     <div class="card-body" style="padding: 30px; background-color: #f8f9fa;">
+                        <h4 style="font-size: 1.4rem; font-weight: bold;">Detail Kontak</h4>
                         <!-- Nama Lengkap -->
-                        <div class="form-section" style="margin-bottom: 1.5rem;">
-                            <label for="fullName" class="form-label" style="font-weight: bold; font-size: 1rem;">Nama
-                                Lengkap</label>
-                            <input type="text" class="form-control" id="fullName" name="fullName"
-                                placeholder="contoh: John Maeda" required style="padding: 12px; font-size: 1rem;"
-                                oninput="enableButton()">
+                        <div class="form-section" style="margin-bottom: 1.2rem;">
+                            <label for="fullName" class="form-label" style="font-weight: bold; font-size: 1rem;">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required style="padding: 12px; font-size: 1rem;" oninput="enableButton()">
                         </div>
 
                         <!-- Email -->
-                        <div class="form-section" style="margin-bottom: 1.5rem;">
-                            <label for="email" class="form-label"
-                                style="font-weight: bold; font-size: 1rem;">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                placeholder="contoh: email@example.com" required style="padding: 12px; font-size: 1rem;"
-                                oninput="enableButton()">
+                        <div class="form-section" style="margin-bottom: 1.2rem;">
+                            <label for="email" class="form-label" style="font-weight: bold; font-size: 1rem;">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required style="padding: 12px; font-size: 1rem;" oninput="enableButton()">
                         </div>
 
                         <!-- Nomor HP -->
-                        <div class="form-section" style="margin-bottom: 1.5rem;">
-                            <label for="mobile" class="form-label" style="font-weight: bold; font-size: 1rem;">Nomor
-                                HP</label>
-                            <input type="tel" class="form-control" id="mobile" name="mobile"
-                                placeholder="contoh: +62 8123456789" required style="padding: 12px; font-size: 1rem;"
-                                oninput="enableButton()">
+                        <div class="form-section" style="margin-bottom: 1.2rem;">
+                            <label for="mobile" class="form-label" style="font-weight: bold; font-size: 1rem;">Nomor HP</label>
+                            <input type="tel" class="form-control" id="mobile" name="mobile" required style="padding: 12px; font-size: 1rem;" oninput="enableButton()">
                         </div>
 
                         <!-- Jumlah Pax -->
@@ -85,105 +92,15 @@
                             </select>
                         </div>
 
-                    </div>
-                </div>
-                <div class="card mb-4" style="border-radius: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-                    <div class="card-header" style="background-color: #f8f9fa; padding: 20px;">
-                        <h4 style="font-size: 1.4rem; font-weight: bold; color: #333;">Total Biaya</h4>
-                    </div>
-                    <div class="card-body" style="padding: 30px; background-color: #f8f9fa;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <div style="display:flex; justify-content:space-between; font-size:1rem; color:#555;">
-                                <p><strong>Harga per orang:</strong></p>
-                                <p id="pricePerPersonDisplay">-</p>
-                            </div>
-
-                            <!-- Tambahkan baris Jumlah Orang -->
-                            <div style="display:flex; justify-content:space-between; font-size:1rem; color:#555;">
-                                <p><strong>Jumlah Orang:</strong></p>
-                                <p id="peopleCountDisplay">-</p>
-                            </div>
-
-                            <div style="display:flex; justify-content:space-between; font-size:1rem; color:#555;">
-                                <p><strong>Total Biaya:</strong></p>
-                                <!-- nilai numerik untuk dikirim ke server -->
-                                <input type="hidden" id="totalCost" name="totalCost" value="">
-                                <p id="totalCostDisplay">-</p>
-                            </div>
+                        <!-- Button Continue -->
+                        <div style="text-align: right;">
+                            <button type="submit" class="btn btn-secondary" id="continueBtn" style="padding: 12px; border-radius: 50px; font-weight: bold; background-color: #28a745; border: none; color: #fff; transition: background-color 0.3s ease;">
+                                Lanjutkan
+                            </button>
                         </div>
-
-
-                        <!-- Button Cancel & Reschedule -->
-                        <button type="submit" class="btn btn-secondary" id="continueBtn"
-                            style="width: 100%; padding: 12px; border-radius: 50px; font-weight: bold; background-color: #28a745; border: none; color: #fff; transition: background-color 0.3s ease;"
-                            onclick="checkSession()">
-                            Continue Payment
-                        </button>
-
                     </div>
                 </div>
             </form>
-        </div>
-
-        <!-- Right Sidebar Section -->
-        <div class="col-md-4">
-            <div class="card mb-5" style="background-color:#f8f9fa; border-radius:0.5rem; padding:20px;">
-                <!-- Gambar Private Trip -->
-                <img src="../dist/assets/images/images-1.jpg" alt="Private Trip Whale Shark Teluk Saleh" class="img-fluid"
-                    style="border-radius:0.5rem; margin-bottom:15px;">
-
-                <div class="details">
-                    <h5 style="font-size:1.2rem; font-weight:bold; color:#007bff;">Private Trip Whale Shark Teluk Saleh</h5>
-
-                    <!-- Harga Paket -->
-                    <p><strong style="font-size:1rem;">Harga Paket (per Pax):</strong></p>
-                    <ul style="list-style:none; padding-left:0; font-size:0.9rem; line-height:1.6;">
-                        <li>1 Pax – IDR 2.800.000</li>
-                        <li>2 Pax – IDR 1.450.000</li>
-                        <li>3 Pax – IDR 1.050.000</li>
-                        <li>4 Pax – IDR 850.000</li>
-                        <li>5 Pax – IDR 800.000</li>
-                        <li>6 Pax – IDR 750.000</li>
-                        <li>7 Pax – IDR 650.000</li>
-                        <li>8 Pax – IDR 600.000</li>
-                        <li>9 Pax – IDR 550.000</li>
-                        <li>10 Pax – IDR 500.000</li>
-                    </ul>
-
-                    <!-- Include -->
-                    <p><strong style="font-size:1rem;">INCLUDE:</strong></p>
-                    <ul style="list-style:none; padding-left:0; font-size:0.9rem;">
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Boat / Bagang</li>
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Pillow & Blanket</li>
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Life Jacket</li>
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Mineral Water</li>
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Tea, Coffee, Bread, Nutella</li>
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Fins & Swimming Goggles</li>
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Snorkeling Equipment (Mask & Fins)</li>
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> GoPro 12/13 (Free Documentation)</li>
-                        <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Underwater Videographer</li>
-                    </ul>
-
-                    <p style="font-size:0.9rem; color:#6c757d;">Nikmati pengalaman luar biasa bersama kami di Teluk Saleh, Sumbawa.</p>
-
-                    <!-- Kontak -->
-                    <div style="margin-top:20px;">
-                        <h6 style="font-size:1.1rem; font-weight:bold; color:#007bff;">Hubungi Kami:</h6>
-                        <p style="font-size:0.9rem;">
-                            <i class="bi bi-whatsapp text-success"></i>
-                            <strong>WhatsApp:</strong> <a href="https://wa.me/6281214408108" target="_blank" style="color:#28a745;">081214408108</a>
-                        </p>
-                        <p style="font-size:0.9rem;">
-                            <i class="bi bi-instagram text-danger"></i>
-                            <strong>Instagram:</strong> <a href="https://instagram.com/whaleshark.teluksaleh" target="_blank" style="color:#28a745;">@whaleshark.teluksaleh</a>
-                        </p>
-                        <p style="font-size:0.9rem;">
-                            <i class="bi bi-geo-alt text-primary"></i>
-                            <strong>Lokasi:</strong> Labuhan Jambu, NTB
-                        </p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

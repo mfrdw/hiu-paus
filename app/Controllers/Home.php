@@ -147,11 +147,20 @@ class Home extends BaseController
     }
     public function get_jadwal_by_date()
     {
-        $tanggal = $this->request->getGet('tanggal');
+        $tanggal = $this->request->getVar('tanggal');
+        $paket = $this->request->getVar('paket');  // Ambil paket dari query parameter
 
         $model_jadwal = new M_JadwalTrip();
 
-        $jadwal = $model_jadwal->where('tanggal', $tanggal)->findAll();
+        // Cek apakah paket ada, jika ada tambahkan ke query
+        if ($paket) {
+            $jadwal = $model_jadwal->where('tanggal', $tanggal)
+                ->where('paket', $paket)
+                ->findAll();
+        } else {
+            // Jika paket tidak ada, hanya filter berdasarkan tanggal
+            $jadwal = $model_jadwal->where('tanggal', $tanggal)->findAll();
+        }
 
         if ($jadwal) {
             return $this->response->setJSON($jadwal);
@@ -163,18 +172,27 @@ class Home extends BaseController
 
 
 
+
     public function booking_payment($id): string
     {
         $model = new M_BookingDetails();
+        $promo = new M_Promosi();
+
+        // Ambil data booking
         $booking = $model->where('id', $id)->first();
+
+        // Ambil semua voucher yang memiliki status 1 (aktif)
+        $voucher = $promo->where('status', 1)->findAll();
 
         $data = [
             'title' => 'Metode Pembayaran',
-            'booking' => $booking
+            'booking' => $booking,
+            'voucher' => $voucher
         ];
 
         return view('pages/booking_payment', $data);
     }
+
 
     public function verifikasi_pembayaran($id): string
     {

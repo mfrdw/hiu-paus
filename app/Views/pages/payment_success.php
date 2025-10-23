@@ -100,19 +100,20 @@
 
 <div class="success-card">
     <div class="success-icon">
-        <i class="bi bi-check-lg"></i>
+        <i class="fas fa-check-circle"></i> <!-- Ganti dengan Font Awesome 5 -->
     </div>
     <h2>Pembayaran Berhasil!</h2>
     <p>Terima kasih sudah melakukan pembayaran.<br> Transaksi kamu berhasil diproses 🎉</p>
 
     <div class="d-grid gap-2">
         <a href="<?= base_url('/') ?>" class="btn btn-primary btn-lg">
-            <i class="bi bi-house-door"></i> Kembali ke Beranda
+            <i class="fas fa-home"></i> Kembali ke Beranda <!-- Ganti dengan Font Awesome 5 -->
         </a>
         <a href="<?= base_url('/history') ?>" class="btn btn-outline-success btn-lg">
-            <i class="bi bi-clock-history"></i> Lihat Riwayat Booking
+            <i class="fas fa-history"></i> Lihat Riwayat Booking <!-- Ganti dengan Font Awesome 5 -->
         </a>
     </div>
 </div>
+
 
 <?= $this->endSection() ?>

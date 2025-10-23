@@ -10,6 +10,11 @@ $routes->get('login', 'Home::login');
 $routes->post('/auth/dologin', 'Auth::doLogin');
 $routes->get('/logout', 'Auth::logout');
 
+$routes->post('/get_promo', 'PromoController::get_promo');
+
+
+$routes->get('/get_calendar_data', 'JadwalTripController::get_calendar_data');
+
 
 $routes->get('views_details/(:num)', 'Home::views_details/$1');
 $routes->get('detail', 'Home::detail');
