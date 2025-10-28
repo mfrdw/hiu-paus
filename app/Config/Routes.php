@@ -11,6 +11,8 @@ $routes->post('/auth/dologin', 'Auth::doLogin');
 $routes->get('/logout', 'Auth::logout');
 
 $routes->post('/get_promo', 'PromoController::get_promo');
+$routes->get('promo/getPromoStatus', 'Home::getPromoStatus');
+
 
 
 $routes->get('/get_calendar_data', 'JadwalTripController::get_calendar_data');

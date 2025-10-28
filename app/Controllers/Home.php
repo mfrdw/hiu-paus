@@ -17,6 +17,7 @@ class Home extends BaseController
 
         $model = new M_KelolaWisata();
         $model_promosi = new M_Promosi();
+        $model_promo_user = new M_Users();
 
         $data = [
             'title' => 'Beranda',
@@ -24,10 +25,26 @@ class Home extends BaseController
             'wisata_unggulan' => $model->where('kategori', 'wisata_unggulan')->findAll(),
             'promosi' => $model_promosi->where('status', 1)
                 ->orderBy('updated_at', 'DESC')
-                ->first()
+                ->first(),
+            'promosi_user' => $model_promo_user->where('promo', 2)->first()
         ];
 
         return view('pages/homepage', $data);
+    }
+
+    public function getPromoStatus()
+    {
+        $userModel = new M_Users();
+
+        $userId = session()->get('id');
+
+        if ($userId) {
+            $user = $userModel->find($userId);
+            if ($user) {
+                return $this->response->setJSON(['promo' => $user['promo']]);
+            }
+        }
+        return $this->response->setJSON(['promo' => 0]);
     }
 
     public function detail(): string
@@ -178,11 +195,13 @@ class Home extends BaseController
         $model = new M_BookingDetails();
         $promo = new M_Promosi();
 
-        // Ambil data booking
         $booking = $model->where('id', $id)->first();
 
-        // Ambil semua voucher yang memiliki status 1 (aktif)
-        $voucher = $promo->where('status', 1)->findAll();
+        $voucher = $promo->where('status', 1)
+            ->where('masa_berlaku_start <=', date('Y-m-d'))
+            ->where('masa_berlaku_end >=', date('Y-m-d'))
+            ->findAll();
+
 
         $data = [
             'title' => 'Metode Pembayaran',
