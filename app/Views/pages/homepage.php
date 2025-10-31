@@ -366,6 +366,8 @@
 
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <!-- Popup Modal untuk Promosi -->
 <div id="promoPopup" class="promo-popup">
     <div class="promo-content">
@@ -375,21 +377,30 @@
                 <p><strong><?= esc($promosi['nama_promosi']) ?></strong></p>
             </div>
             <div class="promo-price">
-                <p><?= esc($promosi['nama_promosi']) ?></p>
                 <p><strong>Harga Normal: Rp <span class="text-decoration-line-through"><?= number_format($promosi['harga_normal'], 0, ',', '.') ?></span></strong></p>
                 <p><strong>Harga Diskon: Rp <?= number_format($promosi['harga_diskon'], 0, ',', '.') ?></strong></p>
             </div>
 
-            <!-- Form untuk menggunakan promo -->
             <form id="promoForm" action="<?= base_url('/get_promo') ?>" method="POST">
                 <input type="hidden" name="promo_id" value="<?= esc($promosi['id']) ?>"> <!-- Kirim ID promo -->
-                <button type="submit" class="btn-promo" id="promoBtn">Gunakan Promo Sekarang</button>
+
+                <?php if (isset($promosi_user) && $promosi_user['promo'] == 2): ?>
+                    <!-- Jika promo sudah digunakan -->
+                    <button type="button" class="btn-promo" style="background-color: #29f043ff; cursor: not-allowed;" disabled>
+                        Promo Sudah Digunakan
+                    </button>
+                <?php else: ?>
+                    <!-- Jika promo belum digunakan -->
+                    <button type="submit" class="btn-promo" id="promoBtn">Gunakan Promo Sekarang</button>
+                <?php endif; ?>
             </form>
+
+
 
             <!-- WhatsApp Button -->
             <button class="btn-whatsapp" onclick="window.open('https://wa.me/?text=<?= urlencode($promosi['nama_promosi']) ?>')">Bagikan ke WhatsApp</button>
 
-            <div class="promo-footer">
+            <div class="promo-footer mt-3">
                 <small><strong>Penawaran Terbatas - Jangan Sampai Terlewat!</strong></small>
             </div>
         <?php else: ?>
@@ -399,53 +410,67 @@
 </div>
 
 <script>
-    // Cek apakah promo sudah aktif (nilai promo = 2)
     document.addEventListener("DOMContentLoaded", function() {
         const promoButton = document.getElementById('promoBtn'); // Tombol promo
 
-        <?php if (session()->get('promo') == 2): ?>
-            // Jika promo sudah aktif, sembunyikan tombol atau ubah teks tombol
-            promoButton.style.display = 'none'; // Menyembunyikan tombol
-            // Atau Anda bisa mengganti teks tombol
-            promoButton.textContent = 'Promo Sudah Digunakan';
-        <?php else: ?>
-            // Jika promo belum aktif, tampilkan modal dan tombol
-            document.getElementById('promoPopup').style.display = 'flex';
-        <?php endif; ?>
-    });
-
-    // Menangani tombol "Gunakan Promo Sekarang"
-    document.querySelector('.btn-promo').addEventListener('click', function(event) {
-        event.preventDefault(); // Mencegah form untuk langsung submit
-
-        // Mengecek apakah user sudah login (memeriksa session)
-        <?php if (!session()->get('id')): ?>
-            // Jika belum login, tampilkan SweetAlert2
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: 'Anda harus login terlebih dahulu!',
-                confirmButtonText: 'Login',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '<?= base_url('/login') ?>'; // Arahkan ke halaman login
+        // Fetch untuk mengambil data promo dari server
+        fetch('<?= base_url('/promo/getPromoStatus') ?>')
+            .then(response => response.json())
+            .then(data => {
+                if (data.promo === 2) {
+                    // Jika promo sudah digunakan
+                    promoButton.textContent = 'Promo Sudah Digunakan';
+                    promoButton.style.backgroundColor = '#cccccc'; // Ganti warna tombol
+                    promoButton.style.cursor = 'not-allowed'; // Membuat tombol tidak dapat diklik
+                } else {
+                    // Jika promo belum aktif, tampilkan modal dan tombol
+                    document.getElementById('promoPopup').style.display = 'flex';
                 }
+            })
+            .catch(error => {
+                console.error('Error fetching promo status:', error);
             });
-        <?php else: ?>
-            // Jika sudah login, submit form
-            document.getElementById('promoForm').submit();
-        <?php endif; ?>
-    });
 
-    // Script untuk menutup popup
-    document.getElementById('closePopup').addEventListener('click', function() {
-        document.getElementById('promoPopup').style.display = 'none';
-    });
+        // Menangani tombol "Gunakan Promo Sekarang"
+        document.querySelector('.btn-promo').addEventListener('click', function(event) {
+            event.preventDefault(); // Mencegah form untuk langsung submit
 
-    // Otomatis sembunyikan popup setelah beberapa detik (7 detik)
-    setTimeout(function() {
-        document.getElementById('promoPopup').style.display = 'none';
-    }, 7000);
+            // Mengecek apakah user sudah login (memeriksa session)
+            fetch('<?= base_url('/promo/getPromoStatus') ?>')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.promo === 0) {
+                        // Jika belum login, tampilkan SweetAlert2
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'Anda harus login terlebih dahulu!',
+                            confirmButtonText: 'Login',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '<?= base_url('/login') ?>'; // Arahkan ke halaman login
+                            }
+                        });
+                    } else {
+                        // Jika sudah login, submit form
+                        document.getElementById('promoForm').submit();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                });
+        });
+
+        // Script untuk menutup popup
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('promoPopup').style.display = 'none';
+        });
+
+        // Otomatis sembunyikan popup setelah beberapa detik (7 detik)
+        setTimeout(function() {
+            document.getElementById('promoPopup').style.display = 'none';
+        }, 7000);
+    });
 </script>
 
 

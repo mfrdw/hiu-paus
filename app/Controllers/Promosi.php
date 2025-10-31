@@ -29,6 +29,8 @@ class Promosi extends BaseController
             'nama_promosi' => $this->request->getPost('nama_promosi'),
             'harga_normal' => $this->request->getPost('harga_normal'),
             'harga_diskon' => $this->request->getPost('harga_diskon'),
+            'masa_berlaku_start' => $this->request->getPost('masa_berlaku_start'),
+            'masa_berlaku_end'   => $this->request->getPost('masa_berlaku_end'),
         ];
 
         if ($model->insert($data)) {

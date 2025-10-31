@@ -45,6 +45,7 @@
                                     <th>Nama Promosi</th>
                                     <th>Harga Normal</th>
                                     <th>Harga Diskon</th>
+                                    <th>Masa Berlaku</th> <!-- Tambahkan kolom Masa Berlaku -->
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -58,6 +59,14 @@
                                             <td>Rp <?= number_format($item['harga_normal'], 0, ',', '.') ?></td>
                                             <td>Rp <?= number_format($item['harga_diskon'], 0, ',', '.') ?></td>
                                             <td>
+                                                <!-- Tampilkan Masa Berlaku -->
+                                                <?php if (!empty($item['masa_berlaku_start']) && !empty($item['masa_berlaku_end'])): ?>
+                                                    <?= date('d-m-Y', strtotime($item['masa_berlaku_start'])) ?> - <?= date('d-m-Y', strtotime($item['masa_berlaku_end'])) ?>
+                                                <?php else: ?>
+                                                    <span class="text-muted">Belum ditentukan</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
                                                 <a href="#" class="btn btn-warning btn-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
@@ -69,11 +78,12 @@
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="5" class="text-center">Tidak ada data promosi</td>
+                                        <td colspan="6" class="text-center">Tidak ada data promosi</td> <!-- Sesuaikan colspan -->
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
+
 
                     </div>
                 </div>
@@ -81,7 +91,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="addPromosiModal" tabindex="-1" role="dialog" aria-labelledby="addPromosiLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -107,6 +116,14 @@
                         <label for="harga_diskon">Harga Diskon</label>
                         <input type="number" name="harga_diskon" id="harga_diskon" class="form-control" min="0" step="100" required>
                     </div>
+                    <div class="form-group">
+                        <label for="masa_berlaku_start">Masa Berlaku Mulai</label>
+                        <input type="date" name="masa_berlaku_start" id="masa_berlaku_start" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="masa_berlaku_end">Masa Berlaku Berakhir</label>
+                        <input type="date" name="masa_berlaku_end" id="masa_berlaku_end" class="form-control" required>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -117,6 +134,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

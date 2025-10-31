@@ -41,6 +41,23 @@ CREATE TABLE `bookings_details_visitors` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bookings_details_visitors`
+--
+
+CREATE TABLE `bookings_details_visitors` (
+  `id` int NOT NULL,
+  `id_bookings` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_visitors` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `usia` int NOT NULL,
+  `jenis_kelamin` enum('L','P') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kewarganegaraan` enum('WNI','WNA') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `booking_details`
 --
 
@@ -55,11 +72,16 @@ CREATE TABLE `booking_details` (
   `jumlah_orang` int NOT NULL,
   `total_biaya` int NOT NULL,
   `role_payment` enum('pending','confirmed','completed') DEFAULT 'pending',
+  `mode_pembayaran` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `mode_pembayaran` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `upload_gambar` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `tanggal_trip` date DEFAULT NULL,
+  `jam_trip` time DEFAULT NULL,
+  `voucher` varchar(59) NOT NULL,
+  `nilai_voucher` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
   `jam_trip` time DEFAULT NULL,
   `voucher` varchar(59) NOT NULL,
   `nilai_voucher` int NOT NULL
@@ -90,6 +112,22 @@ CREATE TABLE `jadwal_trip` (
 INSERT INTO `jadwal_trip` (`id`, `tanggal`, `paket`, `kapasitas`, `terisi`, `sisa`, `status`, `created_at`, `updated_at`) VALUES
 (1, '2025-09-20', 'Open Trip Whale Shark Teluk Saleh', 20, 0, 20, 'tersedia', '2025-09-17 06:54:08', '2025-09-17 06:54:08'),
 (2, '2025-09-17', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-09-17 06:56:28', '2025-09-17 06:56:28'),
+(3, '2025-10-04', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-10-02 09:04:58', '2025-10-02 09:04:58'),
+(4, '2025-10-25', 'Private Trip Whale Shark Teluk Saleh', 15, 1, 14, 'tersedia', '2025-10-14 09:10:48', '2025-10-14 16:13:16'),
+(5, '2025-10-24', 'Open Trip Whale Shark Teluk Saleh', 15, 15, 0, 'tersedia', '2025-10-14 09:17:17', '2025-10-14 17:07:47'),
+(6, '2025-10-16', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-10-14 10:42:59', '2025-10-14 10:42:59'),
+(7, '2025-11-01', 'Open Trip Whale Shark Teluk Saleh', 10, 2, 8, 'tersedia', '2025-10-22 10:05:43', '2025-10-22 10:05:54');
+
+--
+-- Triggers `jadwal_trip`
+--
+DELIMITER $$
+CREATE TRIGGER `before_update_jadwal_trip` BEFORE UPDATE ON `jadwal_trip` FOR EACH ROW BEGIN
+    -- Menghitung nilai 'sisa' berdasarkan kapasitas dan terisi sebelum update
+    SET NEW.sisa = NEW.kapasitas - NEW.terisi;
+END
+$$
+DELIMITER ;
 (3, '2025-10-04', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-10-02 09:04:58', '2025-10-02 09:04:58'),
 (4, '2025-10-25', 'Private Trip Whale Shark Teluk Saleh', 15, 1, 14, 'tersedia', '2025-10-14 09:10:48', '2025-10-14 16:13:16'),
 (5, '2025-10-24', 'Open Trip Whale Shark Teluk Saleh', 15, 15, 0, 'tersedia', '2025-10-14 09:17:17', '2025-10-14 17:07:47'),
@@ -150,6 +188,8 @@ CREATE TABLE `promosi` (
   `nama_promosi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `harga_normal` int NOT NULL,
   `harga_diskon` int NOT NULL,
+  `harga_normal` int NOT NULL,
+  `harga_diskon` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` enum('1','2') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1' COMMENT '1 = Aktif, 2 = Tidak Aktif'
@@ -160,6 +200,9 @@ CREATE TABLE `promosi` (
 --
 
 INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `created_at`, `updated_at`, `status`) VALUES
+(1, 'Diskon 25% Paket Private Pax 5', 800000, 650000, '2025-09-22 11:33:09', '2025-09-22 11:33:09', '1'),
+(2, 'Diskon 25% Paket Private Pax 10', 2800000, 2300000, '2025-10-14 10:18:24', '2025-10-14 10:18:24', '1'),
+(3, 'JALANJALAN', 650000, 200000, '2025-10-22 10:51:02', '2025-10-22 10:51:02', '1');
 (1, 'Diskon 25% Paket Private Pax 5', 800000, 650000, '2025-09-22 11:33:09', '2025-09-22 11:33:09', '1'),
 (2, 'Diskon 25% Paket Private Pax 10', 2800000, 2300000, '2025-10-14 10:18:24', '2025-10-14 10:18:24', '1'),
 (3, 'JALANJALAN', 650000, 200000, '2025-10-22 10:51:02', '2025-10-22 10:51:02', '1');
@@ -213,6 +256,7 @@ CREATE TABLE `users` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `role_user` enum('1','2') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   `promo` tinyint NOT NULL DEFAULT '1',
+  `promo` tinyint NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -225,10 +269,20 @@ INSERT INTO `users` (`id`, `username`, `password`, `nama_lengkap`, `kontak`, `em
 (1, 'user', '123', 'Jarwo Kwat', '082250706412', 'mfikryrid@gmail.com', '1', 2, NULL, NULL),
 (3, 'admin', '123', 'Muhammad Fikri Ridwan', '082250706412', 'mfikryrid2@gmail.com', '2', 1, NULL, NULL),
 (6, 'mfikrid', '123', 'Muhammad Fikri Ridwan', '082250706412', 'mfikryrid3@gmail.com', '1', 2, NULL, NULL);
+INSERT INTO `users` (`id`, `username`, `password`, `nama_lengkap`, `kontak`, `email`, `role_user`, `promo`, `created_at`, `updated_at`) VALUES
+(1, 'user', '123', 'Jarwo Kwat', '082250706412', 'mfikryrid@gmail.com', '1', 2, NULL, NULL),
+(3, 'admin', '123', 'Muhammad Fikri Ridwan', '082250706412', 'mfikryrid2@gmail.com', '2', 1, NULL, NULL),
+(6, 'mfikrid', '123', 'Muhammad Fikri Ridwan', '082250706412', 'mfikryrid3@gmail.com', '1', 2, NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `bookings_details_visitors`
+--
+ALTER TABLE `bookings_details_visitors`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `bookings_details_visitors`
@@ -298,6 +352,12 @@ ALTER TABLE `bookings_details_visitors`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `bookings_details_visitors`
+--
+ALTER TABLE `bookings_details_visitors`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `booking_details`
 --
 ALTER TABLE `booking_details`
@@ -307,6 +367,7 @@ ALTER TABLE `booking_details`
 -- AUTO_INCREMENT for table `jadwal_trip`
 --
 ALTER TABLE `jadwal_trip`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
@@ -326,6 +387,7 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `promosi`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `setting_payments`
@@ -343,6 +405,7 @@ ALTER TABLE `ulasan`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
