@@ -65,6 +65,10 @@ $routes->get('delete_wisata/(:segment)', 'Administrator::delete_wisata/$1');
 $routes->get('data_wisatawan', 'Administrator::data_wisatawan');
 $routes->get('promosi', 'Administrator::promosi');
 $routes->post('promosi/create', 'Promosi::create');
+$routes->post('promosi/update', 'Promosi::update');
+$routes->get('promosi/delete/(:num)', 'Promosi::delete/$1');
+
+
 $routes->post('/kelola-wisata/create', 'KelolaWisata::create');
 
 $routes->get('kelola_ulasan', 'Administrator::kelola_ulasan');
@@ -99,3 +103,8 @@ $routes->post('payment/update', 'BookingController::update_payments');
 $routes->post('jadwal_trip/tambah', 'JadwalTripController::tambah');
 $routes->post('update/(:segment)', 'JadwalTripController::update/$1');
 $routes->get('delete_jadwal/(:segment)', 'JadwalTripController::delete/$1');
+
+// Setting Payment
+$routes->post('setting-payment/create', 'SettingPayment::create');
+$routes->post('setting-payment/update', 'SettingPayment::update');
+$routes->get('setting-payment/delete/(:num)', 'SettingPayment::delete/$1');

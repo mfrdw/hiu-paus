@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 27, 2025 at 03:21 PM
+-- Generation Time: Nov 18, 2025 at 06:17 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.29
 
@@ -37,6 +37,15 @@ CREATE TABLE `bookings_details_visitors` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bookings_details_visitors`
+--
+
+INSERT INTO `bookings_details_visitors` (`id`, `id_bookings`, `nama_visitors`, `usia`, `jenis_kelamin`, `kewarganegaraan`, `created_at`, `updated_at`) VALUES
+(1, 'WS20251028001', 'Muhammad Fikri Ridwan', 25, 'L', 'WNI', '2025-10-28 08:30:50', '2025-10-28 08:30:50'),
+(2, 'WS20251118001', 'MUHAMMAD FIKRI R', 25, 'L', 'WNI', '2025-11-18 08:56:43', '2025-11-18 08:56:43'),
+(3, 'WS20251118002', 'MUHAMMAD FIKRI R', 19, 'L', 'WNI', '2025-11-18 10:51:45', '2025-11-18 10:51:45');
 
 -- --------------------------------------------------------
 
@@ -87,6 +96,15 @@ CREATE TABLE `booking_details` (
   `nilai_voucher` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `booking_details`
+--
+
+INSERT INTO `booking_details` (`id`, `id_bookings`, `user_id`, `full_name`, `email`, `kontak`, `paket`, `jumlah_orang`, `total_biaya`, `role_payment`, `mode_pembayaran`, `upload_gambar`, `created_at`, `updated_at`, `tanggal_trip`, `jam_trip`, `voucher`, `nilai_voucher`) VALUES
+(1, 'WS20251028001', 6, 'Muhammad Fikri Ridwan', 'mfikryrid@gmail.com', '082250706412', 'Open Trip Whale Shark Teluk Saleh', 1, 450000, 'pending', 'gopay', '1761665502_f2d0bbd949b0ee7ba865.png', '2025-10-28 08:31:21', '2025-10-28 08:31:42', '2025-11-01', '06:00:00', '3', 200000),
+(2, 'WS20251118001', 6, 'MUHAMMAD FIKRI R', 'mfikryrid@gmail.com', '082250706412', 'Open Trip Whale Shark Teluk Saleh', 1, 650000, 'pending', 'shopeepay', '1763481456_09f5aff6dbfc0158c6f1.png', '2025-11-18 08:57:03', '2025-11-18 08:57:36', '2025-11-01', '06:00:00', '', 0),
+(3, 'WS20251118002', 6, 'MUHAMMAD FIKRI R', 'mfikryrid2@gmail.com', '082250706412', 'Open Trip Whale Shark Teluk Saleh', 1, 650000, 'pending', NULL, NULL, '2025-11-18 10:51:45', '2025-11-18 10:51:52', '2025-11-20', '06:00:00', '', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -116,7 +134,8 @@ INSERT INTO `jadwal_trip` (`id`, `tanggal`, `paket`, `kapasitas`, `terisi`, `sis
 (4, '2025-10-25', 'Private Trip Whale Shark Teluk Saleh', 15, 1, 14, 'tersedia', '2025-10-14 09:10:48', '2025-10-14 16:13:16'),
 (5, '2025-10-24', 'Open Trip Whale Shark Teluk Saleh', 15, 15, 0, 'tersedia', '2025-10-14 09:17:17', '2025-10-14 17:07:47'),
 (6, '2025-10-16', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-10-14 10:42:59', '2025-10-14 10:42:59'),
-(7, '2025-11-01', 'Open Trip Whale Shark Teluk Saleh', 10, 2, 8, 'tersedia', '2025-10-22 10:05:43', '2025-10-22 10:05:54');
+(7, '2025-11-01', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'penuh', '2025-10-22 10:05:43', '2025-11-18 09:46:28'),
+(8, '2025-11-20', 'Open Trip Whale Shark Teluk Saleh', 15, 1, 14, 'tersedia', '2025-11-18 10:07:04', '2025-11-18 10:51:52');
 
 --
 -- Triggers `jadwal_trip`
@@ -161,6 +180,13 @@ CREATE TABLE `kelola_wisata` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `kelola_wisata`
+--
+
+INSERT INTO `kelola_wisata` (`id`, `nama_wisata`, `kategori`, `deskripsi`, `gambar`, `created_at`, `updated_at`) VALUES
+(1, 'JALAN JALAN', 'wisata_pilihan', 'ABCHDKBFSBKFBDKBFKJD KJDBFBDSKBFKHDSBFBD DHBFHSDBFHKBDSK FD FKHBSKHBFIEHFUIBDSKJBFKJDBB ', '1763482126_fb6c2d32a24eb3da9f46.jpg', '2025-11-18 09:08:46', '2025-11-18 09:08:46');
+
 -- --------------------------------------------------------
 
 --
@@ -192,13 +218,16 @@ CREATE TABLE `promosi` (
   `harga_diskon` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `status` enum('1','2') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1' COMMENT '1 = Aktif, 2 = Tidak Aktif'
+  `status` enum('1','2') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1' COMMENT '1 = Aktif, 2 = Tidak Aktif',
+  `masa_berlaku_start` date DEFAULT NULL,
+  `masa_berlaku_end` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `promosi`
 --
 
+<<<<<<< Updated upstream
 INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `created_at`, `updated_at`, `status`) VALUES
 (1, 'Diskon 25% Paket Private Pax 5', 800000, 650000, '2025-09-22 11:33:09', '2025-09-22 11:33:09', '1'),
 (2, 'Diskon 25% Paket Private Pax 10', 2800000, 2300000, '2025-10-14 10:18:24', '2025-10-14 10:18:24', '1'),
@@ -206,6 +235,11 @@ INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `cr
 (1, 'Diskon 25% Paket Private Pax 5', 800000, 650000, '2025-09-22 11:33:09', '2025-09-22 11:33:09', '1'),
 (2, 'Diskon 25% Paket Private Pax 10', 2800000, 2300000, '2025-10-14 10:18:24', '2025-10-14 10:18:24', '1'),
 (3, 'JALANJALAN', 650000, 200000, '2025-10-22 10:51:02', '2025-10-22 10:51:02', '1');
+=======
+INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `created_at`, `updated_at`, `status`, `masa_berlaku_start`, `masa_berlaku_end`) VALUES
+(4, 'GAJIAN', 650000, 150000, '2025-10-01 08:38:22', '2025-11-18 10:25:40', '1', '2025-11-01', '2025-12-31'),
+(6, 'JALANJALAN', 300000, 250000, '2025-11-18 10:26:31', '2025-11-18 10:26:31', '1', '2025-11-20', '2025-11-27');
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -218,10 +252,17 @@ CREATE TABLE `setting_payments` (
   `payments` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci DEFAULT 'active',
-  `logo` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `metode` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_payments`
+--
+
+INSERT INTO `setting_payments` (`id`, `payments`, `number`, `status`, `metode`, `created_at`, `updated_at`) VALUES
+(1, 'GOPAY', '087765261822', 'active', 'e-wallet', '2025-11-18 10:48:22', '2025-11-18 18:05:55');
 
 -- --------------------------------------------------------
 
@@ -349,7 +390,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings_details_visitors`
 --
 ALTER TABLE `bookings_details_visitors`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `bookings_details_visitors`
@@ -361,20 +402,24 @@ ALTER TABLE `bookings_details_visitors`
 -- AUTO_INCREMENT for table `booking_details`
 --
 ALTER TABLE `booking_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jadwal_trip`
 --
 ALTER TABLE `jadwal_trip`
+<<<<<<< Updated upstream
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+=======
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `kelola_wisata`
 --
 ALTER TABLE `kelola_wisata`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -386,14 +431,18 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `promosi`
 --
 ALTER TABLE `promosi`
+<<<<<<< Updated upstream
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+=======
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `setting_payments`
 --
 ALTER TABLE `setting_payments`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ulasan`

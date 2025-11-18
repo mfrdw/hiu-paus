@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\M_BookingDetails;
 use App\Models\M_JadwalTrip;
 use App\Models\M_UlasanUsers;
-use App\Models\M_Users;
+use App\Models\M_SettingPayments;
 use App\Models\M_KelolaWisata;
 use App\Models\M_Promosi;
 
@@ -23,10 +23,16 @@ class Administrator extends BaseController
     {
         $jadwalModel = new M_JadwalTrip();
         $jadwals = $jadwalModel->orderBy('created_at', 'DESC')->findAll();
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+        $jadwal = $jadwalModel->getJadwalByMonth($currentMonth, $currentYear);
 
         $data = [
             'title' => 'Kelola Jadwal',
             'jadwals' => $jadwals,
+            'jadwal' => $jadwal,
+            'currentMonth' => $currentMonth,
+            'currentYear' => $currentYear
         ];
 
         return view('administrator/kelola_jadwal', $data);
@@ -247,9 +253,12 @@ class Administrator extends BaseController
 
     public function setting_payments(): string
     {
+        $model = new M_SettingPayments();
         $data = [
-            'title' => 'Setting Payments ',
+            'title' => 'Setting Payments',
+            'payments' => $model->findAll()
         ];
+
         return view('administrator/setting_payments', $data);
     }
 

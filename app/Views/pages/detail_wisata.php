@@ -36,7 +36,7 @@
         <!-- Gambar Utama -->
         <div class="col-md-8">
             <div class="card" style="border-radius: 0.5rem; margin-bottom: 1rem;">
-                <img src="../dist/assets/images/images-1.jpg" class="card-img-top" alt="Hotel Image"
+                <img src="../dist/assets/images/images1.jpg" class="card-img-top"
                     style="height: 100%; width: 100%; object-fit: cover;">
             </div>
         </div>
@@ -46,13 +46,13 @@
             <div class="row">
                 <div class="col-12 mb-2">
                     <div class="card" style="border-radius: 0.5rem; margin-bottom: 1rem;">
-                        <img src="../dist/assets/images/images-2.jpg" class="card-img-top" alt="Hotel Image"
+                        <img src="../dist/assets/images/images1.jpg" class="card-img-top"
                             style="height: 100%; width: 100%; object-fit: cover;">
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="card" style="border-radius: 0.5rem; margin-bottom: 1rem;">
-                        <img src="../dist/assets/images/images-3.jpg" class="card-img-top" alt="Hotel Image"
+                        <img src="../dist/assets/images/images1.jpg" class="card-img-top"
                             style="height: 100%; width: 100%; object-fit: cover;">
                     </div>
                 </div>

@@ -42,7 +42,12 @@
                     <button class="btn btn-success" data-toggle="modal" data-target="#tambahJadwalModal">
                         <i class="fas fa-calendar-plus"></i> Tambah Jadwal
                     </button>
-                    <button class="btn btn-warning"><i class="fas fa-calendar-check"></i> Jadwal Penuh</button>
+                    <!-- Tombol untuk Menampilkan Modal -->
+                    <button class="btn btn-warning" data-toggle="modal" data-target="#calendarModal">
+                        <i class="fas fa-calendar-check"></i> Jadwal Penuh
+                    </button>
+
+
                 </div>
 
                 <!-- Dropdown for Date Selection (e.g., July 2024) -->
@@ -122,12 +127,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" data-toggle="modal"
-                                                data-target="#editJadwalModal" data-id="<?= esc($jadwal['id']) ?>"
-                                                data-tanggal="<?= esc($jadwal['tanggal']) ?>"
-                                                data-paket="<?= esc($jadwal['paket']) ?>"
-                                                data-kapasitas="<?= esc($jadwal['kapasitas']) ?>"
-                                                data-status="<?= esc($jadwal['status']) ?>">
+                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editJadwalModal<?= esc($jadwal['id']); ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
 
@@ -212,8 +212,7 @@
 
 <!-- Modal Edit Jadwal -->
 <?php foreach ($jadwals as $jadwal): ?>
-
-    <div class="modal fade" id="editJadwalModal" tabindex="-1" role="dialog" aria-labelledby="editJadwalModalLabel"
+    <div class="modal fade" id="editJadwalModal<?= esc($jadwal['id']); ?>" tabindex="-1" role="dialog" aria-labelledby="editJadwalModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -268,6 +267,210 @@
         </div>
     </div>
 <?php endforeach; ?>
+
+<!-- Modal Kalender -->
+<div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="calendarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="calendarModalLabel">Kalender Jadwal Bulan Ini</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <style>
+                .calendar-table th,
+                .calendar-table td {
+                    text-align: center;
+                    vertical-align: middle;
+                    padding: 10px;
+                }
+
+                .status-available {
+                    background: #2ecc71;
+                    color: #fff;
+                }
+
+                .status-almost_full {
+                    background: #f1c40f;
+                    color: #111;
+                }
+
+                .status-full {
+                    background: #e74c3c;
+                    color: #fff;
+                }
+
+                .legend {
+                    display: inline-block;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 2px;
+                    margin-right: 6px;
+                    border: 1px solid rgba(0, 0, 0, .1);
+                }
+
+                .legend-available {
+                    background: #2ecc71;
+                }
+
+                .legend-almost_full {
+                    background: #f1c40f;
+                }
+
+                .legend-full {
+                    background: #e74c3c;
+                }
+
+                .date-num {
+                    font-weight: 600;
+                }
+
+                .small-note {
+                    font-size: .75rem;
+                    opacity: .85;
+                }
+            </style>
+
+            <div class="modal-body">
+                <?php
+                // Pakai variabel dari controller kalau ada, kalau tidak fallback
+                $currentMonth = isset($currentMonth) ? (int)$currentMonth : (int)date('m');
+                $currentYear  = isset($currentYear)  ? (int)$currentYear  : (int)date('Y');
+
+                $monthName = date('F', mktime(0, 0, 0, $currentMonth, 10));
+                echo "<h4 class='mb-3'>{$monthName} {$currentYear}</h4>";
+
+                // --- Index data jadwal per tanggal & ambil status "terberat" per hari ---
+                $byDate = [];
+                if (!empty($jadwal)) {
+                    foreach ($jadwal as $row) {
+                        // Check if tanggal is a valid date
+                        $tanggal = $row['tanggal'] ?? ''; // Ensure it's set
+                        $dateObj = strtotime($tanggal); // Try converting to timestamp
+
+                        // If strtotime returns false, skip this row
+                        if ($dateObj === false) {
+                            continue;  // Skip invalid dates or handle accordingly
+                        }
+
+                        // Convert to Y-m-d format
+                        $key = date('Y-m-d', $dateObj);
+
+                        // Get the kapasitas and terisi values
+                        $kap    = isset($row['kapasitas']) ? (int)$row['kapasitas'] : 15;  // Default 15 if not set
+                        $terisi = isset($row['terisi'])    ? (int)$row['terisi']    : 0;
+                        $sisa   = isset($row['sisa']) && $row['sisa'] !== '' ? (int)$row['sisa'] : max($kap - $terisi, 0);
+
+                        // Determine the status based on the available capacity
+                        if ($sisa <= 0 || $terisi >= $kap || $terisi >= 15) {
+                            $status = 'full';  // Penuh
+                        } elseif ($terisi >= 10) {
+                            $status = 'almost_full';  // Hampir Penuh
+                        } else {
+                            $status = 'available';  // Tersedia
+                        }
+
+                        // Store the "heaviest" status per day
+                        $sevMap = ['available' => 1, 'almost_full' => 2, 'full' => 3];
+                        $sev    = $sevMap[$status];
+
+                        // If this date's status is stronger, update
+                        if (!isset($byDate[$key]) || $sev > $byDate[$key]['sev']) {
+                            $byDate[$key] = [
+                                'status'  => $status,
+                                'sev'     => $sev,
+                                'terisi'  => $terisi,
+                                'kap'     => $kap,
+                                'sisa'    => $sisa,
+                                'paket'   => $row['paket'] ?? null, // Optional, if you want to display
+                            ];
+                        }
+                    }
+                }
+
+
+                // --- Bangun tabel kalender ---
+                $daysInMonth    = cal_days_in_month(CAL_GREGORIAN, $currentMonth, $currentYear);
+                $firstDayOfWeek = (int)date('N', strtotime(sprintf('%04d-%02d-01', $currentYear, $currentMonth))); // 1=Senin..7=Minggu
+                ?>
+
+                <!-- Legend -->
+                <div class="mb-2">
+                    <span class="legend legend-available"></span> Tersedia
+                    &nbsp;&nbsp;<span class="legend legend-almost_full"></span> Hampir penuh
+                    &nbsp;&nbsp;<span class="legend legend-full"></span> Penuh
+                </div>
+
+                <table class="table table-bordered calendar-table">
+                    <thead>
+                        <tr>
+                            <th>Sen</th>
+                            <th>Sel</th>
+                            <th>Rab</th>
+                            <th>Kam</th>
+                            <th>Jum</th>
+                            <th>Sab</th>
+                            <th>Min</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $weekday = $firstDayOfWeek; // 1..7
+                        echo "<tr>";
+                        // Sel kosong sebelum tanggal 1
+                        for ($i = 1; $i < $weekday; $i++) echo "<td></td>";
+
+                        for ($day = 1; $day <= $daysInMonth; $day++) {
+                            $dateKey = sprintf('%04d-%02d-%02d', $currentYear, $currentMonth, $day);
+
+                            $cls   = '';
+                            $info  = '';
+                            $title = '';
+
+                            if (isset($byDate[$dateKey])) {
+                                $st = $byDate[$dateKey]['status'];  // available / almost_full / full
+                                $cls = "status-{$st}";
+                                // Info kecil di bawah tanggal (opsional)
+                                $terisi = $byDate[$dateKey]['terisi'];
+                                $kap    = $byDate[$dateKey]['kap'];
+                                $sisa   = $byDate[$dateKey]['sisa'];
+                                $info   = "<div class='small-note'>{$terisi}/{$kap} (sisa {$sisa})</div>";
+                                $title  = " title='Terisi {$terisi} dari {$kap} — Sisa {$sisa}'";
+                            }
+                            // Jika tidak ada jadwal pada tanggal tsb => tidak diberi class => sel tetap putih
+
+                            echo "<td class='{$cls}'{$title}><div class='date-num'>{$day}</div>{$info}</td>";
+
+                            // Pindah baris tiap Minggu
+                            if ($weekday == 7 && $day < $daysInMonth) {
+                                echo "</tr><tr>";
+                                $weekday = 1;
+                            } else {
+                                $weekday++;
+                            }
+                        }
+
+                        // Sel kosong setelah tanggal terakhir
+                        if ($weekday != 1) {
+                            for ($i = $weekday; $i <= 7; $i++) echo "<td></td>";
+                        }
+                        echo "</tr>";
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 
 <script>

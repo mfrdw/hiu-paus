@@ -92,95 +92,42 @@
                             <!-- TAB: E-Wallet -->
                             <div class="tab-pane fade show active" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
                                 <div class="list-group mb-3">
-                                    <label class="list-group-item list-group-item-action p-3 rounded-3 mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="radio" name="payment_channel" value="shopeepay" required>
-                                            <i class="fas fa-wallet me-3 text-secondary"></i>
-                                            <div>
-                                                <div class="fw-semibold">ShopeePay</div>
-                                                <small class="text-muted">QR/Transfer Instan</small>
+                                    <!-- Loop untuk menampilkan data E-Wallet -->
+                                    <?php foreach ($ewalletPayments as $payment): ?>
+                                        <label class="list-group-item list-group-item-action p-3 rounded-3 mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <input class="form-check-input me-3" type="radio" name="payment_channel" value="<?= esc($payment['payments']) ?>" required>
+                                                <i class="fas fa-wallet me-3 text-secondary"></i>
+                                                <div>
+                                                    <div class="fw-semibold"><?= esc($payment['payments']) ?></div>
+                                                    <small class="text-muted"><?= esc($payment['status']) == 'active' ? 'QR/Transfer Instan' : 'Non-Aktif' ?></small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </label>
-                                    <label class="list-group-item list-group-item-action p-3 rounded-3 mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="radio" name="payment_channel" value="gopay">
-                                            <i class="fas fa-wallet me-3 text-secondary"></i>
-                                            <div>
-                                                <div class="fw-semibold">GoPay</div>
-                                                <small class="text-muted">QR/Transfer Instan</small>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <label class="list-group-item list-group-item-action p-3 rounded-3 mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="radio" name="payment_channel" value="ovo">
-                                            <i class="fas fa-wallet me-3 text-secondary"></i>
-                                            <div>
-                                                <div class="fw-semibold">OVO</div>
-                                                <small class="text-muted">QR/Transfer Instan</small>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <label class="list-group-item list-group-item-action p-3 rounded-3">
-                                        <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="radio" name="payment_channel" value="dana">
-                                            <i class="fas fa-wallet me-3 text-secondary"></i>
-                                            <div>
-                                                <div class="fw-semibold">DANA</div>
-                                                <small class="text-muted">QR/Transfer Instan</small>
-                                            </div>
-                                        </div>
-                                    </label>
+                                        </label>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
 
                             <!-- TAB: Transfer Bank -->
                             <div class="tab-pane fade" id="bank" role="tabpanel" aria-labelledby="bank-tab">
                                 <div class="list-group mb-3">
-                                    <label class="list-group-item list-group-item-action p-3 rounded-3 mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="radio" name="payment_channel" value="bni_va" required>
-                                            <i class="fas fa-university me-3 text-secondary"></i>
-                                            <div>
-                                                <div class="fw-semibold">BNI</div>
-                                                <small class="text-muted">Virtual Account</small>
+                                    <!-- Loop untuk menampilkan data Transfer Bank -->
+                                    <?php foreach ($bankPayments as $payment): ?>
+                                        <label class="list-group-item list-group-item-action p-3 rounded-3 mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <input class="form-check-input me-3" type="radio" name="payment_channel" value="<?= esc($payment['payments']) ?>" required>
+                                                <i class="fas fa-university me-3 text-secondary"></i>
+                                                <div>
+                                                    <div class="fw-semibold"><?= esc($payment['payments']) ?></div>
+                                                    <small class="text-muted"><?= esc($payment['status']) == 'active' ? 'Virtual Account' : 'Non-Aktif' ?></small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </label>
-                                    <label class="list-group-item list-group-item-action p-3 rounded-3 mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="radio" name="payment_channel" value="bri_va">
-                                            <i class="fas fa-university me-3 text-secondary"></i>
-                                            <div>
-                                                <div class="fw-semibold">BRI</div>
-                                                <small class="text-muted">Virtual Account</small>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <label class="list-group-item list-group-item-action p-3 rounded-3 mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="radio" name="payment_channel" value="bca_va">
-                                            <i class="fas fa-university me-3 text-secondary"></i>
-                                            <div>
-                                                <div class="fw-semibold">BCA</div>
-                                                <small class="text-muted">Virtual Account</small>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <label class="list-group-item list-group-item-action p-3 rounded-3">
-                                        <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="radio" name="payment_channel" value="mandiri_va">
-                                            <i class="fas fa-university me-3 text-secondary"></i>
-                                            <div>
-                                                <div class="fw-semibold">Mandiri</div>
-                                                <small class="text-muted">Virtual Account</small>
-                                            </div>
-                                        </div>
-                                    </label>
+                                        </label>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- Persetujuan -->
                         <div class="form-check mt-2">

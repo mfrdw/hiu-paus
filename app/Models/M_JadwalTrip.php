@@ -23,6 +23,13 @@ class M_JadwalTrip extends Model
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
 
+    public function getJadwalByMonth($month, $year)
+    {
+        return $this->where('MONTH(tanggal)', $month)
+            ->where('YEAR(tanggal)', $year)
+            ->findAll(); // Mengambil semua jadwal dalam bulan dan tahun tertentu
+    }
+
     public function getByTanggal($tanggal)
     {
         return $this->where('tanggal', $tanggal)->first();

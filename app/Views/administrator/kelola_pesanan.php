@@ -113,16 +113,13 @@
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-warning btn-sm" data-toggle="modal"
-                                                        data-target="#editBookingModal" data-id="<?= $booking['id']; ?>"
-                                                        data-full_name="<?= esc($booking['full_name']); ?>"
-                                                        data-paket="<?= $booking['jumlah_orang'] == 1 && $booking['total_biaya'] == 650000 ? 'Open Trip Whale Shark Teluk Saleh' : 'Private Trip Whale Shark Teluk Saleh'; ?>"
-                                                        data-jumlah_orang="<?= esc($booking['jumlah_orang']); ?>"
-                                                        data-total_biaya="<?= esc($booking['total_biaya']); ?>"
-                                                        data-role_payment="<?= esc($booking['role_payment']); ?>"
-                                                        data-upload_gambar="<?= esc($booking['upload_gambar']); ?>">
+                                                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editBookingModal<?= $booking['id_bookings'] ?>">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
+
+
+
+
 
                                                     <!-- Delete Button with Font Awesome Icon -->
                                                     <a href="<?= base_url('/delete/' . $booking['id']); ?>"
@@ -146,77 +143,66 @@
     </div>
 </div>
 
+<?php foreach ($bookings as $item) : ?>
+    <div class="modal fade" id="editBookingModal<?= $item['id_bookings'] ?>" tabindex="-1" role="dialog" aria-labelledby="editBookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="<?= base_url('update_booking/' . $item['id_bookings']); ?>" method="post">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="id" id="booking_id" value="<?= esc($item['id_bookings']); ?>">
 
-<!-- Modal Edit -->
-<div class="modal fade" id="editBookingModal" tabindex="-1" role="dialog" aria-labelledby="editBookingModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form action="<?= base_url('update_booking/' . $booking['id']); ?>" method="post">
-
-                <?= csrf_field() ?>
-                <input type="hidden" name="id" id="booking_id" value="<?= esc($booking['id']) ?>">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editBookingModalLabel">Edit Booking</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <!-- Nama Pemesan -->
-                    <div class="form-group">
-                        <label for="full_name">Nama Pemesan</label>
-                        <input type="text" name="fullName" id="full_name" class="form-control"
-                            value="<?= esc($booking['full_name']) ?>" required>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editBookingModalLabel">Edit Booking</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
 
-                    <!-- Email -->
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control"
-                            value="<?= esc($booking['email']) ?>" required>
+                    <div class="modal-body">
+                        <!-- Nama Pemesan -->
+                        <div class="form-group">
+                            <label for="full_name">Nama Pemesan</label>
+                            <input type="text" name="fullName" id="full_name" class="form-control" value="<?= esc($item['full_name']); ?>" required>
+                        </div>
+
+                        <!-- Paket -->
+                        <div class="form-group">
+                            <label for="paket">Paket</label>
+                            <input type="text" name="paket" id="paket" class="form-control" value="<?= esc($item['paket']); ?>" required>
+                        </div>
+
+                        <!-- Jumlah Orang -->
+                        <div class="form-group">
+                            <label for="jumlah_orang">Jumlah Orang</label>
+                            <input type="number" name="jumlah_orang" id="jumlah_orang" class="form-control" value="<?= esc($item['jumlah_orang']); ?>" required min="1">
+                        </div>
+
+                        <!-- Total Biaya -->
+                        <div class="form-group">
+                            <label for="total_biaya">Total Biaya</label>
+                            <input type="text" name="total_biaya" id="total_biaya" class="form-control" value="<?= esc($item['total_biaya']); ?>" required>
+                        </div>
+
+                        <!-- Status Pembayaran -->
+                        <div class="form-group">
+                            <label for="role_payment">Status Pembayaran</label>
+                            <select name="rolePayment" id="role_payment" class="form-control">
+                                <option value="pending" <?= ($item['role_payment'] == 'pending' ? 'selected' : ''); ?>>Pending</option>
+                                <option value="confirmed" <?= ($item['role_payment'] == 'confirmed' ? 'selected' : ''); ?>>Confirmed</option>
+                                <option value="completed" <?= ($item['role_payment'] == 'completed' ? 'selected' : ''); ?>>Completed</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- Kontak -->
-                    <div class="form-group">
-                        <label for="mobile">Kontak</label>
-                        <input type="text" name="mobile" id="mobile" class="form-control"
-                            value="<?= esc($booking['kontak']) ?>" required>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
-
-                    <!-- Jumlah Orang -->
-                    <div class="form-group">
-                        <label for="jumlah_orang">Jumlah Orang</label>
-                        <input type="number" name="peopleCount" id="peopleCount" class="form-control"
-                            value="<?= esc($booking['jumlah_orang']) ?>" required min="1">
-                    </div>
-
-                    <!-- Status Pembayaran -->
-                    <div class="form-group">
-                        <label for="role_payment">Status Pembayaran</label>
-                        <select name="rolePayment" id="role_payment" class="form-control">
-                            <option value="pending" <?= $booking['role_payment'] == 'pending' ? 'selected' : '' ?>>
-                                Pending</option>
-                            <option value="confirmed" <?= $booking['role_payment'] == 'confirmed' ? 'selected' : '' ?>>
-                                Confirmed</option>
-                            <option value="completed" <?= $booking['role_payment'] == 'completed' ? 'selected' : '' ?>>
-                                Completed</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-
-
+<?php endforeach; ?>
 
 
 

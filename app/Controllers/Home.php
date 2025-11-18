@@ -8,6 +8,7 @@ use App\Models\M_Users;
 use App\Models\M_UlasanUsers;
 use App\Models\M_KelolaWisata;
 use App\Models\M_Promosi;
+use App\Models\M_SettingPayments;
 
 class Home extends BaseController
 {
@@ -187,26 +188,32 @@ class Home extends BaseController
     }
 
 
-
-
-
     public function booking_payment($id): string
     {
         $model = new M_BookingDetails();
         $promo = new M_Promosi();
+        $paymentModel = new M_SettingPayments();
 
+        // Ambil data booking berdasarkan ID
         $booking = $model->where('id', $id)->first();
 
+        // Ambil data voucher aktif yang masih berlaku
         $voucher = $promo->where('status', 1)
             ->where('masa_berlaku_start <=', date('Y-m-d'))
             ->where('masa_berlaku_end >=', date('Y-m-d'))
             ->findAll();
 
+        // Ambil data metode pembayaran berdasarkan 'metode'
+        $ewalletPayments = $paymentModel->where('metode', 'e-wallet')->findAll();
+        $bankPayments = $paymentModel->where('metode', 'transfer-bank')->findAll();
+
 
         $data = [
             'title' => 'Metode Pembayaran',
             'booking' => $booking,
-            'voucher' => $voucher
+            'voucher' => $voucher,
+            'ewalletPayments' => $ewalletPayments,
+            'bankPayments' => $bankPayments,
         ];
 
         return view('pages/booking_payment', $data);

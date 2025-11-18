@@ -20,14 +20,39 @@
                                     <th>Payments</th>
                                     <th>Number</th>
                                     <th>Status</th>
-                                    <th>Logo</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php if (!empty($payments) && is_array($payments)): ?>
+                                    <?php $no = 1; ?>
+                                    <?php foreach ($payments as $item): ?>
+                                        <tr>
+                                            <td><?= $no++ ?></td>
+                                            <td><?= esc($item['payments']) ?></td>
+                                            <td><?= esc($item['number']) ?></td>
+                                            <td><?= esc($item['status']) ?></td>
+                                            <td>
+                                                <!-- Tombol Edit -->
+                                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPaymentModal<?= esc($item['id']) ?>">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
 
+                                                <!-- Tombol Delete -->
+                                                <a href="<?= site_url('setting-payment/delete/' . $item['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data pembayaran ini?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center">Tidak ada data pembayaran</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -46,7 +71,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?= base_url('addPayments') ?>" id="paymentForm" enctype="multipart/form-data">
+                <form action="<?= site_url('setting-payment/create') ?>" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="paymentMethod">Payments</label>
                         <input type="text" class="form-control" id="paymentMethod" name="paymentMethod" required>
@@ -56,17 +81,18 @@
                         <input type="text" class="form-control" id="paymentNumber" name="paymentNumber" required>
                     </div>
                     <div class="form-group">
+                        <label for="paymentMethodType">Metode Pembayaran</label>
+                        <select class="form-control" id="paymentMethodType" name="paymentMethodType" required>
+                            <option value="e-wallet">E-Wallet</option>
+                            <option value="bank-transfer">Transfer Bank</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="status">Status</label>
                         <select class="form-control" id="status" name="status" required>
                             <option value="active">Aktif</option>
                             <option value="inactive">Tidak Aktif</option>
                         </select>
-                    </div>
-                    <!-- Upload Gambar Logo -->
-                    <div class="form-group">
-                        <label for="logo">Logo Pembayaran</label>
-                        <input type="file" class="form-control" id="logo" name="logo" accept="image/*" required>
-                        <small class="form-text text-muted">Pilih file gambar untuk logo (JPG, PNG, atau GIF).</small>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Simpan</button>
                 </form>
@@ -74,45 +100,78 @@
         </div>
     </div>
 </div>
+<!-- Modal Edit -->
+<?php foreach ($payments as $item): ?>
+    <div class="modal fade" id="editPaymentModal<?= esc($item['id']) ?>" tabindex="-1" role="dialog" aria-labelledby="editPaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="<?= site_url('setting-payment/update') ?>" method="post">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="id_payment" id="id_payment" value="<?= esc($item['id']) ?>">
 
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editPaymentModalLabel">Edit Pembayaran</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
-<!-- Modal untuk Mengedit Pembayaran -->
-<div class="modal fade" id="editPaymentModal" tabindex="-1" role="dialog" aria-labelledby="editPaymentModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editPaymentModalLabel">Edit Pembayaran</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="editPaymentForm">
-                    <input type="hidden" id="editPaymentId" name="editPaymentId">
-                    <div class="form-group">
-                        <label for="editPaymentMethod">Metode Pembayaran</label>
-                        <input type="text" class="form-control" id="editPaymentMethod" name="editPaymentMethod" required>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="paymentMethod">Payments</label>
+                            <input type="text" name="paymentMethod" id="paymentMethod" class="form-control" value="<?= esc($item['payments']) ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentNumber">Number</label>
+                            <input type="text" name="paymentNumber" id="paymentNumber" class="form-control" value="<?= esc($item['number']) ?>" required>
+                        </div>
+                        <!-- Dropdown Metode Pembayaran -->
+                        <div class="form-group">
+                            <label for="paymentMethodType">Metode Pembayaran</label>
+                            <select class="form-control" id="paymentMethodType" name="paymentMethodType" required>
+                                <option value="e-wallet" <?= ($item['metode'] == 'e-wallet') ? 'selected' : '' ?>>E-Wallet</option>
+                                <option value="transfer-bank" <?= ($item['metode'] == 'transfer-bank') ? 'selected' : '' ?>>Transfer Bank</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="active" <?= ($item['status'] == 'active') ? 'selected' : '' ?>>Aktif</option>
+                                <option value="inactive" <?= ($item['status'] == 'inactive') ? 'selected' : '' ?>>Tidak Aktif</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="editPaymentNumber">Nomor</label>
-                        <input type="text" class="form-control" id="editPaymentNumber" name="editPaymentNumber" required>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
-                    <div class="form-group">
-                        <label for="editStatus">Status</label>
-                        <select class="form-control" id="editStatus" name="editStatus" required>
-                            <option value="active">Aktif</option>
-                            <option value="inactive">Tidak Aktif</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-warning w-100">Perbarui</button>
                 </form>
             </div>
         </div>
     </div>
-</div>
+<?php endforeach; ?>
+
+
+<script>
+    // Event listener untuk modal edit
+    $('#editPaymentModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Tombol yang memicu modal
+        var id = button.data('id');
+        var paymentMethod = button.data('paymentMethod');
+        var paymentNumber = button.data('paymentNumber');
+        var status = button.data('status');
+        var status = button.data('paymentMethodType');
+
+        // Update modal dengan data yang didapat
+        var modal = $(this);
+        modal.find('#id_payment').val(id);
+        modal.find('#paymentMethod').val(paymentMethod);
+        modal.find('#paymentNumber').val(paymentNumber);
+        modal.find('#status').val(status);
+        modal.find('#paymentMethodType').val(paymentMethodType);
+    });
+</script>
+
 
 <?= $this->endSection() ?>
-
-<!-- Bootstrap 4 JS, Popper.js -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>

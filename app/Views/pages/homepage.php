@@ -65,7 +65,7 @@
             <!-- Paket Trip Cards -->
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
-                    <img src="../dist/assets/images/kapal-pesiar.jpg" class="card-img-top" alt="Open Trip Whale Shark Teluk Saleh">
+                    <img src="../dist/assets/images/images1.jpg" class="card-img-top" alt="Open Trip Whale Shark Teluk Saleh">
                     <div class="card-body text-center text-dark">
                         <h5 class="card-title">Open Trip Whale Shark Teluk Saleh</h5>
                         <p class="card-text">
@@ -89,7 +89,7 @@
 
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
-                    <img src="../dist/assets/images/kapal-pesiar2.jpg" class="card-img-top" alt="Private Trip Whale Shark">
+                    <img src="../dist/assets/images/images2.jpg" class="card-img-top" alt="Private Trip Whale Shark">
                     <div class="card-body text-center text-dark">
                         <h5 class="card-title">Private Trip Whale Shark Teluk Saleh</h5>
                         <p class="card-text">
