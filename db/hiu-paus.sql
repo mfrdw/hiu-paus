@@ -47,6 +47,7 @@ INSERT INTO `bookings_details_visitors` (`id`, `id_bookings`, `nama_visitors`, `
 (2, 'WS20251118001', 'MUHAMMAD FIKRI R', 25, 'L', 'WNI', '2025-11-18 08:56:43', '2025-11-18 08:56:43'),
 (3, 'WS20251118002', 'MUHAMMAD FIKRI R', 19, 'L', 'WNI', '2025-11-18 10:51:45', '2025-11-18 10:51:45');
 
+<<<<<<< Updated upstream
 -- --------------------------------------------------------
 
 --
@@ -64,6 +65,8 @@ CREATE TABLE `bookings_details_visitors` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+=======
+>>>>>>> Stashed changes
 -- --------------------------------------------------------
 
 --
@@ -105,6 +108,15 @@ INSERT INTO `booking_details` (`id`, `id_bookings`, `user_id`, `full_name`, `ema
 (2, 'WS20251118001', 6, 'MUHAMMAD FIKRI R', 'mfikryrid@gmail.com', '082250706412', 'Open Trip Whale Shark Teluk Saleh', 1, 650000, 'pending', 'shopeepay', '1763481456_09f5aff6dbfc0158c6f1.png', '2025-11-18 08:57:03', '2025-11-18 08:57:36', '2025-11-01', '06:00:00', '', 0),
 (3, 'WS20251118002', 6, 'MUHAMMAD FIKRI R', 'mfikryrid2@gmail.com', '082250706412', 'Open Trip Whale Shark Teluk Saleh', 1, 650000, 'pending', NULL, NULL, '2025-11-18 10:51:45', '2025-11-18 10:51:52', '2025-11-20', '06:00:00', '', 0);
 
+--
+-- Dumping data for table `booking_details`
+--
+
+INSERT INTO `booking_details` (`id`, `id_bookings`, `user_id`, `full_name`, `email`, `kontak`, `paket`, `jumlah_orang`, `total_biaya`, `role_payment`, `mode_pembayaran`, `upload_gambar`, `created_at`, `updated_at`, `tanggal_trip`, `jam_trip`, `voucher`, `nilai_voucher`) VALUES
+(1, 'WS20251028001', 6, 'Muhammad Fikri Ridwan', 'mfikryrid@gmail.com', '082250706412', 'Open Trip Whale Shark Teluk Saleh', 1, 450000, 'pending', 'gopay', '1761665502_f2d0bbd949b0ee7ba865.png', '2025-10-28 08:31:21', '2025-10-28 08:31:42', '2025-11-01', '06:00:00', '3', 200000),
+(2, 'WS20251118001', 6, 'MUHAMMAD FIKRI R', 'mfikryrid@gmail.com', '082250706412', 'Open Trip Whale Shark Teluk Saleh', 1, 650000, 'pending', 'shopeepay', '1763481456_09f5aff6dbfc0158c6f1.png', '2025-11-18 08:57:03', '2025-11-18 08:57:36', '2025-11-01', '06:00:00', '', 0),
+(3, 'WS20251118002', 6, 'MUHAMMAD FIKRI R', 'mfikryrid2@gmail.com', '082250706412', 'Open Trip Whale Shark Teluk Saleh', 1, 650000, 'pending', NULL, NULL, '2025-11-18 10:51:45', '2025-11-18 10:51:52', '2025-11-20', '06:00:00', '', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -136,6 +148,7 @@ INSERT INTO `jadwal_trip` (`id`, `tanggal`, `paket`, `kapasitas`, `terisi`, `sis
 (6, '2025-10-16', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-10-14 10:42:59', '2025-10-14 10:42:59'),
 (7, '2025-11-01', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'penuh', '2025-10-22 10:05:43', '2025-11-18 09:46:28'),
 (8, '2025-11-20', 'Open Trip Whale Shark Teluk Saleh', 15, 1, 14, 'tersedia', '2025-11-18 10:07:04', '2025-11-18 10:51:52');
+<<<<<<< Updated upstream
 
 --
 -- Triggers `jadwal_trip`
@@ -152,6 +165,8 @@ DELIMITER ;
 (5, '2025-10-24', 'Open Trip Whale Shark Teluk Saleh', 15, 15, 0, 'tersedia', '2025-10-14 09:17:17', '2025-10-14 17:07:47'),
 (6, '2025-10-16', 'Open Trip Whale Shark Teluk Saleh', 10, 0, 10, 'tersedia', '2025-10-14 10:42:59', '2025-10-14 10:42:59'),
 (7, '2025-11-01', 'Open Trip Whale Shark Teluk Saleh', 10, 2, 8, 'tersedia', '2025-10-22 10:05:43', '2025-10-22 10:05:54');
+=======
+>>>>>>> Stashed changes
 
 --
 -- Triggers `jadwal_trip`
@@ -228,6 +243,7 @@ CREATE TABLE `promosi` (
 --
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `created_at`, `updated_at`, `status`) VALUES
 (1, 'Diskon 25% Paket Private Pax 5', 800000, 650000, '2025-09-22 11:33:09', '2025-09-22 11:33:09', '1'),
 (2, 'Diskon 25% Paket Private Pax 10', 2800000, 2300000, '2025-10-14 10:18:24', '2025-10-14 10:18:24', '1'),
@@ -235,6 +251,11 @@ INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `cr
 (1, 'Diskon 25% Paket Private Pax 5', 800000, 650000, '2025-09-22 11:33:09', '2025-09-22 11:33:09', '1'),
 (2, 'Diskon 25% Paket Private Pax 10', 2800000, 2300000, '2025-10-14 10:18:24', '2025-10-14 10:18:24', '1'),
 (3, 'JALANJALAN', 650000, 200000, '2025-10-22 10:51:02', '2025-10-22 10:51:02', '1');
+=======
+INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `created_at`, `updated_at`, `status`, `masa_berlaku_start`, `masa_berlaku_end`) VALUES
+(4, 'GAJIAN', 650000, 150000, '2025-10-01 08:38:22', '2025-11-18 10:25:40', '1', '2025-11-01', '2025-12-31'),
+(6, 'JALANJALAN', 300000, 250000, '2025-11-18 10:26:31', '2025-11-18 10:26:31', '1', '2025-11-20', '2025-11-27');
+>>>>>>> Stashed changes
 =======
 INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `created_at`, `updated_at`, `status`, `masa_berlaku_start`, `masa_berlaku_end`) VALUES
 (4, 'GAJIAN', 650000, 150000, '2025-10-01 08:38:22', '2025-11-18 10:25:40', '1', '2025-11-01', '2025-12-31'),
@@ -391,12 +412,15 @@ ALTER TABLE `users`
 --
 ALTER TABLE `bookings_details_visitors`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+<<<<<<< Updated upstream
 
 --
 -- AUTO_INCREMENT for table `bookings_details_visitors`
 --
 ALTER TABLE `bookings_details_visitors`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
+=======
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `booking_details`
@@ -409,8 +433,12 @@ ALTER TABLE `booking_details`
 --
 ALTER TABLE `jadwal_trip`
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+=======
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+>>>>>>> Stashed changes
 =======
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 >>>>>>> Stashed changes
@@ -432,8 +460,12 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `promosi`
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+=======
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+>>>>>>> Stashed changes
 =======
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 >>>>>>> Stashed changes
