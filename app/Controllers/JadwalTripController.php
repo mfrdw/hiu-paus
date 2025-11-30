@@ -9,23 +9,28 @@ class JadwalTripController extends Controller
 {
     public function tambah()
     {
+        $tanggal     = $this->request->getPost('tanggal');
+        $paket       = $this->request->getPost('paket');
+        $jamMulai    = $this->request->getPost('jam_mulai');
+        $jamSelesai  = $this->request->getPost('jam_selesai');
+        $kapasitas   = (int) $this->request->getPost('kapasitas');
 
-        $tanggal = $this->request->getPost('tanggal');
-        $paket = $this->request->getPost('paket');
-        $kapasitas = $this->request->getPost('kapasitas');
         $status = 'tersedia';
         $terisi = 0;
-        $sisa = $kapasitas;
+        $sisa   = $kapasitas;
 
         $model = new M_JadwalTrip();
+
         $data = [
-            'tanggal' => $tanggal,
-            'paket' => $paket,
-            'kapasitas' => $kapasitas,
-            'terisi' => $terisi,
-            'sisa' => $sisa,
-            'status' => $status,
-            'created_at' => date('Y-m-d H:i:s'),
+            'tanggal'     => $tanggal,
+            'paket'       => $paket,
+            'jam_mulai'   => $jamMulai,
+            'jam_selesai' => $jamSelesai,
+            'kapasitas'   => $kapasitas,
+            'terisi'      => $terisi,
+            'sisa'        => $sisa,
+            'status'      => $status,
+            'created_at'  => date('Y-m-d H:i:s'),
         ];
 
         if ($model->save($data)) {
@@ -35,26 +40,38 @@ class JadwalTripController extends Controller
         }
     }
 
+
     public function update($id)
     {
+        $tanggal     = $this->request->getPost('tanggal');
+        $paket       = $this->request->getPost('paket');
+        $jamMulai    = $this->request->getPost('jam_mulai');
+        $jamSelesai  = $this->request->getPost('jam_selesai');
+        $kapasitas   = (int) $this->request->getPost('kapasitas');
+        $status      = $this->request->getPost('status');
 
-        $tanggal = $this->request->getPost('tanggal');
-        $paket = $this->request->getPost('paket');
-        $kapasitas = $this->request->getPost('kapasitas');
-        $status = $this->request->getPost('status');
-        $terisi = 0;
-        $sisa = $kapasitas;
+        $model  = new M_JadwalTrip();
+        $jadwal = $model->find($id);
 
-        $model = new M_JadwalTrip();
+        // kalau data lama ada, pakai terisi lama, kalau nggak ada default 0
+        $terisiLama = isset($jadwal['terisi']) ? (int) $jadwal['terisi'] : 0;
+
+        // hitung sisa baru (minimal 0)
+        $sisa = $kapasitas - $terisiLama;
+        if ($sisa < 0) {
+            $sisa = 0;
+        }
 
         $data = [
-            'tanggal' => $tanggal,
-            'paket' => $paket,
-            'kapasitas' => $kapasitas,
-            'terisi' => $terisi,
-            'sisa' => $sisa,
-            'status' => $status,
-            'updated_at' => date('Y-m-d H:i:s'),
+            'tanggal'     => $tanggal,
+            'paket'       => $paket,
+            'jam_mulai'   => $jamMulai,
+            'jam_selesai' => $jamSelesai,
+            'kapasitas'   => $kapasitas,
+            'terisi'      => $terisiLama,
+            'sisa'        => $sisa,
+            'status'      => $status,
+            'updated_at'  => date('Y-m-d H:i:s'),
         ];
 
         if ($model->update($id, $data)) {
@@ -63,6 +80,7 @@ class JadwalTripController extends Controller
             return redirect()->back()->with('error', 'Gagal memperbarui jadwal, silakan coba lagi.');
         }
     }
+
 
     public function delete($id)
     {

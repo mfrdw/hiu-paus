@@ -102,6 +102,7 @@
                                 <tr>
                                     <th scope="col">No</th>
                                     <th scope="col">Tanggal</th>
+                                    <th scope="col">Jam</th> <!-- ✅ TAMBAH INI -->
                                     <th scope="col">Paket</th>
                                     <th scope="col">Kapasitas</th>
                                     <th scope="col">Terisi</th>
@@ -114,41 +115,51 @@
                                 <?php $no = 1; ?>
                                 <?php foreach ($jadwals as $jadwal): ?>
                                     <tr>
-                                        <td><?= $no++; ?></td> <!-- Menampilkan nomor urut -->
+                                        <td><?= $no++; ?></td>
                                         <td><?= date('d M Y', strtotime($jadwal['tanggal'])); ?></td>
+
+                                        <!-- ✅ KOLOM JAM -->
+                                        <td>
+                                            <i class="far fa-clock mr-1 text-primary"></i>
+                                            <?= esc($jadwal['jam_mulai']) . ' - ' . esc($jadwal['jam_selesai']); ?>
+                                        </td>
+
                                         <td><?= esc($jadwal['paket']); ?></td>
                                         <td><?= esc($jadwal['kapasitas']) . ' orang'; ?></td>
                                         <td><?= esc($jadwal['terisi']) . ' orang'; ?></td>
                                         <td><?= esc($jadwal['sisa']) . ' orang'; ?></td>
                                         <td>
-                                            <span class="badge 
-                    <?= ($jadwal['status'] == 'tersedia') ? 'badge-success' : (($jadwal['status'] == 'penuh') ? 'badge-danger' : 'badge-warning'); ?>">
+                                            <span class="badge
+                        <?= ($jadwal['status'] == 'tersedia')
+                                        ? 'badge-success'
+                                        : (($jadwal['status'] == 'penuh') ? 'badge-danger' : 'badge-warning'); ?>">
                                                 <?= ucfirst($jadwal['status']); ?>
                                             </span>
                                         </td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editJadwalModal<?= esc($jadwal['id']); ?>">
+                                            <button class="btn btn-warning btn-sm"
+                                                data-toggle="modal"
+                                                data-target="#editJadwalModal<?= esc($jadwal['id']); ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
 
                                             <a href="<?= base_url('/delete_jadwal/' . $jadwal['id']); ?>"
                                                 class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?');"><i
-                                                    class="fas fa-trash"></i></a>
-
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?');">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
+
 <!-- Modal Tambah Jadwal -->
 <div class="modal fade" id="tambahJadwalModal" tabindex="-1" role="dialog" aria-labelledby="tambahJadwalModalLabel"
     aria-hidden="true">
@@ -160,20 +171,34 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <div class="modal-body">
                 <form id="jadwalForm" action="<?= base_url('jadwal_trip/tambah') ?>" method="POST">
                     <div class="form-group">
                         <label for="tanggal">Tanggal Trip</label>
                         <input type="date" class="form-control" id="tanggal" name="tanggal" required>
                     </div>
+
                     <div class="form-group">
                         <label for="paket">Paket</label>
                         <select class="form-control" id="paket" name="paket" required>
                             <option value="Open Trip Whale Shark Teluk Saleh">Open Trip Whale Shark Teluk Saleh</option>
-                            <option value="Private Trip Whale Shark Teluk Saleh">Private Trip Whale Shark Teluk Saleh
-                            </option>
+                            <option value="Private Trip Whale Shark Teluk Saleh">Private Trip Whale Shark Teluk Saleh</option>
                         </select>
                     </div>
+
+                    <!-- JAM MULAI -->
+                    <div class="form-group">
+                        <label for="jam_mulai">Jam Mulai</label>
+                        <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" required>
+                    </div>
+
+                    <!-- JAM SELESAI -->
+                    <div class="form-group">
+                        <label for="jam_selesai">Jam Selesai</label>
+                        <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" required>
+                    </div>
+
                     <div class="form-group">
                         <label for="kapasitas">Kapasitas</label>
                         <input type="number" class="form-control" id="kapasitas" name="kapasitas" required>

@@ -52,32 +52,38 @@ class Administrator extends BaseController
         return view('administrator/kelola_pesanan', $data);
     }
 
-    public function update_booking($booking_id)
+    public function update_booking($bookingCode)
     {
-
         $model = new M_BookingDetails();
-        $booking = $model->find($booking_id);
+
+        // Cari berdasarkan id_bookings (bukan primary key id)
+        $booking = $model->where('id_bookings', $bookingCode)->first();
 
         if (!$booking) {
-            return redirect()->to('/booking')->with('error', 'Pemesanan tidak ditemukan.');
+            return redirect()->to('/kelola_pesanan')
+                ->with('error', 'Pemesanan tidak ditemukan.');
         }
 
+        // Data dari form (sesuai name= di input)
         $updatedData = [
             'full_name'    => $this->request->getPost('fullName'),
-            'email'        => $this->request->getPost('email'),
-            'kontak'       => $this->request->getPost('mobile'),
-            'jumlah_orang' => $this->request->getPost('peopleCount'),
+            'paket'        => $this->request->getPost('paket'),
+            'jumlah_orang' => $this->request->getPost('jumlah_orang'),
+            'total_biaya'  => $this->request->getPost('total_biaya'),
             'role_payment' => $this->request->getPost('rolePayment'),
-            'updated_at'   => date('Y-m-d H:i:s')
+            'updated_at'   => date('Y-m-d H:i:s'),
         ];
 
-        $updated = $model->update($booking_id, $updatedData);
+        // Update pakai primary key (id) milik row yang ketemu
+        $updated = $model->update($booking['id'], $updatedData);
 
         if ($updated) {
-            return redirect()->to('/kelola_pesanan')->with('success', 'Pemesanan berhasil diperbarui!');
+            return redirect()->to('/kelola_pesanan')
+                ->with('success', 'Pemesanan berhasil diperbarui!');
         }
 
-        return redirect()->to('/kelola_pesanan')->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
+        return redirect()->to('/kelola_pesanan')
+            ->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
     }
 
     public function delete_booking($booking_id)
