@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `bookings_details_visitors` (
   `id` int NOT NULL,
+<<<<<<< HEAD
   `id_bookings` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `nama_visitors` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `usia` int NOT NULL,
@@ -37,6 +38,16 @@ CREATE TABLE `bookings_details_visitors` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+  `id_bookings` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_visitors` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `usia` int NOT NULL,
+  `jenis_kelamin` enum('L','P') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kewarganegaraan` enum('WNI','WNA') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 --
 -- Dumping data for table `bookings_details_visitors`
@@ -56,16 +67,28 @@ INSERT INTO `bookings_details_visitors` (`id`, `id_bookings`, `nama_visitors`, `
 
 CREATE TABLE `booking_details` (
   `id` int NOT NULL,
+<<<<<<< HEAD
   `id_bookings` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+=======
+  `id_bookings` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
   `user_id` int UNSIGNED DEFAULT NULL,
   `full_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `kontak` varchar(20) NOT NULL,
+<<<<<<< HEAD
   `paket` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `jumlah_orang` int NOT NULL,
   `total_biaya` int NOT NULL,
   `role_payment` enum('pending','confirmed','completed') DEFAULT 'pending',
   `mode_pembayaran` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+=======
+  `paket` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `jumlah_orang` int NOT NULL,
+  `total_biaya` int NOT NULL,
+  `role_payment` enum('pending','confirmed','completed') DEFAULT 'pending',
+  `mode_pembayaran` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
   `upload_gambar` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -73,7 +96,11 @@ CREATE TABLE `booking_details` (
   `jam_trip` time DEFAULT NULL,
   `voucher` varchar(59) NOT NULL,
   `nilai_voucher` int NOT NULL
+<<<<<<< HEAD
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 --
 -- Dumping data for table `booking_details`
@@ -95,6 +122,7 @@ CREATE TABLE `jadwal_trip` (
   `tanggal` date NOT NULL,
   `jam_mulai` time DEFAULT NULL,
   `jam_selesai` time DEFAULT NULL,
+<<<<<<< HEAD
   `paket` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `kapasitas` int NOT NULL,
   `terisi` int NOT NULL DEFAULT '0',
@@ -103,6 +131,16 @@ CREATE TABLE `jadwal_trip` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+  `paket` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kapasitas` int NOT NULL,
+  `terisi` int NOT NULL DEFAULT '0',
+  `sisa` int NOT NULL DEFAULT '0',
+  `status` enum('tersedia','penuh','tidak tersedia') COLLATE utf8mb4_unicode_ci DEFAULT 'tersedia',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 --
 -- Dumping data for table `jadwal_trip`
@@ -131,6 +169,7 @@ DELIMITER ;
 
 CREATE TABLE `kelola_wisata` (
   `id` int NOT NULL,
+<<<<<<< HEAD
   `nama_wisata` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `kategori` enum('wisata_pilihan','wisata_unggulan') COLLATE utf8mb4_general_ci NOT NULL,
   `deskripsi` text COLLATE utf8mb4_general_ci NOT NULL,
@@ -138,6 +177,15 @@ CREATE TABLE `kelola_wisata` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+  `nama_wisata` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kategori` enum('wisata_pilihan','wisata_unggulan') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `deskripsi` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gambar` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 --
 -- Dumping data for table `kelola_wisata`
@@ -155,12 +203,21 @@ INSERT INTO `kelola_wisata` (`id`, `nama_wisata`, `kategori`, `deskripsi`, `gamb
 CREATE TABLE `payments` (
   `id` int NOT NULL,
   `user_id` int NOT NULL,
+<<<<<<< HEAD
   `payment` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `total_payment` decimal(15,2) NOT NULL,
   `gambar_payment` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+  `payment` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_payment` decimal(15,2) NOT NULL,
+  `gambar_payment` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 -- --------------------------------------------------------
 
@@ -170,15 +227,26 @@ CREATE TABLE `payments` (
 
 CREATE TABLE `promosi` (
   `id` int NOT NULL,
+<<<<<<< HEAD
   `nama_promosi` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+=======
+  `nama_promosi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
   `harga_normal` int NOT NULL,
   `harga_diskon` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+<<<<<<< HEAD
   `status` enum('1','2') COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1' COMMENT '1 = Aktif, 2 = Tidak Aktif',
   `masa_berlaku_start` date DEFAULT NULL,
   `masa_berlaku_end` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+  `status` enum('1','2') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1' COMMENT '1 = Aktif, 2 = Tidak Aktif',
+  `masa_berlaku_start` date DEFAULT NULL,
+  `masa_berlaku_end` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 --
 -- Dumping data for table `promosi`
@@ -195,6 +263,7 @@ INSERT INTO `promosi` (`id`, `nama_promosi`, `harga_normal`, `harga_diskon`, `cr
 
 CREATE TABLE `setting_payments` (
   `id` int NOT NULL,
+<<<<<<< HEAD
   `payments` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `number` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `status` enum('active','inactive') COLLATE utf8mb4_general_ci DEFAULT 'active',
@@ -202,6 +271,15 @@ CREATE TABLE `setting_payments` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+  `payments` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci DEFAULT 'active',
+  `metode` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 --
 -- Dumping data for table `setting_payments`
@@ -226,7 +304,11 @@ CREATE TABLE `ulasan` (
   `fasilitas_rating` decimal(3,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+<<<<<<< HEAD
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 -- --------------------------------------------------------
 
@@ -236,6 +318,7 @@ CREATE TABLE `ulasan` (
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
+<<<<<<< HEAD
   `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `nama_lengkap` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
@@ -246,6 +329,18 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_lengkap` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kontak` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role_user` enum('1','2') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  `promo` tinyint NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+>>>>>>> bedfa1b797b03a17f405c8a4809540976548ecb8
 
 --
 -- Dumping data for table `users`

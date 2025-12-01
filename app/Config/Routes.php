@@ -50,7 +50,7 @@ $routes->get('dashboard', 'Administrator::dashboard', ['filter' => 'auth']);
 
 // Kelola Pesanan
 $routes->get('kelola_pesanan', 'Administrator::kelola_pesanan');
-$routes->post('update_booking/(:num)', 'Administrator::update_booking/$1');
+$routes->post('update_booking/(:any)', 'Administrator::update_booking/$1');
 $routes->get('delete/(:segment)', 'Administrator::delete_booking/$1');
 
 
@@ -108,3 +108,7 @@ $routes->get('delete_jadwal/(:segment)', 'JadwalTripController::delete/$1');
 $routes->post('setting-payment/create', 'SettingPayment::create');
 $routes->post('setting-payment/update', 'SettingPayment::update');
 $routes->get('setting-payment/delete/(:num)', 'SettingPayment::delete/$1');
+
+// invoice
+$routes->get('invoice/download/(:num)', 'InvoiceController::download/$1');
+$routes->get('invoice/(:num)', 'InvoiceController::view/$1');

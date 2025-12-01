@@ -18,10 +18,9 @@
     </div>
     <nav class="navbar">
         <div class="nav-left">
-            <a href="<?= base_url('/') ?>" class="active">Beranda</a>
-            <a href="<?= base_url('/') ?>">Paket Trip</a>
-            <a href="<?= base_url('/') ?>">Wisata Pilihan</a>
-            <a href="<?= base_url('/') ?>">Wisata Unggulan</a>
+            <a href="<?= base_url('/#beranda') ?>" class="active">Beranda</a>
+            <a href="<?= base_url('/#paket-trip') ?>">Paket Trip</a>
+            <a href="<?= base_url('/#kontak') ?>">Kontak</a>
         </div>
         <div class="nav-right">
             <?php if (session()->get('isLoggedIn')): ?>
@@ -37,7 +36,7 @@
                     </ul>
                 </div>
             <?php else: ?>
-                <a href="<?= base_url('login') ?>" class="btn-login">Masuk</a> | <a href="<?= base_url('registration') ?>" class="btn-register">Daftar</a>
+                <a href="<?= base_url('login') ?>" class="btn-login">Masuk</a>|<a href="<?= base_url('registration') ?>" class="btn-register">Daftar</a>
             <?php endif; ?>
         </div>
     </nav>

@@ -10,6 +10,8 @@ class M_JadwalTrip extends Model
     protected $primaryKey = 'id';
     protected $allowedFields = [
         'tanggal',
+        'jam_mulai',
+        'jam_selesai',
         'paket',
         'kapasitas',
         'terisi',

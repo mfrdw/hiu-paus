@@ -1,9 +1,8 @@
 <?= $this->extend('layout_user/header') ?>
 <?= $this->section('content') ?>
 
-
 <!-- Main Section -->
-<section class="main-section" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../dist/assets/images/sea-gorontalo.jpg') center center / cover no-repeat; color: white; padding-top: 60px; padding-bottom: 60px;">
+<section id="beranda" class="main-section" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../dist/assets/images/sea-gorontalo.jpg') center center / cover no-repeat; color: white; padding-top: 60px; padding-bottom: 60px;">
     <div class="container-fluid">
         <!-- Video Section -->
         <div class="video-container mb-5">
@@ -57,7 +56,7 @@
         </div>
 
         <!-- Paket Trip Section -->
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" id="paket-trip">>
             <div class="section-title text-center mb-4 col-12">
                 <h2 class="text-white">Pilih Paket Trip</h2>
             </div>
@@ -114,93 +113,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- Paket Wisata Pilihan Section -->
-        <div class="section-title text-center mb-4 col-12">
-            <h2>Paket Wisata Pilihan</h2>
-        </div>
-        <div class="custom-card-container">
-            <?php if (!empty($wisata_pilihan) && is_array($wisata_pilihan)): ?>
-                <?php foreach ($wisata_pilihan as $item): ?>
-                    <div class="custom-card">
-                        <img src="<?= base_url('uploads/kelola_wisata/' . $item['gambar']) ?>" alt="<?= esc($item['nama_wisata']) ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= esc($item['nama_wisata']) ?></h5>
-                            <p class="card-text"><?= esc($item['deskripsi']) ?></p>
-                            <a href="<?= base_url('views_details/' . $item['id']) ?>" class="btn btn-warning">DETAILS</a>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Tidak ada paket wisata pilihan tersedia.</p>
-            <?php endif; ?>
-        </div>
-
-        <!-- Aktivitas Unggulan Taman Hiu Paus Section -->
-        <div class="section-title text-center mb-4 col-12">
-            <h2>Aktivitas Unggulan Taman Hiu Paus</h2>
-        </div>
-        <div class="custom-card-container">
-            <?php if (!empty($wisata_unggulan) && is_array($wisata_unggulan)): ?>
-                <?php foreach ($wisata_unggulan as $item): ?>
-                    <div class="custom-card">
-                        <img src="<?= base_url('uploads/kelola_wisata/' . $item['gambar']) ?>" alt="<?= esc($item['nama_wisata']) ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= esc($item['nama_wisata']) ?></h5>
-                            <p class="card-text"><?= esc($item['deskripsi']) ?></p>
-                            <a href="<?= base_url('views_details/' . $item['id']) ?>" class="btn btn-warning">DETAILS</a>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Tidak ada aktivitas unggulan yang tersedia.</p>
-            <?php endif; ?>
-        </div>
     </div>
 </section>
-
-
-<!-- Modal Booking -->
-<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="bookingModalLabel">Form Booking</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="bookingForm">
-                    <div class="mb-3">
-                        <label for="customerName" class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="customerName" name="customerName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="package" class="form-label">Paket</label>
-                        <input type="text" class="form-control" id="package" name="package"
-                            value="Open Trip Whale Shark Teluk Saleh" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="bookingDate" class="form-label">Tanggal</label>
-                        <input type="date" class="form-control" id="bookingDate" name="bookingDate" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="quantity" class="form-label">Jumlah Orang</label>
-                        <input type="text" class="form-control" id="quantity" name="quantity" min="1" value="1"
-                            readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="totalCost" class="form-label">Total Biaya</label>
-                        <input type="text" class="form-control" id="totalCost" name="totalCost" value="650.000"
-                            readonly>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn w-50">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!-- JavaScript untuk Modal dan SweetAlert2 -->

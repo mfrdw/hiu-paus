@@ -15,6 +15,7 @@
                     <th scope="col">Jumlah Orang</th>
                     <th scope="col">Total Biaya</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Invoice</th> <!-- 🧾 kolom baru -->
                 </tr>
             </thead>
             <tbody>
@@ -23,13 +24,13 @@
                         <tr>
                             <td><?= $index + 1 ?></td>
                             <td>
-                                <a href="<?= base_url('payment/' . $order['id']); ?>">
+                                <a href="<?= base_url('verifikasi/' . $order['id']); ?>">
                                     <?= esc($order['full_name']); ?>
                                 </a>
                             </td>
-                            <td><?= $order['email'] ?></td>
-                            <td><?= $order['kontak'] ?></td>
-                            <td><?= $order['jumlah_orang'] ?></td>
+                            <td><?= esc($order['email']) ?></td>
+                            <td><?= esc($order['kontak']) ?></td>
+                            <td><?= esc($order['jumlah_orang']) ?></td>
                             <td>Rp <?= number_format($order['total_biaya'], 0, ',', '.') ?></td>
                             <td>
                                 <?php if ($order['role_payment'] == 'pending'): ?>
@@ -40,15 +41,23 @@
                                     <span class="badge bg-success">Completed</span>
                                 <?php endif; ?>
                             </td>
+
+                            <!-- 🧾 Invoice -->
+                            <td>
+                                <a href="<?= base_url('invoice/' . $order['id']); ?>">
+                                    <i class=" fas fa-file-download me-1"></i>
+                                </a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" class="text-center">Tidak ada pemesanan untuk ditampilkan.</td>
+                        <td colspan="8" class="text-center">Tidak ada pemesanan untuk ditampilkan.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
         </table>
+
     </div>
 </div>
 

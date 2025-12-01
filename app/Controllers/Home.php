@@ -148,21 +148,40 @@ class Home extends BaseController
 
     public function booking_jadwal($id): string
     {
-        $model = new M_BookingDetails();
-        $model_jadwal = new M_JadwalTrip();
+        $modelBooking = new M_BookingDetails();
+        $modelJadwal  = new M_JadwalTrip();
 
-        $booking = $model->where('id', $id)->first();
+        // Ambil data booking
+        $booking = $modelBooking->where('id', $id)->first();
 
-        $jadwal = $model_jadwal->where('paket', '')->findAll();
+        // Kalau booking tidak ketemu
+        if (!$booking) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Booking tidak ditemukan');
+        }
+
+        // Ambil jadwal hanya untuk paket yang sama dengan di booking
+        $jadwalQuery = $modelJadwal
+            ->where('paket', $booking['paket']); // filter paket
+
+        // (opsional) kalau mau hanya jadwal yang masih tersedia:
+        // $jadwalQuery->where('status', 'tersedia');
+
+        // (opsional) kalau mau hanya tanggal >= hari ini:
+        // $jadwalQuery->where('tanggal >=', date('Y-m-d'));
+
+        $jadwal = $jadwalQuery
+            ->orderBy('tanggal', 'ASC')
+            ->findAll();
 
         $data = [
-            'title' => 'Booking Jadwal',
+            'title'   => 'Booking Jadwal',
             'booking' => $booking,
-            'jadwal' => $jadwal
+            'jadwal'  => $jadwal,
         ];
 
         return view('pages/booking_jadwal', $data);
     }
+
     public function get_jadwal_by_date()
     {
         $tanggal = $this->request->getVar('tanggal');

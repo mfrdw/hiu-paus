@@ -117,62 +117,90 @@ class BookingController extends Controller
 
     public function add_jadwal()
     {
-        // Ambil data dari request POST
-        $id = $this->request->getPost('id');
-        $tripDate = $this->request->getPost('tripDate');
-        $departureTime = $this->request->getPost('departureTime');
-        $jumlahOrang = $this->request->getPost('jumlahOrang');  // Menangkap jumlah orang
+        $bookingId   = $this->request->getPost('id');          // id booking_details
+        $jadwalId    = $this->request->getPost('jadwal_id');   // dari tombol "Pilih"
+        $jumlahOrang = (int) $this->request->getPost('jumlahOrang');
 
-        // Model untuk Booking Details
-        $model_booking = new M_BookingDetails();
-        // Model untuk Jadwal Trip
+        if (!$jadwalId) {
+            return redirect()->back()->with('error', 'Silakan pilih jadwal terlebih dahulu.');
+        }
+
+        $model_booking     = new M_BookingDetails();
         $model_jadwal_trip = new M_JadwalTrip();
 
-        // Ambil booking berdasarkan ID
-        $booking = $model_booking->where('id', $id)->first();
-
+        // Ambil booking
+        $booking = $model_booking->where('id', $bookingId)->first();
         if (!$booking) {
             return redirect()->to('/booking')->with('error', 'Booking tidak ditemukan.');
         }
 
-        // Data yang akan diupdate di booking
-        $data = [
-            'tanggal_trip' => $tripDate,
-            'jam_trip'     => $departureTime,
-            'updated_at'   => date('Y-m-d H:i:s')
-        ];
-
-        // Update data booking
-        $updateStatus = $model_booking->update($id, $data);
-
-        if ($updateStatus) {
-            // Setelah berhasil update booking, kita akan update M_JadwalTrip
-            // Cari trip dengan paket dan tanggal trip yang sesuai
-            $jadwalTrip = $model_jadwal_trip->where('paket', $booking['paket'])
-                ->where('tanggal', $tripDate)
-                ->first();
-
-            if ($jadwalTrip) {
-                // Hitung nilai terisi baru (jumlah orang ditambah dengan terisi sebelumnya)
-                $terisi = $jadwalTrip['terisi'] + $jumlahOrang;
-                $sisa = $jadwalTrip['kapasitas'] - $terisi;
-
-                // Update kolom 'terisi' dan 'sisa' secara manual
-                $model_jadwal_trip->update($jadwalTrip['id'], [
-                    'terisi'    => $terisi,
-                    'sisa'      => $sisa,
-                    'updated_at' => date('Y-m-d H:i:s')
-                ]);
-
-                // Redirect dengan sukses
-                return redirect()->to('/booking_payment/' . $id)->with('success', 'Pemesanan berhasil diperbarui!');
-            }
-
-            return redirect()->to('/booking_jadwal/' . $id)->with('error', 'Jadwal tidak ditemukan atau tidak tersedia.');
+        // Ambil jadwal trip berdasarkan id yang dipilih
+        $jadwalTrip = $model_jadwal_trip->find($jadwalId);
+        if (!$jadwalTrip) {
+            return redirect()
+                ->to('/booking_jadwal/' . $bookingId)
+                ->with('error', 'Jadwal tidak ditemukan atau tidak tersedia.');
         }
 
-        return redirect()->to('/booking')->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
+        // (Opsional) pastikan paket jadwal sama dengan paket booking
+        if ($jadwalTrip['paket'] !== $booking['paket']) {
+            return redirect()
+                ->to('/booking_jadwal/' . $bookingId)
+                ->with('error', 'Jadwal tidak sesuai dengan paket yang dipilih.');
+        }
+
+        // Hitung kapasitas
+        $kapasitas    = (int) $jadwalTrip['kapasitas'];
+        $terisiLama   = (int) $jadwalTrip['terisi'];
+        $terisiBaru   = $terisiLama + $jumlahOrang;
+
+        // Cek kalau jumlah orang melebihi kapasitas
+        if ($terisiBaru > $kapasitas) {
+            return redirect()
+                ->to('/booking_jadwal/' . $bookingId)
+                ->with('error', 'Slot pada jadwal ini tidak mencukupi untuk jumlah orang yang dipesan.');
+        }
+
+        $sisa  = $kapasitas - $terisiBaru;
+        $status = $sisa <= 0 ? 'penuh' : 'tersedia';
+
+        // =========================
+        // 1. Update booking_details
+        // =========================
+        $dataBooking = [
+            'tanggal_trip' => $jadwalTrip['tanggal'],
+            // kalau mau simpan range jam:
+            // 'jam_trip'     => $jadwalTrip['jam_mulai'] . ' - ' . $jadwalTrip['jam_selesai'],
+            'jam_trip'     => $jadwalTrip['jam_mulai'],  // jam keberangkatan saja
+            'updated_at'   => date('Y-m-d H:i:s'),
+        ];
+
+        $updateStatus = $model_booking->update($bookingId, $dataBooking);
+
+        if (!$updateStatus) {
+            return redirect()
+                ->to('/booking_jadwal/' . $bookingId)
+                ->with('error', 'Gagal memperbarui pemesanan. Silakan coba lagi.');
+        }
+
+        // =========================
+        // 2. Update jadwal_trip
+        // =========================
+        $model_jadwal_trip->update($jadwalTrip['id'], [
+            'terisi'     => $terisiBaru,
+            'sisa'       => $sisa,
+            'status'     => $status,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        // =========================
+        // 3. Redirect ke pembayaran
+        // =========================
+        return redirect()
+            ->to('/booking_payment/' . $bookingId)
+            ->with('success', 'Pemesanan dan jadwal berhasil diperbarui!');
     }
+
 
 
 
@@ -180,45 +208,43 @@ class BookingController extends Controller
     public function add_payments()
     {
         $model = new M_BookingDetails();
-        $promo = new M_Promosi();  // Model untuk mengambil data promosi (voucher)
+        $promo = new M_Promosi();
 
-        $id = $this->request->getPost('id');  // Booking ID
-        $payment_channel = $this->request->getPost('payment_channel');  // Payment method
-        $voucherData = $this->request->getPost('voucher');  // Array of selected vouchers
+        $id              = $this->request->getPost('id');
+        $payment_channel = $this->request->getPost('payment_channel');
 
-        // Ambil data booking berdasarkan ID
+        // dari form baru
+        $voucherId       = $this->request->getPost('voucher_id');      // bisa null
+        $voucherDiskon   = (int) $this->request->getPost('voucher_diskon'); // bisa 0
+
         $booking = $model->where('id', $id)->first();
 
         if (!$booking) {
             return redirect()->to('/booking_payment/' . $id)->with('error', 'Booking tidak ditemukan.');
         }
 
-        // Inisialisasi data voucher yang dipilih
-        $voucherId = null;
-        $voucherDiskon = 0;
+        // total sebelum diskon (pastikan ini harga asli)
+        $totalBiaya = (int) $booking['total_biaya'];
 
-        // Periksa apakah ada voucher yang dipilih
-        if (!empty($voucherData)) {
-            foreach ($voucherData as $voucher) {
-                $voucherId = $voucher['id'];  // ID Voucher
-                $voucherDiskon = $voucher['diskon'];  // Nilai diskon voucher
-            }
+        // kalau tidak ada voucher yang dipilih, paksa 0
+        if (empty($voucherId) || $voucherDiskon <= 0) {
+            $voucherId     = null;
+            $voucherDiskon = 0;
         }
 
-        // Hitung total biaya setelah diskon
-        $totalBiaya = $booking['total_biaya'];  // Total biaya sebelum diskon
-        $totalBiayaSetelahDiskon = $totalBiaya - $voucherDiskon;  // Total biaya setelah dikurangi diskon
+        $totalBiayaSetelahDiskon = $totalBiaya - $voucherDiskon;
+        if ($totalBiayaSetelahDiskon < 0) {
+            $totalBiayaSetelahDiskon = 0;
+        }
 
-        // Siapkan data untuk update pembayaran
         $data = [
             'mode_pembayaran' => $payment_channel,
-            'voucher' => $voucherId,  // Simpan ID voucher yang dipilih
-            'nilai_voucher' => $voucherDiskon,  // Simpan nilai diskon
-            'total_biaya' => $totalBiayaSetelahDiskon,  // Update total biaya setelah diskon
-            'created_at' => date('Y-m-d H:i:s'),
+            'voucher'         => $voucherId,
+            'nilai_voucher'   => $voucherDiskon,
+            'total_biaya'     => $totalBiayaSetelahDiskon,
+            'updated_at'      => date('Y-m-d H:i:s'),
         ];
 
-        // Update data pembayaran di booking_details
         $updatePayment = $model->update($id, $data);
 
         if ($updatePayment) {
@@ -227,6 +253,7 @@ class BookingController extends Controller
 
         return redirect()->to('/booking_payment/' . $id)->with('error', 'Gagal melakukan Pembayaran. Silakan coba lagi.');
     }
+
 
 
 

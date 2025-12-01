@@ -69,23 +69,35 @@
                                 </button>
                             </li>
                             <!-- Voucher Section -->
-                            <div class="d-flex justify-content-between ms-auto">
-                                <div class="d-flex align-items-center">
-                                    <!-- Loop untuk menampilkan voucher -->
+                            <div class="ms-auto">
+                                <div class="small text-muted mb-1">
+                                    Pilih Promo
+                                </div>
+
+                                <div class="d-flex align-items-center flex-wrap">
                                     <?php foreach ($voucher as $v): ?>
-                                        <div class="me-2">
-                                            <!-- Label untuk Voucher -->
-                                            <label for="voucher_<?= $v['id']; ?>" class="voucher-label" data-id="<?= $v['id']; ?>">
+                                        <div class="me-2 mb-1">
+                                            <!-- Input radio untuk pilih voucher -->
+                                            <input
+                                                type="radio"
+                                                class="btn-check voucher-radio"
+                                                name="voucher_id"
+                                                id="voucher_<?= $v['id']; ?>"
+                                                value="<?= $v['id']; ?>"
+                                                data-diskon="<?= $v['harga_diskon']; ?>"
+                                                autocomplete="off">
+                                            <label class="voucher-label btn btn-outline-info btn-sm"
+                                                for="voucher_<?= $v['id']; ?>">
                                                 <strong><?= $v['nama_promosi']; ?></strong>
                                             </label>
-
-                                            <!-- Hidden Input untuk harga diskon -->
-                                            <input type="hidden" name="voucher[<?= $v['id']; ?>][id]" value="<?= $v['id']; ?>">
-                                            <input type="hidden" name="voucher[<?= $v['id']; ?>][diskon]" value="<?= $v['harga_diskon']; ?>" class="voucher-diskon-<?= $v['id']; ?>" />
                                         </div>
                                     <?php endforeach; ?>
+
+                                    <!-- Hidden: diskon voucher terpilih -->
+                                    <input type="hidden" name="voucher_diskon" id="voucher_diskon" value="0">
                                 </div>
                             </div>
+
                         </ul>
 
                         <div class="tab-content" id="payTabContent">
@@ -248,38 +260,29 @@
 </style>
 
 <script>
-    // JavaScript to handle label click effect
-    const voucherLabels = document.querySelectorAll('.voucher-label');
+    document.addEventListener('DOMContentLoaded', function() {
+        const radios = document.querySelectorAll('.voucher-radio');
+        const labels = document.querySelectorAll('.voucher-label');
+        const diskonInput = document.getElementById('voucher_diskon');
 
-    // Event listener to toggle the active class when clicked
-    voucherLabels.forEach(label => {
-        label.addEventListener('click', function() {
-            // Deactivate all other labels
-            voucherLabels.forEach(otherLabel => {
-                if (otherLabel !== label) {
-                    otherLabel.classList.remove('active');
-                    // Reset the hidden input for the other labels
-                    const voucherId = otherLabel.getAttribute('data-id');
-                    const voucherDiskonInput = document.querySelector(`.voucher-diskon-${voucherId}`);
-                    voucherDiskonInput.value = ''; // Clear value for unselected vouchers
+        radios.forEach(r => {
+            r.addEventListener('change', function() {
+                // reset tampilan label
+                labels.forEach(l => l.classList.remove('active'));
+
+                // label yang terpilih
+                const label = document.querySelector('label[for="' + this.id + '"]');
+                if (label) {
+                    label.classList.add('active');
                 }
+
+                // set nilai diskon
+                const diskon = this.getAttribute('data-diskon') || 0;
+                diskonInput.value = diskon;
             });
-
-            // Toggle active state on the clicked label
-            this.classList.toggle('active');
-
-            // Get the hidden input for this voucher
-            const voucherId = this.getAttribute('data-id');
-            const voucherDiskonInput = document.querySelector(`.voucher-diskon-${voucherId}`);
-
-            // If active, add voucher diskon value to the input, else reset it
-            if (this.classList.contains('active')) {
-                voucherDiskonInput.value = voucherDiskonInput.value; // Ensuring the value is sent
-            } else {
-                voucherDiskonInput.value = ''; // Reset the value if not selected
-            }
         });
     });
 </script>
+
 
 <?= $this->endSection() ?>

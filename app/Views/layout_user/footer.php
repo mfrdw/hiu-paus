@@ -1,141 +1,60 @@
-<footer class="footer">
-    <div class="footer-container">
-        <!-- Logo and Contact Info -->
-        <div class="footer-column logo-contact">
-            <img src="../dist/assets/images/logo.png" alt="Logo" class="footer-logo">
-            <p>Hubungi Kami</p>
-            <strong>info@hiupaustrip.com</strong><br>
-            <strong>+6287844342546</strong>
-            <p>Ikuti Kami</p>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/hiupaustrip" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.instagram.com/hiupaustrip" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/6287844342546" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+
+<footer class="mt-5 pt-4 pb-4 bg-light border-top" id="kontak">
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- MAP -->
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="ratio ratio-4x3">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.8404155936314!2d123.0968980064535!3d0.47565989987942203!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x327f2b1ebb06a7ad%3A0x6e207bf0624d792f!2sWisata%20Hiu%20Paus%20Botubarani%20Gorontalo!5e0!3m2!1sid!2sid!4v1764513150872!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
             </div>
-        </div>
 
-        <!-- Seva Kapal Links -->
-        <div class="footer-column">
-            <h3 class="footer-title">PAKET TRIP</h3>
-            <a href="#" class="footer-link">Open Trip Whale Shark Teluk Saleh</a>
-            <a href="#" class="footer-link">Private Trip Whale Shark Teluk Saleh</a>
-        </div>
+            <!-- CONTACT FORM -->
+            <div class="col-md-6">
+                <h5 class="mb-3">Kontak</h5>
 
-        <!-- Pilihan Wisata Links -->
-        <div class="footer-column">
-            <h3 class="footer-title">PILIHAN WISATA</h3>
-            <a href="#" class="footer-link">Tur Bali Timur</a>
-            <a href="#" class="footer-link">Tur Bali Utara</a>
-            <a href="#" class="footer-link">Tur Bali Selatan</a>
-        </div>
+                <form action="<?= site_url('kontak/kirim'); ?>" method="post">
+                    <?= csrf_field(); ?>
 
-        <!-- Aktivitas Unggulan Links -->
-        <div class="footer-column">
-            <h3 class="footer-title">AKTIVITAS UNGGULAN</h3>
-            <a href="#" class="footer-link">Olahraga Air</a>
-            <a href="#" class="footer-link">Balon Udara Panas</a>
-            <a href="#" class="footer-link">Pulau Penida</a>
-        </div>
-    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name*</label>
+                        <input type="text" name="name" id="name" class="form-control" required>
+                    </div>
 
-    <!-- Footer Bottom -->
-    <div class="footer-bottom">
-        <p>&copy; 2025 HIU PAUS Trip. All rights reserved.</p>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-Mail*</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject*</label>
+                        <input type="text" name="subject" id="subject" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message*</label>
+                        <textarea name="message" id="message" rows="4" class="form-control" required></textarea>
+                    </div>
+
+                    <!-- SIMPLE CAPTCHA -->
+                    <div class="mb-3">
+                        <label for="captcha" class="form-label">
+                            Please prove that you are human by solving the equation *
+                        </label>
+                        <input type="text" name="captcha" id="captcha" class="form-control" placeholder="1 + 0 = ?" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-light px-4">
+                        Submit
+                    </button>
+                </form>
+            </div>
+
+        </div>
     </div>
 </footer>
 
-<style>
-    /* General footer styles */
-    .footer {
-        background-color: #2058f1ff;
-        color: #fff;
-        padding: 60px 0;
-        font-family: 'Arial', sans-serif;
-    }
-
-    .footer-container {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 40px;
-        max-width: 1500px;
-        margin: 0 auto;
-    }
-
-    .footer-column {
-        flex: 1;
-        min-width: 200px;
-    }
-
-    .footer-title {
-        font-size: 1.2rem;
-        margin-bottom: 15px;
-        color: #f39c12;
-        text-transform: uppercase;
-    }
-
-    .footer-logo {
-        width: 120px;
-        margin-bottom: 20px;
-    }
-
-    .footer-link {
-        display: block;
-        color: #ccc;
-        text-decoration: none;
-        margin: 8px 0;
-        font-size: 0.9rem;
-        transition: color 0.3s;
-    }
-
-    .footer-link:hover {
-        color: #f39c12;
-    }
-
-    .social-icons {
-        display: flex;
-        gap: 15px;
-    }
-
-    .social-icon {
-        font-size: 20px;
-        color: #ccc;
-        transition: color 0.3s;
-    }
-
-    .social-icon:hover {
-        color: #f39c12;
-    }
-
-    /* Footer bottom */
-    .footer-bottom {
-        text-align: center;
-        margin-top: 40px;
-        font-size: 0.9rem;
-        color: #bbb;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .footer-container {
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .footer-column {
-            min-width: auto;
-            text-align: center;
-        }
-
-        .footer-logo {
-            margin: 0 auto;
-        }
-
-        .social-icons {
-            justify-content: center;
-        }
-    }
-</style>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
