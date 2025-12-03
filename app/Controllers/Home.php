@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\M_BookingDetails;
 use App\Models\M_JadwalTrip;
 use App\Models\M_Users;
-use App\Models\M_UlasanUsers;
+use App\Models\M_Feedback;
 use App\Models\M_KelolaWisata;
 use App\Models\M_Promosi;
 use App\Models\M_SettingPayments;
@@ -50,40 +50,10 @@ class Home extends BaseController
 
     public function detail(): string
     {
-        $model = new M_UlasanUsers();
-        $ulasan = $model->getUlasanWithUser();
-
-        $totalReviews = count($ulasan);
-
-        if ($totalReviews === 0) {
-            $ulasan = null;
-        }
-
-        $totalPengalaman = 0;
-        $totalPemandu = 0;
-        $totalFasilitas = 0;
-
-        if ($ulasan) {
-            foreach ($ulasan as $item) {
-                $totalPengalaman += $item['pengalaman_rating'];
-                $totalPemandu += $item['pemandu_rating'];
-                $totalFasilitas += $item['fasilitas_rating'];
-            }
-        }
-
-        $averagePengalaman = ($totalReviews > 0) ? $totalPengalaman / $totalReviews : 0;
-        $averagePemandu = ($totalReviews > 0) ? $totalPemandu / $totalReviews : 0;
-        $averageFasilitas = ($totalReviews > 0) ? $totalFasilitas / $totalReviews : 0;
-        $averageRating = ($averagePengalaman + $averagePemandu + $averageFasilitas) / 3;
 
         $data = [
             'title' => 'Detail ',
-            'ulasan' => $ulasan,
-            'totalReviews' => $totalReviews,
-            'averageRating' => round($averageRating, 1),
-            'averagePengalaman' => round($averagePengalaman, 1),
-            'averagePemandu' => round($averagePemandu, 1),
-            'averageFasilitas' => round($averageFasilitas, 1)
+
         ];
 
         return view('pages/detail_wisata', $data);
@@ -95,40 +65,11 @@ class Home extends BaseController
 
     public function detail_wisata_private(): string
     {
-        $model = new M_UlasanUsers();
-        $ulasan = $model->getUlasanWithUserPrivate();
-
-        $totalReviews = count($ulasan);
-
-        if ($totalReviews === 0) {
-            $ulasan = null;
-        }
-
-        $totalPengalaman = 0;
-        $totalPemandu = 0;
-        $totalFasilitas = 0;
-
-        if ($ulasan) {
-            foreach ($ulasan as $item) {
-                $totalPengalaman += $item['pengalaman_rating'];
-                $totalPemandu += $item['pemandu_rating'];
-                $totalFasilitas += $item['fasilitas_rating'];
-            }
-        }
-
-        $averagePengalaman = ($totalReviews > 0) ? $totalPengalaman / $totalReviews : 0;
-        $averagePemandu = ($totalReviews > 0) ? $totalPemandu / $totalReviews : 0;
-        $averageFasilitas = ($totalReviews > 0) ? $totalFasilitas / $totalReviews : 0;
-        $averageRating = ($averagePengalaman + $averagePemandu + $averageFasilitas) / 3;
+       
 
         $data = [
             'title' => 'Detail ',
-            'ulasan' => $ulasan,
-            'totalReviews' => $totalReviews,
-            'averageRating' => round($averageRating, 1),
-            'averagePengalaman' => round($averagePengalaman, 1),
-            'averagePemandu' => round($averagePemandu, 1),
-            'averageFasilitas' => round($averageFasilitas, 1)
+
         ];
 
         return view('pages/detail_wisata_private', $data);

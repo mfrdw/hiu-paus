@@ -1,7 +1,8 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">Admin Dashboard</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -27,7 +28,7 @@
         <li><a href="<?= base_url('kelola_jadwal') ?>"><i class="fas fa-calendar"></i> Kelola Jadwal</a></li>
         <li><a href="<?= base_url('kelola_wisata') ?>"><i class="fas fa-cogs"></i> Kelola Wisata</a></li>
         <li><a href="<?= base_url('data_wisatawan') ?>"><i class="fas fa-users"></i> Data Wisatawan</a></li>
-        <li><a href="<?= base_url('kelola_ulasan') ?>"><i class="fas fa-comments"></i> Kelola Ulasan</a></li>
+        <li><a href="<?= base_url('feedback') ?>"><i class="fas fa-comments"></i> Feedback</a></li>
         <li><a href="<?= base_url('promosi') ?>"><i class="fas fa-gift"></i> Promosi</a></li>
         <li><a href="<?= base_url('setting') ?>"><i class="fas fa-cogs"></i> Pengaturan</a></li>
         <li><a href="<?= base_url('/logout') ?>"><i class="fas fa-sign-out-alt"></i> Logout</a></li>

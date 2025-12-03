@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\M_BookingDetails;
 use App\Models\M_JadwalTrip;
-use App\Models\M_UlasanUsers;
+use App\Models\M_Feedback;
 use App\Models\M_SettingPayments;
 use App\Models\M_KelolaWisata;
 use App\Models\M_Promosi;
@@ -174,32 +174,24 @@ class Administrator extends BaseController
     }
 
 
-    public function kelola_ulasan(): string
+    public function feedback(): string
     {
-        $model = new M_UlasanUsers();
-        $ulasan = $model->getUlasanWithUserAdmin();
-
-        // Pastikan ulasan selalu berupa array (kosong jika tidak ada data)
-        if ($ulasan === null) {
-            $ulasan = [];
-        }
-
-        // Hitung jumlah ulasan
-        $totalReviews = count($ulasan);
+        $model = new M_Feedback();
+        $feedback = $model->findAll();
 
         $data = [
             'title' => 'Kelola Ulasan',
-            'ulasan' => $ulasan,  // Kirim data ulasan ke view
+            'feedbacks' => $feedback,  // Kirim data ulasan ke view
         ];
 
-        return view('administrator/kelola_ulasan', $data);
+        return view('administrator/feedback', $data);
     }
 
 
     public function update_ulasan()
     {
-        // Membuat instance dari model M_UlasanUsers
-        $model = new M_UlasanUsers();
+        // Membuat instance dari model M_Feedback
+        $model = new M_Feedback();
 
         // Mendapatkan data dari form yang dikirim
         $id = $this->request->getPost('id');
@@ -231,7 +223,7 @@ class Administrator extends BaseController
 
     public function delete_ulasan($id)
     {
-        $model = new M_UlasanUsers();
+        $model = new M_Feedback();
 
         $ulasan = $model->find($id);
 

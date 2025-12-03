@@ -71,9 +71,12 @@ $routes->get('promosi/delete/(:num)', 'Promosi::delete/$1');
 
 $routes->post('/kelola-wisata/create', 'KelolaWisata::create');
 
-$routes->get('kelola_ulasan', 'Administrator::kelola_ulasan');
-$routes->post('update_ulasan/(:segment)', 'Administrator::update_ulasan/$1');
-$routes->get('delete_ulasan/(:segment)', 'Administrator::delete_ulasan/$1');
+// Kontak
+$routes->get('feedback', 'Administrator::feedback');
+$routes->post('kontak/kirim', 'KontakController::kirim');
+$routes->post('kontak/updateSave/(:num)', 'KontakController::updateSave/$1');
+$routes->get('kontak/delete/(:num)', 'KontakController::delete/$1');
+
 
 $routes->post('kelola-wisata/create', 'KelolaWisata::create');
 
